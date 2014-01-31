@@ -13,13 +13,13 @@ from etsproxy.traits.api import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HGroup
 
-from ecb_cross_section_component import \
-    ECBCrossSectionComponent, \
+from mxn.cross_section_component import \
+    CrossSectionComponent, \
     ECB_COMPONENT_CHANGE, \
     ECB_COMPONENT_AND_EPS_CHANGE
 
-from ecb_cross_section_state import \
-    ECBCrossSectionState
+from mxn.cross_section_state import \
+    CrossSectionState
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -41,7 +41,7 @@ from cc_law import \
 
 import numpy as np
 
-class ECBMatrixCrossSection(ECBCrossSectionComponent):
+class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
     '''
 
@@ -189,8 +189,8 @@ class ECBMatrixCrossSection(ECBCrossSectionComponent):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    state = ECBCrossSectionState(eps_lo=0.02)
-    ecs = ECBMatrixCrossSection(state=state, height=0.4)
+    state = CrossSectionState(eps_lo=0.02)
+    ecs = MatrixCrossSection(state=state, height=0.4)
 
     print 'zz_ti_arr', ecs.zz_ti_arr
     print 'ecb_lo', ecs.state.eps_lo

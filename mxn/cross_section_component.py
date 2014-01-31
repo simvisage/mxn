@@ -13,8 +13,8 @@ from etsproxy.traits.api import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HGroup
 
-from ecb_cross_section_state import \
-    ECBCrossSectionState
+from mxn.cross_section_state import \
+    CrossSectionState
 
 import numpy as np
 
@@ -22,10 +22,10 @@ import numpy as np
 ECB_COMPONENT_CHANGE = '+geo_input,+law_input'
 ECB_COMPONENT_AND_EPS_CHANGE = 'eps_changed,+geo_input,+law_input'
 
-class ECBCrossSectionComponent(HasStrictTraits):
+class CrossSectionComponent(HasStrictTraits):
     '''Cross section component supplying the normal force and moment..
     '''
-    state = WeakRef(ECBCrossSectionState)
+    state = WeakRef(CrossSectionState)
     '''Strain state of a cross section
     '''
 

@@ -26,10 +26,10 @@ from scipy.optimize import fsolve
 from constitutive_law import \
     ConstitutiveLawModelView
 
-from ecb_cross_section_state import \
+from mxn.cross_section_state import \
     ECBCrossSectionState
 
-from ecb_cross_section_geo import \
+from mxn.cross_section import \
     ECBCrossSectionGeo
 
 from ecb_law import ECBLBase

@@ -27,17 +27,17 @@ from ecb_law import \
 from constitutive_law import \
     ConstitutiveLawModelView
 
-from ecb_matrix_cross_section import \
-    ECBMatrixCrossSection
+from mxn.matrix_cross_section import \
+    MatrixCrossSection
 
-from ecb_cross_section_component import \
-    ECBCrossSectionComponent, \
+from mxn.cross_section_component import \
+    CrossSectionComponent, \
     ECB_COMPONENT_CHANGE, \
     ECB_COMPONENT_AND_EPS_CHANGE
 
-class ECBReinfComponent(ECBCrossSectionComponent):
+class ReinfComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
-    matrix_cs = WeakRef(ECBMatrixCrossSection)
+    matrix_cs = WeakRef(MatrixCrossSection)
 

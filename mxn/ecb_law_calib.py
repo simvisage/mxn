@@ -17,14 +17,14 @@ import pylab as p
 
 from scipy.optimize import fsolve
 
-from ecb_cross_section import \
-    ECBCrossSection
+from mxn.cross_section import \
+    CrossSection
 
-from ecb_reinf_tex_uniform import \
-    ECBReinfTexUniform
+from mxn.reinf_tex_uniform import \
+    ReinfTexUniform
 
-from ecb_matrix_cross_section import \
-    ECBMatrixCrossSection
+from mxn.matrix_cross_section import \
+    MatrixCrossSection
 
 from ecb_law import ECBLBase
 
@@ -49,11 +49,11 @@ class ECBLCalib(HasStrictTraits):
     # Cross Section Specification (Geometry and Layout)
     #===========================================================================
 
-    cs = Instance(ECBCrossSection)
+    cs = Instance(CrossSection)
     def _cs_default(self):
-        reinf = [ECBReinfTexUniform(n_layers=3)]
-        matrix = ECBMatrixCrossSection(width=0.1, n_cj=20)
-        return ECBCrossSection(reinf=reinf,
+        reinf = [ReinfTexUniform(n_layers=3)]
+        matrix = MatrixCrossSection(width=0.1, n_cj=20)
+        return CrossSection(reinf=reinf,
                                matrix=matrix)
 
     ecb_law_type = DelegatesTo('cs')
@@ -161,7 +161,7 @@ class ECBLCalibModelView(ModelView):
     def _model_default(self):
         return ECBLCalib()
 
-    cs_state = Property(Instance(ECBCrossSection), depends_on='model')
+    cs_state = Property(Instance(CrossSection), depends_on='model')
     @cached_property
     def _get_cs_state(self):
         return self.model.cs

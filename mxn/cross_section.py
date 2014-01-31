@@ -21,26 +21,26 @@ from matplotlib.figure import \
 from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup
 
-from ecb_cross_section_state import \
-    ECBCrossSectionState
+from mxn.cross_section_state import \
+    CrossSectionState
 
-from ecb_matrix_cross_section import \
-    ECBMatrixCrossSection
+from mxn.matrix_cross_section import \
+    MatrixCrossSection
 
-from ecb_reinf_component import \
-    ECBReinfComponent
+from mxn.reinf_component import \
+    ReinfComponent
 
 import numpy as np
 
-class ECBCrossSection(ECBCrossSectionState):
+class CrossSection(CrossSectionState):
     '''Cross section characteristics needed for tensile specimens
     '''
 
-    matrix_cs = Instance(ECBMatrixCrossSection)
+    matrix_cs = Instance(MatrixCrossSection)
     def _matrix_cs_default(self):
-        return ECBMatrixCrossSection()
+        return MatrixCrossSection()
 
-    reinf = List(ECBReinfComponent)
+    reinf = List(ReinfComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
 
@@ -246,7 +246,7 @@ class ECBCrossSection(ECBCrossSectionState):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    ecs = ECBCrossSection(# 7d: f_ck,cube = 62 MPa; f_ck,cyl = 62/1.2=52
+    ecs = CrossSection(# 7d: f_ck,cube = 62 MPa; f_ck,cyl = 62/1.2=52
                            # 9d: f_ck,cube = 66.8 MPa; f_ck,cyl = 55,7
                            f_ck=55.7,
 

@@ -5,15 +5,15 @@ Created on Nov 21, 2013
 '''
 
 from mxn import \
-    ECBCrossSection, ECBReinfTexUniform, ECBMatrixCrossSection
+    CrossSection, ReinfTexUniform, MatrixCrossSection
 
 import numpy as np
 
 def test_ecb_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     '''
-    cp = ECBCrossSection(reinf=[ECBReinfTexUniform(n_layers=3)],
-                         matrix_cs=ECBMatrixCrossSection(width=0.1, height=0.05,
+    cp = CrossSection(reinf=[ReinfTexUniform(n_layers=3)],
+                         matrix_cs=MatrixCrossSection(width=0.1, height=0.05,
                                                          n_cj=20),
                          eps_lo=0.014,
                          eps_up= -0.0033,
