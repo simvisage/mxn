@@ -20,6 +20,9 @@ from mxn.cross_section_component import \
 
 from mxn.cross_section_state import \
     CrossSectionState
+    
+from mxn.cross_section_geo import \
+    CrossSectionGeo, GeoRect, GeoI, GeoCirc
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -57,14 +60,6 @@ class MatrixCrossSection(CrossSectionComponent):
     eps_c_u = Float(0.0033, auto_set=False, enter_set=True,
                     cc_input=True)
     '''Strain at failure of the matrix in compression [-]
-    '''
-
-    height = Float(0.4, auto_set=False, enter_set=True, geo_input=True)
-    '''height of the cross section [m]
-    '''
-
-    width = Float(0.20, auto_set=False, enter_set=True, geo_input=True)
-    '''width of the cross section [m]
     '''
 
     x = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
@@ -118,6 +113,27 @@ class MatrixCrossSection(CrossSectionComponent):
         return self.height - self.z_ti_arr
 
     #===========================================================================
+    # Cross section geometry and related parameters
+    #===========================================================================
+
+    geo = Instance(CrossSectionGeo)
+    '''Geometry of the cross section
+    '''
+    
+    height = Property(depends_on='geo')
+    '''height of the cross section [m]
+    '''
+    def _get_height(self):
+        return self.geo.height
+
+    w_ti_arr = Property(depends_on='geo.modified,z_cj_arr')
+    '''Discretization of the  compressive zone - weight factors for general cross section
+    '''
+    @cached_property
+    def _get_w_ti_arr(self):
+        return self.geo.get_width(self.z_ti_arr)
+    
+    #===========================================================================
     # Compressive concrete constitutive law
     #===========================================================================
 
@@ -161,7 +177,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_f_ti_arr(self):
-        return self.width * self.sig_ti_arr * self.unit_conversion_factor
+        return self.w_ti_arr * self.sig_ti_arr * self.unit_conversion_factor
 
     def _get_N(self):
         return np.trapz(self.f_ti_arr, self.z_ti_arr)

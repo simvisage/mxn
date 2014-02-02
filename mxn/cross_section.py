@@ -100,7 +100,7 @@ class CrossSection(CrossSectionState):
     def _get_M(self):
         M_matrix = self.matrix_cs_with_state.M
         M = M_matrix + np.sum([c.M for c in self.reinf_components_with_state])
-        return M - self.N * self.height / 2.
+        return M - self.N * self.matrix_cs.geo.gravity_centre
 
     figure = Instance(Figure)
     def _figure_default(self):

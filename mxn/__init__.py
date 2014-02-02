@@ -18,3 +18,6 @@ from ecb_law_calib import \
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
+
+from mxn.cross_section_geo import \
+    GeoRect, GeoI, GeoCirc
