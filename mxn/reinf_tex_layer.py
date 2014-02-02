@@ -77,7 +77,7 @@ class ReinfTexLayer(ReinfComponent):
     '''
     @cached_property
     def _get_sig_t(self):
-        return self.ecb_law.mfn_vct(self.eps_t)
+        return self.ecb_law.mfn.get_value(self.eps_t)
 
     f_t = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
     '''force at the height of reinforcement layer [kN]:

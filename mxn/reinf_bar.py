@@ -71,7 +71,7 @@ class ReinfBar(ReinfComponent):
     '''
     @cached_property
     def _get_sig(self):
-        return self.ecb_law.mfn_vct(self.eps)
+        return self.ecb_law.mfn.get_value(self.eps)
 
     f = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
     '''force in the bar [kN]:
@@ -89,7 +89,7 @@ class ReinfBar(ReinfComponent):
         return self.f * self.z_up
     
 class SteelBar(ReinfBar):
-    '''
+    '''Steel reinforcement bar
     '''
     ecb_law_type = 'steel'
     def _get_ecb_law(self):
