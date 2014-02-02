@@ -111,7 +111,7 @@ class MatrixCrossSection(CrossSectionComponent):
         return (-np.fabs(eps_j_arr) + eps_j_arr) / 2.0
 
     zz_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Distance of reinforcement layers from the bottom
+    '''Distance of discrete slices of compressive zone from the bottom
     '''
     @cached_property
     def _get_zz_ti_arr(self):

@@ -8,9 +8,9 @@ from etsproxy.traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable
 
-from mxn.cross_section import ECBCrossSection
+from mxn.cross_section import CrossSection
 
-class ECBCrossSectionHistory(ECBCrossSection):
+class ECBCrossSectionHistory(CrossSection):
     '''
     '''
 

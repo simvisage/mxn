@@ -21,9 +21,6 @@ from matplotlib.figure import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, HGroup
 
-from ecb_law import \
-    ECBLBase, ECBLLinear, ECBLFBM, ECBLCubic, ECBLBilinear
-
 from constitutive_law import \
     ConstitutiveLawModelView
 
@@ -34,13 +31,10 @@ from mxn.reinf_component import \
 
 import numpy as np
 
-class ReinfTexUniform(ReinfComponent):
-    '''Cross section characteristics needed for tensile specimens
-    '''
+from mxn.reinf_tex_layer import \
+    ReinfTexLayer
 
-    height = DelegatesTo('matrix_cs')
-    '''height of reinforced cross section
-    '''
+class ReinfTexUniform(ReinfComponent):
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
@@ -53,7 +47,7 @@ class ReinfTexUniform(ReinfComponent):
 
     A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
     '''cross section of one roving [mm**2]'''
-
+    
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure
         to the strain at the bottom of the cross section'''
@@ -65,9 +59,6 @@ class ReinfTexUniform(ReinfComponent):
         in the lowest reinforcement layer at failure'''
         eps_up = self.state.eps_up
         return (eps_up + (eps_lo - eps_up) / self.height * self.z_ti_arr[0])
-
-    '''Convert the MN to kN
-    '''
 
     #===========================================================================
     # material properties 
@@ -108,78 +99,29 @@ class ReinfTexUniform(ReinfComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    eps_i_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Strain at the level of the i-th reinforcement layer
+    layer_lst = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    '''List of reinforcement layers
     '''
     @cached_property
-    def _get_eps_i_arr(self):
-        # ------------------------------------------------------------------------                
-        # geometric params independent from the value for 'eps_t'
-        # ------------------------------------------------------------------------                
-        height = self.height
-        eps_lo = self.state.eps_lo
-        eps_up = self.state.eps_up
-        # strain at the height of each reinforcement layer [-]:
-        #
-        return eps_up + (eps_lo - eps_up) * self.z_ti_arr / height
+    def _get_layer_lst(self):
+        lst = []
+        for i in range(self.n_layers):
+            lst.append(ReinfTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
+                                     state=self.state, matrix_cs=self.matrix_cs,
+                                     z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u))
+        return lst
 
-    eps_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Tension strain at the level of the i-th layer of the fabrics
-    '''
-    @cached_property
-    def _get_eps_ti_arr(self):
-        return (np.fabs(self.eps_i_arr) + self.eps_i_arr) / 2.0
+    def _get_N(self):
+        N = 0.
+        for i in range(self.n_layers):
+            N += self.layer_lst[i].N
+        return N
 
-    eps_ci_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Compression strain at the level of the i-th layer.
-    '''
-    @cached_property
-    def _get_eps_ci_arr(self):
-        return (-np.fabs(self.eps_i_arr) + self.eps_i_arr) / 2.0
-
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-    ecb_law_type = Trait('fbm', dict(fbm=ECBLFBM,
-                                  cubic=ECBLCubic,
-                                  linear=ECBLLinear,
-                                  bilinear=ECBLBilinear),
-                      tt_input=True)
-    '''Selector of the effective crack bridge law type
-    ['fbm', 'cubic', 'linear', 'bilinear']'''
-
-    ecb_law = Property(Instance(ECBLBase), depends_on='+tt_input')
-    '''Effective crack bridge law corresponding to ecb_law_type'''
-    @cached_property
-    def _get_ecb_law(self):
-        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
-
-    show_ecb_law = Button
-    '''Button launching a separate view of the effective crack bridge law.
-    '''
-    def _show_ecb_law_fired(self):
-        ecb_law_mw = ConstitutiveLawModelView(model=self.ecb_law)
-        ecb_law_mw.edit_traits(kind='live')
-        return
-
-    tt_modified = Event
-
-    sig_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Stresses at the i-th fabric layer.
-    '''
-    @cached_property
-    def _get_sig_ti_arr(self):
-        return self.ecb_law.mfn_vct(self.eps_ti_arr)
-
-    f_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''force at the height of each reinforcement layer [kN]:
-    '''
-    @cached_property
-    def _get_f_ti_arr(self):
-        sig_ti_arr = self.sig_ti_arr
-        n_rovings = self.n_rovings
-        A_roving = self.A_roving
-        return sig_ti_arr * n_rovings * A_roving / self.unit_conversion_factor
+    def _get_M(self):
+        M = 0.
+        for i in range(self.n_layers):
+            M += self.layer_lst[i].M
+        return M
 
     figure = Instance(Figure)
     def _figure_default(self):
