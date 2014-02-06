@@ -42,12 +42,14 @@ class ReinfBar(ReinfComponent):
     '''area of the bar
     '''
     
-    bar_coord_arr = Property(depends_on='geo_input')
+    bar_coord_arr = Property(depends_on='+geo_input')
     def _get_bar_coord_arr(self):
         return np.array(self.position, dtype='f')
-    z_up = Property(depends_on='geo_input')
+    
+    z_up = Property(depends_on='+geo_input')
     '''vertical distance from upper rim of cross section
     '''
+    @cached_property
     def _get_z_up(self):
         return self.bar_coord_arr[1]
     

@@ -64,7 +64,7 @@ class GeoRect(CrossSectionGeo):
     '''total width of crosssection
     '''
 
-    gravity_centre = Property(depends_on='geo_input')
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):
@@ -137,7 +137,7 @@ class GeoI(CrossSectionGeo):
     '''width of stalk
     '''
 
-    gravity_centre = Property(depends_on='geo_input')
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):
@@ -214,7 +214,7 @@ class GeoCirc(CrossSectionGeo):
     def _get_height(self):
         return 2 * self.radius
 
-    gravity_centre = Property(depends_on='geo_input')
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):

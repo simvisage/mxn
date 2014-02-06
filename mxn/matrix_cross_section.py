@@ -62,7 +62,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Strain at failure of the matrix in compression [-]
     '''
 
-    x = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    x = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Height of the compressive zone
     '''
     @cached_property
@@ -77,7 +77,7 @@ class MatrixCrossSection(CrossSectionComponent):
             return (abs(eps_up) / (abs(eps_up - eps_lo)) *
                      self.height)
 
-    z_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    z_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Discretizaton of the  compressive zone
     '''
     @cached_property
@@ -90,7 +90,7 @@ class MatrixCrossSection(CrossSectionComponent):
         else: # no compression
             return np.array([0], dtype='f')
 
-    eps_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    eps_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Compressive strain at each integration layer of the compressive zone [-]:
     '''
     @cached_property
@@ -105,7 +105,7 @@ class MatrixCrossSection(CrossSectionComponent):
                      height)
         return (-np.fabs(eps_j_arr) + eps_j_arr) / 2.0
 
-    zz_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    zz_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Distance of discrete slices of compressive zone from the bottom
     '''
     @cached_property
@@ -120,13 +120,13 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Geometry of the cross section
     '''
     
-    height = Property(depends_on='geo')
+    height = Property(depends_on='geo.+geo_input')
     '''height of the cross section [m]
     '''
     def _get_height(self):
         return self.geo.height
 
-    w_ti_arr = Property(depends_on='geo.modified,z_cj_arr')
+    w_ti_arr = Property(depends_on='geo.+geo_input,+geo_input')
     '''Discretization of the  compressive zone - weight factors for general cross section
     '''
     @cached_property
@@ -165,23 +165,31 @@ class MatrixCrossSection(CrossSectionComponent):
     # Calculation of compressive stresses and forces
     #===========================================================================
 
-    sig_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    sig_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Stresses at the j-th integration point.
     '''
     @cached_property
     def _get_sig_ti_arr(self):
         return -self.cc_law.mfn_vct(-self.eps_ti_arr)
 
-    f_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
+    f_ti_arr = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
     '''Layer force corresponding to the j-th integration point.
     '''
     @cached_property
     def _get_f_ti_arr(self):
         return self.w_ti_arr * self.sig_ti_arr * self.unit_conversion_factor
 
+    N = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
+    '''Get the resulting normal force.
+    '''
+    @cached_property
     def _get_N(self):
         return np.trapz(self.f_ti_arr, self.z_ti_arr)
 
+    M = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE + ',geo.+geo_input')
+    '''Get the resulting moment evaluated with respect to the center line
+    '''
+    @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
 

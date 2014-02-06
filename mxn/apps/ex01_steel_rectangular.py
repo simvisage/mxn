@@ -21,4 +21,3 @@ cs = CrossSection(reinf=[sb],
 
 print 'normal force', cs.N
 print 'moment', cs.M
-print 'sigma_bar', sb.sig
