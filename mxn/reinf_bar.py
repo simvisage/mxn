@@ -89,7 +89,11 @@ class ReinfBar(ReinfComponent):
 
     def _get_M(self):
         return self.f * self.z_up
-    
+
+    def plot_geometry(self, ax):
+        '''Plot geometry'''
+        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'ro')
+       
 class SteelBar(ReinfBar):
     '''Steel reinforcement bar
     '''

@@ -131,7 +131,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_w_ti_arr(self):
-        return self.geo.get_width(self.z_ti_arr)
+        return self.geo.width_vct(self.z_ti_arr)
     
     #===========================================================================
     # Compressive concrete constitutive law

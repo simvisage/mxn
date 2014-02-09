@@ -123,6 +123,11 @@ class ReinfTexUniform(ReinfComponent):
             M += self.layer_lst[i].M
         return M
 
+    def plot_geometry(self, ax):
+        '''Plot geometry'''
+        for i in range(self.n_layers):
+            self.layer_lst[i].plot_geometry
+            
     figure = Instance(Figure)
     def _figure_default(self):
         figure = Figure(facecolor='white')
