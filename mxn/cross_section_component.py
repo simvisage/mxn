@@ -36,7 +36,7 @@ class CrossSectionComponent(HasStrictTraits):
     upon modifications of eps_lo and eps_up
     '''
 
-    @on_trait_change(ECB_COMPONENT_CHANGE)
+    @on_trait_change(ECB_COMPONENT_CHANGE + ',geo.+geo_input')
     def notify_change(self):
         '''Propagate the change of the component geometry to the cross section state.
         '''

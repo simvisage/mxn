@@ -95,5 +95,9 @@ class ReinfTexLayer(ReinfComponent):
     def _get_M(self):
         return self.f_t * self.z_coord
 
-    
+    def plot_geometry(self, ax):
+        '''Plot geometry'''
+        width = self.matrix_cs.geo.get_width(self.z_coord)
+        w_max = self.matrix_cs.geo.width
+        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, (w_max + width) / 2, lw=2, color='red', linestyle='dashed')
     

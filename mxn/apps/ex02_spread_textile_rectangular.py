@@ -9,10 +9,21 @@ Created on 1. 2. 2014
 
 from mxn import \
     CrossSection, ReinfTexLayer, MatrixCrossSection, GeoRect
+
+from matplotlib.figure import \
+    Figure
+
+from matplotlib.backends.backend_agg import \
+    FigureCanvasAgg
     
 tl1 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
 tl2 = ReinfTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
+'''Two layers of textile reinforcement
+'''
+
 ge = GeoRect(height=0.5, width=0.3)
+'''Cross section geometry
+'''
 
 cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,
@@ -23,4 +34,11 @@ cs = CrossSection(reinf=[tl1, tl2],
 
 print 'normal force', cs.N
 print 'moment', cs.M
-print 'sigma_layer1', tl1.sig_t
+
+fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
+canvas = FigureCanvasAgg(fig)
+ax = fig.add_subplot(1,1,1)
+ge.plot_geometry(ax)
+for i in range(len(cs.reinf)):
+    cs.reinf[i].plot_geometry(ax)
+canvas.print_figure('ex02.png')

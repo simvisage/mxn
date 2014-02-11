@@ -4,15 +4,27 @@ Created on Jan 30, 2014
 @author: rch
 '''
 
-'''rectangular concrete cross section with steel reinforcement
+'''Rectangular concrete cross section with steel reinforcement
 '''
 
 from mxn import \
     CrossSection, SteelBar, MatrixCrossSection, GeoRect
 
-sb = SteelBar(position=[0.1, 0.45], area=0.0002)
+from matplotlib.figure import \
+    Figure
+
+from matplotlib.backends.backend_agg import \
+    FigureCanvasAgg
+
+bar = SteelBar(position=[0.1, 0.45], area=0.0002)
+'''Single steel reinforcement bar
+'''
+
 ge = GeoRect(height=0.5, width=0.3)
-cs = CrossSection(reinf=[sb],
+'''Cross section geometry
+'''
+
+cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,
                                                          n_cj=20),
                          eps_lo=0.002,
@@ -21,7 +33,10 @@ cs = CrossSection(reinf=[sb],
 
 print 'normal force', cs.N
 print 'moment', cs.M
-print 'sigma_bar', sb.sig
 
-sb.position = [0.09, 0.43]
-print 'moment', cs.M
+fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
+canvas = FigureCanvasAgg(fig)
+ax = fig.add_subplot(1, 1, 1)
+ge.plot_geometry(ax)
+bar.plot_geometry(ax)
+canvas.print_figure('ex01.png')

@@ -57,14 +57,14 @@ class GeoRect(CrossSectionGeo):
     '''
 
     height = Float(0.3, auto_set=False, enter_set=True, geo_input=True)
-    '''total height of crosssection
+    '''total height of cross section
     '''
 
     width = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
-    '''total width of crosssection
+    '''total width of cross section
     '''
 
-    gravity_centre = Property(depends_on='geo_input')
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):
@@ -73,17 +73,21 @@ class GeoRect(CrossSectionGeo):
     def get_width(self, z):
         '''returns width of cross section for different vertical coordinates
         '''
-        width_arr = np.empty(z.shape)
-        width_arr[:] = self.width
-        return width_arr
+        return self.width
+
+    width_vct = Property()
+    def _get_width_vct(self):
+        return np.vectorize(self.get_width, otypes = [np.float])
 
     def plot_geometry(self, ax):
         '''Plot geometry'''
-        dx, dz = -self.width / 2, -self.height / 2
+        dx, dz = 0.0, 0.0
         xdata = np.array([0, self.width, self.width, 0, 0], dtype=float)
         zdata = np.array([0, 0, self.height, self.height, 0], dtype=float)
         ax.plot(xdata + dx, zdata + dz, color='blue')
+        ax.axis('equal')
         ax.axis([dx - 0.1 * self.width, dx + 1.1 * self.width, dz - 0.1 * self.height, dz + 1.1 * self.height])
+        
 
     view = View(HSplit(Group(
                 HGroup(
@@ -137,7 +141,13 @@ class GeoI(CrossSectionGeo):
     '''width of stalk
     '''
 
-    gravity_centre = Property(depends_on='geo_input')
+    width = Property(depends_on='+geo_input')
+    '''Width of cross section
+    '''
+    def _get_width(self):
+        return max(self.width_lo, self.width_up)
+
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):
@@ -149,15 +159,19 @@ class GeoI(CrossSectionGeo):
     def get_width(self, z):
         '''returns width of cross section for different vertical coordinates
         '''
-        width_arr = self.width_up + (np.sign(z-self.height_up)+1)/2 * (self.width_st - self.width_up) + \
+        width = self.width_up + (np.sign(z-self.height_up)+1)/2 * (self.width_st - self.width_up) + \
         (np.sign(z-self.height + self.height_lo)+1)/2 * (self.width_lo - self.width_st)
-        return width_arr
+        return width
+
+    width_vct = Property()
+    def _get_width_vct(self):
+        return np.vectorize(self.get_width, otypes = [np.float])
         
     def plot_geometry(self, ax):
         '''Plot geometry'''
-        w_max = max(self.width_lo, self.width_up)
+        w_max = self.width
        
-        dx, dz = -w_max / 2, -self.height / 2
+        dx, dz = 0.0, 0.0
 
         xdata = np.array([- self.width_lo / 2, self.width_lo / 2, self.width_lo / 2, self.width_st / 2,
                           self.width_st / 2, self.width_up / 2, self.width_up / 2, - self.width_up / 2,
@@ -170,6 +184,7 @@ class GeoI(CrossSectionGeo):
 
         ax.plot(xdata + dx, zdata + dz, color='blue')
 
+        ax.axis('equal')
         ax.axis([dx - 0.1 * w_max, dx + 1.1 * w_max, dz - 0.1 * self.height, dz + 1.1 * self.height])
 
     view = View(HSplit(Group(
@@ -214,27 +229,39 @@ class GeoCirc(CrossSectionGeo):
     def _get_height(self):
         return 2 * self.radius
 
-    gravity_centre = Property(depends_on='geo_input')
+    width = Property(depends_on='radius')
+    '''Width of cross section
+    '''
+    def _get_width(self):
+        return 2 * self.radius
+
+    gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
     def _get_gravity_centre(self):
         return self.radius
 
     def get_width(self, z):
-        '''returns width of cross section for different vertical coordinates
+        '''returns width of cross section for given vertical coordinate
         '''
-        r_dist_arr = z - self.radius
+        r_dist = z - self.radius
         '''transfer distance from top to distance from center
         '''
-        width_arr = 2 * np.sqrt(self.radius ** 2 - r_dist_arr ** 2)
-        return width_arr
+        width = 2 * np.sqrt(self.radius ** 2 - r_dist ** 2)
+        return width
+
+    width_vct = Property()
+    def _get_width_vct(self):
+        return np.vectorize(self.get_width, otypes = [np.float])
         
     def plot_geometry(self, ax):
         '''Plot geometry'''
+        dx, dz = self.radius, self.radius
         fi_outline_arr = np.append(np.arange(0, 2 * np.pi, np.pi / 60, dtype=float), 0.0)
 
-        ax.plot(np.cos(fi_outline_arr) * self.radius, np.sin(fi_outline_arr) * self.radius, color='blue')
-        ax.axis([-self.radius * 1.1, self.radius * 1.1, -self.radius * 1.1, self.radius * 1.1])
+        ax.plot(np.cos(fi_outline_arr) * self.radius + dx, np.sin(fi_outline_arr) * self.radius + dz, color='blue')
+        ax.axis('equal')
+        ax.axis([dx - self.radius * 1.1, dx + self.radius * 1.1, dz - self.radius * 1.1, dz + self.radius * 1.1])
 
     view = View(HSplit(Group(
                 HGroup(
