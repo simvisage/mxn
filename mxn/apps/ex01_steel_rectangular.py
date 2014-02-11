@@ -22,3 +22,6 @@ cs = CrossSection(reinf=[sb],
 print 'normal force', cs.N
 print 'moment', cs.M
 print 'sigma_bar', sb.sig
+
+sb.position = [0.09, 0.43]
+print 'moment', cs.M
