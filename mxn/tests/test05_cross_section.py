@@ -7,12 +7,6 @@ Created on 15. 2. 2014
 from mxn import \
     CrossSection, SteelBar, MatrixCrossSection, GeoRect, ReinfTexLayer, GeoCirc
 
-from matplotlib.figure import \
-    Figure
-
-from matplotlib.backends.backend_agg import \
-    FigureCanvasAgg
-
 import numpy as np
     
 def test05_cross_section_mn():
