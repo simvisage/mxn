@@ -257,7 +257,8 @@ class GeoCirc(CrossSectionGeo):
     def plot_geometry(self, ax):
         '''Plot geometry'''
         dx, dz = self.radius, self.radius
-        fi_outline_arr = np.append(np.arange(0, 2 * np.pi, np.pi / 60, dtype=float), 0.0)
+        #fi_outline_arr = np.append(np.arange(0, 2 * np.pi, np.pi / 60, dtype=float), 0.0)
+        fi_outline_arr = np.linspace(0, 2 * np.pi, 60)
 
         ax.plot(np.cos(fi_outline_arr) * self.radius + dx, np.sin(fi_outline_arr) * self.radius + dz, color='blue')
         ax.axis('equal')
