@@ -26,6 +26,9 @@ from mxn.reinf_tex_uniform import \
 from mxn.matrix_cross_section import \
     MatrixCrossSection
 
+from mxn.cross_section_geo import \
+    GeoRect
+    
 from ecb_law import ECBLBase
 
 from util.traits.editors.mpl_figure_editor import  \
@@ -49,41 +52,47 @@ class ECBLCalib(HasStrictTraits):
     # Cross Section Specification (Geometry and Layout)
     #===========================================================================
 
+    reinf = Instance(ReinfTexUniform)
+    def _reinf_default(self):
+        return ReinfTexUniform(n_layers=12)
+
+    matrix = Instance(MatrixCrossSection)
+    def _matrix_default(self):
+        return MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20)
+
     cs = Instance(CrossSection)
     def _cs_default(self):
-        reinf = [ReinfTexUniform(n_layers=3)]
-        matrix = MatrixCrossSection(width=0.1, n_cj=20)
-        return CrossSection(reinf=reinf,
-                               matrix=matrix)
-
-    ecb_law_type = DelegatesTo('cs')
-    ecb_law = DelegatesTo('cs')
-    cc_law_type = DelegatesTo('cs')
-    cc_law = DelegatesTo('cs')
-    width = DelegatesTo('cs')
-    f_ck = DelegatesTo('cs')
-    eps_c_u = DelegatesTo('cs')
-    n_rovings = DelegatesTo('cs')
-    n_layers = DelegatesTo('cs')
+        return CrossSection(reinf=[self.reinf],
+                               matrix_cs=self.matrix)
+        
+    #ecb_law_type = DelegatesTo('reinf')
+    #ecb_law = DelegatesTo('reinf')
+    #cc_law_type = DelegatesTo('matrix')
+    #cc_law = DelegatesTo('matrix')
+    #width = DelegatesTo('matrix_cs.geo')
+    f_ck = DelegatesTo('matrix')
+    eps_c_u = DelegatesTo('matrix')
+    n_rovings = DelegatesTo('reinf')
+    n_layers = DelegatesTo('reinf')
 
     notify_change = Callable(None)
 
     modified = Event
-    @on_trait_change('cs.modified,+calib_input')
+    @on_trait_change('cs.changed,+calib_input')
     def _set_modified(self):
         self.modified = True
         if self.notify_change != None:
             self.notify_change()
 
-    u0 = Property(Array(float), depends_on='cs.modified')
+    u0 = Property(Array(float), depends_on='cs.changed')
     '''Construct the initial vector.
     '''
     @cached_property
     def _get_u0(self):
-        u0 = self.ecb_law.u0
+        u0 = self.cs.reinf_components_with_state[0].ecb_law.u0
         #eps_up = u0[1]
-        eps_up = -self.cs.eps_c_u
-        eps_lo = self.cs.convert_eps_tex_u_2_lo(u0[0])
+        eps_up = -self.eps_c_u
+        eps_lo = self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(u0[0])
 
         print 'eps_up', eps_up
         print 'eps_lo', eps_lo
@@ -103,13 +112,16 @@ class ECBLCalib(HasStrictTraits):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.cs.eps_c_u
+        eps_up = -self.eps_c_u
         eps_lo = u[0]
 
-        self.cs.set(eps_lo=eps_lo, eps_up=eps_up)
+        self.cs.set_eps(eps_lo=eps_lo, eps_up=eps_up)
 
-        eps_tex_u = self.cs.convert_eps_lo_2_tex_u(u[0])
-        self.cs.ecb_law.set_cparams(eps_tex_u, u[1])
+        eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
+        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])
+        
+        for layer in self.cs.reinf_components_with_state[0].layer_lst:
+            layer.ecb_law.set_cparams(eps_tex_u, u[1])
 
         N_internal = self.cs.N
         M_internal = self.cs.M
@@ -119,7 +131,7 @@ class ECBLCalib(HasStrictTraits):
 
         return np.array([ d_N, d_M ], dtype=float)
 
-    u_sol = Property(Array(Float), depends_on='cs.modified,+calib_input')
+    u_sol = Property(Array(Float), depends_on='cs.changed,+calib_input')
     '''Solution vector returned by 'fit_response'.'''
     @cached_property
     def _get_u_sol(self):
@@ -140,14 +152,14 @@ class ECBLCalib(HasStrictTraits):
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
 
-    calibrated_ecb_law = Property(depends_on='cs.modified,+calib_input')
+    calibrated_ecb_law = Property(depends_on='cs.changed,+calib_input')
     '''Calibrated ecbl_mfn
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
-        self.ecb_law.set_cparams(*self.u_sol)
-        return self.ecb_law
+        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(*self.u_sol)
+        return self.cs.reinf_components_with_state[0].ecb_law
 
     view = View(Item('Mu'),
                 Item('Nu'),
@@ -223,11 +235,11 @@ if __name__ == '__main__':
     print '\n'
     p.plot([0, 0], [0, 2.4e3])
 
-    ec = ECBLCalib(# mean concrete strength after 9 days
+    ec = ECBLCalib(        #reinf=ReinfTexUniform(n_layers=3), matrix=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05), n_cj=20),
+                           # mean concrete strength after 9 days
                            # 7d: f_ck,cube = 62 MPa; f_ck,cyl = 62/1.2=52
                            # 9d: f_ck,cube = 66.8 MPa; f_ck,cyl = 55,7
                            f_ck=55.7,
-
                            # measured strain at bending test rupture (0-dir)
                            #
                            eps_c_u=3.3 / 1000.,
@@ -237,7 +249,6 @@ if __name__ == '__main__':
                            #
                            Mu=3.49,
                        )
-
     ecw = ECBLCalibModelView(model=ec)
     ecw.configure_traits()
 

@@ -26,6 +26,11 @@ from traitsui.api import \
 class CrossSectionGeo(HasStrictTraits):
     '''Base class for cross section types.
     '''
+    
+    changed = Event
+    @on_trait_change('+geo_input')
+    def set_changed(self):
+        self.changed = True
 
     #===========================================================================
     # Plotting of the cross section
@@ -67,6 +72,7 @@ class GeoRect(CrossSectionGeo):
     gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
+    @cached_property
     def _get_gravity_centre(self):
         return self.height / 2
 
@@ -76,6 +82,7 @@ class GeoRect(CrossSectionGeo):
         return self.width
 
     width_vct = Property()
+    @cached_property
     def _get_width_vct(self):
         return np.vectorize(self.get_width, otypes = [np.float])
 
@@ -144,12 +151,14 @@ class GeoI(CrossSectionGeo):
     width = Property(depends_on='+geo_input')
     '''Width of cross section
     '''
+    @cached_property
     def _get_width(self):
         return max(self.width_lo, self.width_up)
 
     gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
+    @cached_property
     def _get_gravity_centre(self):
         A_up, z_up = self.width_up * self.height_up, self.height_up / 2
         A_lo, z_lo = self.width_lo * self.height_lo, self.height - self.height_lo / 2
@@ -164,6 +173,7 @@ class GeoI(CrossSectionGeo):
         return width
 
     width_vct = Property()
+    @cached_property
     def _get_width_vct(self):
         return np.vectorize(self.get_width, otypes = [np.float])
         
@@ -226,18 +236,21 @@ class GeoCirc(CrossSectionGeo):
     height = Property(depends_on='radius')
     '''Height of cross section
     '''
+    @cached_property
     def _get_height(self):
         return 2 * self.radius
 
     width = Property(depends_on='radius')
     '''Width of cross section
     '''
+    @cached_property
     def _get_width(self):
         return 2 * self.radius
 
     gravity_centre = Property(depends_on='+geo_input')
     '''z distance of gravity centre from upper rim
     '''
+    @cached_property
     def _get_gravity_centre(self):
         return self.radius
 
@@ -251,6 +264,7 @@ class GeoCirc(CrossSectionGeo):
         return width
 
     width_vct = Property()
+    @cached_property
     def _get_width_vct(self):
         return np.vectorize(self.get_width, otypes = [np.float])
         

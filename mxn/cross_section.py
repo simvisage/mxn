@@ -60,8 +60,6 @@ class CrossSection(CrossSectionState):
             r.matrix_cs = self.matrix_cs
         return self.reinf
 
-    height = DelegatesTo('matrix_cs')
-
     unit_conversion_factor = Constant(1000.0)
 
     '''Convert the MN to kN

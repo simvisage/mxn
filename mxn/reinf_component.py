@@ -31,19 +31,16 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection
 
 from mxn.cross_section_component import \
-    CrossSectionComponent, \
-    ECB_COMPONENT_CHANGE, \
-    ECB_COMPONENT_AND_EPS_CHANGE
+    CrossSectionComponent
+
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input'
 
 class ReinfComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
     matrix_cs = WeakRef(MatrixCrossSection)
-
-    height = DelegatesTo('matrix_cs')
-    '''height of reinforced cross section
-    '''
 
     #===========================================================================
     # Effective crack bridge law
@@ -53,15 +50,15 @@ class ReinfComponent(CrossSectionComponent):
                                   linear=ECBLLinear,
                                   bilinear=ECBLBilinear,
                                   steel=ECBLSteel),
-                      tt_input=True)
+                      law_input=True)
     '''Selector of the effective crack bridge law type
     ['fbm', 'cubic', 'linear', 'bilinear','steel']'''
 
-    ecb_law = Property(Instance(ECBLBase), depends_on='+tt_input')
+    ecb_law = Property(Instance(ECBLBase), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
+        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
 
     show_ecb_law = Button
     '''Button launching a separate view of the effective crack bridge law.

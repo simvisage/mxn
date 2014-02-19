@@ -19,8 +19,7 @@ from mxn.cross_section_state import \
 import numpy as np
 
 
-ECB_COMPONENT_CHANGE = '+geo_input,+law_input'
-ECB_COMPONENT_AND_EPS_CHANGE = 'eps_changed,+geo_input,+law_input'
+COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed'
 
 class CrossSectionComponent(HasStrictTraits):
     '''Cross section component supplying the normal force and moment..
@@ -36,9 +35,10 @@ class CrossSectionComponent(HasStrictTraits):
     upon modifications of eps_lo and eps_up
     '''
 
-    @on_trait_change(ECB_COMPONENT_CHANGE + ',geo.+geo_input')
+    @on_trait_change(COMPONENT_CHANGE)
     def notify_change(self):
-        '''Propagate the change of the component geometry to the cross section state.
+        '''Propagate the change of the component geometry or stress-strain 
+        law to the cross section state.
         '''
         if self.state:
             self.state.changed = True
@@ -48,19 +48,13 @@ class CrossSectionComponent(HasStrictTraits):
     # Cross-sectional stress resultants
     #===========================================================================
 
-    N = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Get the resulting normal force.
+    N = Property()
+    '''Resulting normal force.
     '''
-    @cached_property
-    def _get_N(self):
-        return sum(self.f_ti_arr)
 
-    M = Property(depends_on=ECB_COMPONENT_AND_EPS_CHANGE)
-    '''Get the resulting moment evaluated with respect to the center line
+    M = Property()
+    '''Resulting moment.
     '''
-    @cached_property
-    def _get_M(self):
-        return np.dot(self.f_ti_arr, self.z_ti_arr)
 
 if __name__ == '__main__':
     #ecs.configure_traits()

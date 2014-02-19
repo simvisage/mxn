@@ -87,7 +87,7 @@ class ECBLFBM(ECBLBase):
     eps_arr = Property(depends_on = '+input')
     @cached_property
     def _get_eps_arr(self):
-        return np.linspace(0, self.eps_tex_u, num = 100.)
+        return np.linspace(0, self.eps_tex_u, num = 100)
 
     sig_arr = Property(depends_on = '+input')
     @cached_property
@@ -97,7 +97,7 @@ class ECBLFBM(ECBLBase):
         eps_arr = self.eps_arr
         m = self.m
         return (sig_tex_u / eps_tex_u /
-                exp(-pow(exp(-log(m) / self.m), 1.0 * m)) *
+                exp(-pow(exp(-log(m) / m), 1.0 * m)) *
                 eps_arr * np.exp(-np.power(eps_arr / eps_tex_u * exp(-log(m) / m), 1.0 * m)))
 
 class ECBLCubic(ECBLBase):
