@@ -19,6 +19,18 @@ from etsproxy.traits.ui.api import \
 from ecb_law_calib import \
     ECBLCalib
 
+from mxn.cross_section import \
+    CrossSection
+
+from mxn.reinf_tex_uniform import \
+    ReinfTexUniform
+
+from mxn.matrix_cross_section import \
+    MatrixCrossSection
+
+from mxn.cross_section_geo import \
+    GeoRect
+
 import numpy as np
 
 class ECBLMNDiagram(HasTraits):
@@ -32,7 +44,7 @@ class ECBLMNDiagram(HasTraits):
 
     modified = Event
     def set_modified(self):
-        print 'MN:set_modifeid'
+        print 'MN:set_modified'
         self.modified = True
 
     # cross section
@@ -46,7 +58,7 @@ class ECBLMNDiagram(HasTraits):
 
     eps_cu = Property()
     def _get_eps_cu(self):
-        return -self.cs.cc_law.eps_c_u
+        return -self.cs.matrix_cs_with_state.cc_law.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
@@ -83,7 +95,7 @@ class ECBLMNDiagram(HasTraits):
     #===========================================================================
 
     def _get_MN_fn(self, eps_lo, eps_up):
-        self.cs.set(eps_lo=eps_lo,
+        self.cs.set_eps(eps_lo=eps_lo,
                     eps_up=eps_up)
         return (self.cs.M, self.cs.N)
 
@@ -230,17 +242,16 @@ class ECBLMNDiagram(HasTraits):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    c = ECBLCalib(
-                  Mu=3.49,
-                  width=0.20,
-                  n_rovings=23,
-                  ecb_law_type='fbm',
-                  cc_law_type='quadratic'             #eps_tu 0.0137279096658                              
-                  )
+    rf = ReinfTexUniform(n_layers=12,ecb_law_type='fbm')
+    mx = MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20, cc_law_type='quadratic')    
+    cs1 = CrossSection(reinf = [rf], matrix_cs = mx)
+    
+    c = ECBLCalib(Mu=3.49, cs = cs1)
 
     mn = ECBLMNDiagram(calib=c,
-                       n_eps=30,
+                       n_eps=5,
                       )
 
+    print mn.MN_arr
     mn.configure_traits()
 

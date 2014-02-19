@@ -52,29 +52,11 @@ class ECBLCalib(HasStrictTraits):
     # Cross Section Specification (Geometry and Layout)
     #===========================================================================
 
-    reinf = Instance(ReinfTexUniform)
-    def _reinf_default(self):
-        return ReinfTexUniform(n_layers=12)
-
-    matrix = Instance(MatrixCrossSection)
-    def _matrix_default(self):
-        return MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20)
-
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection(reinf=[self.reinf],
-                               matrix_cs=self.matrix)
+        return CrossSection(reinf=[ReinfTexUniform(n_layers=12)],
+                               matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20))
         
-    #ecb_law_type = DelegatesTo('reinf')
-    #ecb_law = DelegatesTo('reinf')
-    #cc_law_type = DelegatesTo('matrix')
-    #cc_law = DelegatesTo('matrix')
-    #width = DelegatesTo('matrix_cs.geo')
-    f_ck = DelegatesTo('matrix')
-    eps_c_u = DelegatesTo('matrix')
-    n_rovings = DelegatesTo('reinf')
-    n_layers = DelegatesTo('reinf')
-
     notify_change = Callable(None)
 
     modified = Event
@@ -90,8 +72,8 @@ class ECBLCalib(HasStrictTraits):
     @cached_property
     def _get_u0(self):
         u0 = self.cs.reinf_components_with_state[0].ecb_law.u0
-        #eps_up = u0[1]
-        eps_up = -self.eps_c_u
+
+        eps_up = -self.cs.matrix_cs.eps_c_u
         eps_lo = self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(u0[0])
 
         print 'eps_up', eps_up
@@ -112,7 +94,7 @@ class ECBLCalib(HasStrictTraits):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.eps_c_u
+        eps_up = -self.cs.matrix_cs.eps_c_u
         eps_lo = u[0]
 
         self.cs.set_eps(eps_lo=eps_lo, eps_up=eps_up)
@@ -235,14 +217,13 @@ if __name__ == '__main__':
     print '\n'
     p.plot([0, 0], [0, 2.4e3])
 
-    ec = ECBLCalib(        #reinf=ReinfTexUniform(n_layers=3), matrix=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05), n_cj=20),
-                           # mean concrete strength after 9 days
+    ec = ECBLCalib(        # mean concrete strength after 9 days
                            # 7d: f_ck,cube = 62 MPa; f_ck,cyl = 62/1.2=52
                            # 9d: f_ck,cube = 66.8 MPa; f_ck,cyl = 55,7
-                           f_ck=55.7,
+                           #f_ck=55.7,
                            # measured strain at bending test rupture (0-dir)
                            #
-                           eps_c_u=3.3 / 1000.,
+                           #eps_c_u=3.3 / 1000.,
 
                            # measured value in bending test [kNm]
                            # value per m: M = 5*3.49

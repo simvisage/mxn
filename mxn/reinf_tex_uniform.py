@@ -109,7 +109,8 @@ class ReinfTexUniform(ReinfComponent):
         for i in range(self.n_layers):
             lst.append(ReinfTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
-                                     z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u))
+                                     z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
+                                     ecb_law_type=self.ecb_law_type))
         return lst
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
