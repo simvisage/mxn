@@ -303,6 +303,6 @@ class GeoCirc(CrossSectionGeo):
 
 if __name__ == '__main__':
 
-    ecs = GeoI(width_up=0.8, width_lo=0.5)
+    ecs = GeoI()
 
     ecs.configure_traits()

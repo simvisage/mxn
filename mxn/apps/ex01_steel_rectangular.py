@@ -33,13 +33,6 @@ cs = CrossSection(reinf=[bar],
 
 print 'normal force', cs.N
 print 'moment', cs.M
-print bar.N
-
-ge.height = 0.6
-
-print 'normal force', cs.N
-print 'moment', cs.M
-print bar.N
 
 fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
 canvas = FigureCanvasAgg(fig)

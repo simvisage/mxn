@@ -99,8 +99,30 @@ class ReinfBar(ReinfComponent):
 
     def plot_geometry(self, ax):
         '''Plot geometry'''
-        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'ro')
-       
+        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'go')
+
+    def plot_eps(self, ax):
+        h = self.matrix_cs.geo.height
+        
+        # eps ti
+        ax.hlines([h-self.z_up], [0], [-self.eps], lw=4, color='green')
+
+    def plot_sig(self, ax):
+        h = self.matrix_cs.geo.height
+        
+        # sig ti
+        ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='green')
+
+    view = View(VGroup(
+                       Item('position', style = 'readonly'),
+                       Item('area'),
+                       label='Reinforcement Bar',
+                       springy=True
+                       ),
+                       resizable=True,
+                       buttons=['OK', 'Cancel']
+                       )
+    
 class SteelBar(ReinfBar):
     '''Steel reinforcement bar
     '''
@@ -108,4 +130,7 @@ class SteelBar(ReinfBar):
     def _get_ecb_law(self):
         return self.ecb_law_type_(f_yk=500., E_s=200000., eps_s_u=0.025)
     
-    
+if __name__ == '__main__':
+    bar = SteelBar()
+    bar.configure_traits()
+    print bar.position

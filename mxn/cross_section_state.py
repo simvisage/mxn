@@ -19,7 +19,4 @@ class CrossSectionState(HasStrictTraits):
 
     eps_up = Float(-0.0033, auto_set=False, enter_set=True, eps_input=True)
     eps_lo = Float(0.0140, auto_set=False, enter_set=True, eps_input=True)
-
-    def set_eps(self, eps_lo, eps_up):
-        self.eps_lo = eps_lo
-        self.eps_up = eps_up
+        

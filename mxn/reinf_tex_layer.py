@@ -4,13 +4,16 @@ Created on 31. 1. 2014
 @author: Vancikv
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
     DelegatesTo, Constant
 
 from constitutive_law import \
     ConstitutiveLawModelView
+
+from traitsui.api import \
+    View, Item, Group, HSplit, VGroup, HGroup
 
 from mxn.reinf_component import \
     ReinfComponent, \
@@ -109,4 +112,36 @@ class ReinfTexLayer(ReinfComponent):
         width = self.matrix_cs.geo.get_width(self.z_coord)
         w_max = self.matrix_cs.geo.width
         ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, (w_max + width) / 2, lw=2, color='red', linestyle='dashed')
+
+    def plot_eps(self, ax):
+        h = self.matrix_cs.geo.height
+        eps_lo = self.state.eps_lo
+        eps_up = self.state.eps_up
+        
+        # eps ti
+        ax.hlines([h-self.z_coord], [0], [-self.eps_t], lw=4, color='red')
+
+        # reinforcement layer
+        ax.hlines([h-self.z_coord], [min(0.0, -eps_lo, -eps_up)], [max(0.0, -eps_lo, -eps_up)], lw=1, color='black', linestyle='--')
+
+    def plot_sig(self, ax):
+        h = self.matrix_cs.geo.height
+        
+        # sig ti
+        ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='red')
     
+    view = View(VGroup(
+                      Item('n_rovings'),
+                      Item('A_roving'),
+                      Item('z_coord'),
+                      Item('sig_tex_u'),
+                      label='Textile layer',
+                      springy=True,
+                      ),
+                resizable=True,
+                buttons=['OK', 'Cancel']
+                )
+    
+if __name__ == '__main__':
+    Layer = ReinfTexLayer()
+    Layer.configure_traits()

@@ -95,7 +95,7 @@ class ECBLMNDiagram(HasTraits):
     #===========================================================================
 
     def _get_MN_fn(self, eps_lo, eps_up):
-        self.cs.set_eps(eps_lo=eps_lo,
+        self.cs.set(eps_lo=eps_lo,
                     eps_up=eps_up)
         return (self.cs.M, self.cs.N)
 

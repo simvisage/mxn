@@ -97,7 +97,7 @@ class ECBLCalib(HasStrictTraits):
         eps_up = -self.cs.matrix_cs.eps_c_u
         eps_lo = u[0]
 
-        self.cs.set_eps(eps_lo=eps_lo, eps_up=eps_up)
+        self.cs.set(eps_lo=eps_lo, eps_up=eps_up)
 
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])

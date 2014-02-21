@@ -6,19 +6,17 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
-    Event, on_trait_change, Callable, Instance, WeakRef, Trait, Button
-
-from etsproxy.traits.ui.api import \
-    View, Item, Group, HGroup
+    Event, on_trait_change, Callable, Instance, WeakRef, Trait, \
+    Button, List
 
 from mxn.cross_section_component import \
     CrossSectionComponent
 
 from mxn.cross_section_state import \
     CrossSectionState
-    
+
 from mxn.cross_section_geo import \
     CrossSectionGeo, GeoRect, GeoI, GeoCirc
 
@@ -28,8 +26,8 @@ from util.traits.editors.mpl_figure_editor import \
 from matplotlib.figure import \
     Figure
 
-from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup
+from traitsui.api import \
+    View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
 from constitutive_law import \
     ConstitutiveLawModelView
@@ -116,6 +114,8 @@ class MatrixCrossSection(CrossSectionComponent):
     geo = Instance(CrossSectionGeo)
     '''Geometry of the cross section
     '''
+    
+    geo_lst = List([GeoRect(),GeoI(),GeoCirc()])
 
     w_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Discretization of the  compressive zone - weight factors for general cross section
@@ -185,24 +185,44 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
 
+    def plot_eps(self, ax):
+        h = self.geo.height
+        
+        # eps ti
+        ec = np.hstack([self.eps_ti_arr] + [0, 0])
+        zz = np.hstack([self.zz_ti_arr] + [0, h ])
+        ax.fill(-ec, zz, color='blue')
+
+    def plot_sig(self, ax):
+        h = self.geo.height
+
+        # sig ti
+        ec = np.hstack([self.f_ti_arr*self.x/self.n_cj] + [0, 0])
+        zz = np.hstack([self.zz_ti_arr] + [0, h ])
+        ax.fill(-ec, zz, color='blue')
+
     view = View(HGroup(
-                Group(Item('height', springy=True),
-                      Item('width'),
-                      Item('n_layers'),
-                      Item('n_rovings'),
-                      Item('A_roving'),
-                      label='Geometry',
+                Group(
+                      Item('n_cj'),
+                      Item('f_ck'),
+                      Item('eps_c_u'),
+                      Item('geo',label='Cross section geometry',show_label=False,
+                           editor=InstanceEditor(name='geo_lst',editable=True), style='custom'),
+                      label='Matrix',
                       springy=True
                       ),
                 springy=True,
                 ),
+                width=0.8,
+                height=0.6,
                 resizable=True,
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    state = CrossSectionState(eps_lo=0.02)
+            
+    from mxn.cross_section import CrossSection
+
+    state = CrossSection(eps_lo=0.02)
     ecs = MatrixCrossSection(state=state,geo=GeoRect())
 
-    print 'zz_ti_arr', ecs.zz_ti_arr
-    print 'ecb_lo', ecs.state.eps_lo
-    #ecs.configure_traits()
+    ecs.configure_traits()
