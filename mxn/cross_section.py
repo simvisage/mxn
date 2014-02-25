@@ -50,7 +50,7 @@ class CrossSection(CrossSectionState):
     reinf = List(ReinfComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
-    
+
     matrix_cs_with_state = Property(depends_on='matrix_cs')
     @cached_property
     def _get_matrix_cs_with_state(self):
@@ -153,7 +153,7 @@ class CrossSection(CrossSectionState):
         ax.spines['bottom'].set_smart_bounds(True)
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
-    
+
     view = View(HSplit(
                     VGroup(Item('eps_up'),
                            Item('eps_lo'),
@@ -167,29 +167,29 @@ class CrossSection(CrossSectionState):
                       label='plot sheet',
                       dock='tab',
                       )))
-        
+
 class CrossSectionTree(HasStrictTraits):
     cs = Instance(CrossSection)
-    
+
 tree_editor = TreeEditor(
             nodes=[
-                   TreeNode( node_for = [CrossSection],
-                             auto_open = True,
-                             children = '',
-                             label = '=Cross section',
+                   TreeNode(node_for=[CrossSection],
+                             auto_open=True,
+                             children='',
+                             label='=Cross section',
                             ),
-                   TreeNode( node_for = [CrossSection],
-                             auto_open = True,
-                             children = 'reinf',
-                             label = '=Reinforcement',
-                             view = View(),
-                             add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
+                   TreeNode(node_for=[CrossSection],
+                             auto_open=True,
+                             children='reinf_components_with_state',
+                             label='=Reinforcement',
+                             view=View(),
+                             add=[ReinfTexUniform, ReinfTexLayer, SteelBar]
                             ),
-                   TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
-                             auto_open = True,
+                   TreeNode(node_for=[ReinfTexUniform, ReinfTexLayer, SteelBar],
+                             auto_open=True,
                             ),
-                   TreeNode( node_for = [MatrixCrossSection],
-                              auto_open = True,
+                   TreeNode(node_for=[MatrixCrossSection],
+                              auto_open=True,
                             ),
                    ],
                          orientation='vertical'
@@ -198,20 +198,20 @@ tree_editor = TreeEditor(
 view = View(
                Group(
                    Item(
-                        name = 'cs',
-                        editor = tree_editor,
-                        resizable = True ),
-                    orientation = 'vertical',
-                    show_labels = True,
-                    show_left = True, ),
-                title = 'Cross section structure',
-                dock = 'horizontal',
-                drop_class = HasStrictTraits,
-                buttons = [ 'Undo', 'OK', 'Cancel' ],
-                resizable = True,
-                width = .5,
-                height = .5 )
-    
+                        name='cs',
+                        editor=tree_editor,
+                        resizable=True),
+                    orientation='vertical',
+                    show_labels=True,
+                    show_left=True,),
+                title='Cross section structure',
+                dock='horizontal',
+                drop_class=HasStrictTraits,
+                buttons=[ 'Undo', 'OK', 'Cancel' ],
+                resizable=True,
+                width=.5,
+                height=.5)
+
 
 if __name__ == '__main__':
     from mxn.cross_section_geo import GeoRect

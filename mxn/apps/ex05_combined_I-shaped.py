@@ -10,7 +10,7 @@ of textile layers and steel bars
 
 from mxn import \
     CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, GeoI, GeoCirc
-    
+
 import numpy as np
 
 from matplotlib.figure import \
@@ -18,9 +18,9 @@ from matplotlib.figure import \
 
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
-    
+
 ge = GeoI(height=0.4, height_up=0.05, width_up=0.25, height_lo=0.05, width_lo=0.35, width_st=0.05)
-mcs = MatrixCrossSection(geo=ge, n_cj=20)    
+mcs = MatrixCrossSection(geo=ge, n_cj=20)
 '''Cross section geometry + matrix
 '''
 
@@ -43,11 +43,11 @@ cs = CrossSection(reinf=[tl1, tl2, bar1, bar2, bar3, bar4],
                          )
 
 print 'normal force', cs.N
-print 'moment', cs.M
+print 'moment', cs.
 
-fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
+fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
 canvas = FigureCanvasAgg(fig)
-ax = fig.add_subplot(1,1,1)
+ax = fig.add_subplot(1, 1, 1)
 ge.plot_geometry(ax)
 for i in range(len(cs.reinf)):
     cs.reinf[i].plot_geometry(ax)
