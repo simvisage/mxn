@@ -10,7 +10,7 @@ from etsproxy.traits.api import \
     on_trait_change
 
 from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, ModelView, VGroup, HGroup, RangeEditor, InstanceEditor
+    TreeEditor, TreeNode, View, Item, Group, HSplit, ModelView, VGroup, HGroup, RangeEditor, InstanceEditor
 
 import numpy as np
 import pylab as p
@@ -22,6 +22,12 @@ from mxn.cross_section import \
 
 from mxn.reinf_tex_uniform import \
     ReinfTexUniform
+from mxn.reinf_tex_layer import \
+    ReinfTexLayer
+from mxn.reinf_tex_uniform import \
+    ReinfTexUniform
+from mxn.reinf_bar import \
+    SteelBar
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -183,7 +189,7 @@ class ECBLCalibModelView(ModelView):
     def _get_calibrated_ecb_law(self):
         return self.model.calibrated_ecb_law
 
-    view = View(HSplit(VGroup(
+    traits_view = View(HSplit(VGroup(
                        Item('cs_state', label='Cross section', show_label=False),
                        Item('model@', show_label=False),
                        Item('calibrated_ecb_law@', show_label=False, resizable=True),
@@ -203,7 +209,59 @@ class ECBLCalibModelView(ModelView):
                 height=0.4,
                 buttons=['OK', 'Cancel'],
                 resizable=True)
+    
+tree_editor = TreeEditor(
+            nodes=[
+                   TreeNode( node_for = [CrossSection],
+                             auto_open = True,
+                             children = '',
+                             label = '=Cross section',
+                            ),
+                   TreeNode( node_for = [CrossSection],
+                             auto_open = True,
+                             children = 'reinf',
+                             label = '=Reinforcement',
+                             view = View(),
+                             add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
+                            ),
+                   TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
+                             auto_open = True,
+                             name = 'name',
+                            ),
+                   TreeNode( node_for = [MatrixCrossSection],
+                              auto_open = True,
+                            ),
+                   ],
+                         orientation='vertical'
+                         )
 
+view = View(HSplit(   Group(Group(
+                             Item('model@', show_label=False),
+                             Item('calibrated_ecb_law@', show_label=False, resizable=True),
+                            label='ECB law calibration',
+                            dock='tab',
+                            ),
+                            Group(
+                             HGroup(
+                             Item('replot', show_label=False),
+                             Item('clear', show_label=False),
+                             ),
+                             Item('figure', editor=MPLFigureEditor(),
+                                 resizable=True, show_label=False),
+                            label='plot sheet',
+                            dock='tab',
+                            ), layout = 'split'),
+                      VGroup(
+                       Item('cs_state',
+                        editor = tree_editor,
+                        resizable = True,
+                        show_label=False ),
+                       )),
+                width=0.5,
+                height=0.4,
+                buttons=['OK', 'Cancel'],
+                resizable=True)
+                
 if __name__ == '__main__':
 
     #------------------------------------------------
@@ -215,47 +273,8 @@ if __name__ == '__main__':
     print '\n'
     print 'setup ECBLCalib'
     print '\n'
-    p.plot([0, 0], [0, 2.4e3])
 
-    ec = ECBLCalib(        # mean concrete strength after 9 days
-                           # 7d: f_ck,cube = 62 MPa; f_ck,cyl = 62/1.2=52
-                           # 9d: f_ck,cube = 66.8 MPa; f_ck,cyl = 55,7
-                           #f_ck=55.7,
-                           # measured strain at bending test rupture (0-dir)
-                           #
-                           #eps_c_u=3.3 / 1000.,
-
-                           # measured value in bending test [kNm]
-                           # value per m: M = 5*3.49
-                           #
-                           Mu=3.49,
-                       )
+    ec = ECBLCalib(Mu=3.49)
     ecw = ECBLCalibModelView(model=ec)
-    ecw.configure_traits()
+    ecw.configure_traits(view=view)
 
-    for sig_tex_u, color in zip([1200, 1300, 1400], ['red', 'green', 'blue', 'black', 'orange', 'brown']):
-    #for sig_tex_u, color in zip([1216], ['red']):
-
-        #for ecbl_type in ['linear', 'cubic', 'fbm']:
-        for ecbl_type in ['cubic']:
-            print 'CALIB TYPE', ecbl_type
-            ec.n = 0
-            ec.cs.ecb_law_type = ecbl_type
-            ec.cs.ecb_law.sig_tex_u = sig_tex_u
-            ec.get_lack_of_fit(ec.u0)
-
-            ec.calibrated_ecb_law.mfn.plot(p, color=color, linewidth=8)
-            print 'E_yarn', ec.calibrated_ecb_law.mfn.get_diff(0.00001)
-            print 'INTEG', ec.calibrated_ecb_law.mfn.integ_value
-
-#            ec.ecbl_type = 'bilinear'
-#            ec.ecbl.sig_tex_u = sig_tex_u
-#            for eps_el_fraction in np.linspace(0.25, 0.99999, 4):
-#                ec.n = 0
-#                ec.ecbl.eps_el_fraction = eps_el_fraction
-#                ec.ecbl_mfn.plot(p, color = color)
-#                print 'E_yarn', ec.ecbl_mfn.get_diff(0.00001)
-#                print 'INTEG', ec.ecbl_mfn.integ_value
-    p.plot([0.0, 0.01], [0.0, 2400], color='black')
-
-    p.show()
