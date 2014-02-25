@@ -43,7 +43,7 @@ def test06_cross_section_mn():
     ge.height_lo = 0.06
     assert np.allclose([cs.M, cs.N], [228.13663252701798, -1032.9945885108996])
     cs.eps_lo = 0.004
-    assert np.allclose([cs.M, cs.N], [203.04482502039664, -602.71470968570782])
+    assert np.allclose([cs.M, cs.N], [247.49122203, -843.661746225])
     mcs.geo = GeoRect(height=0.4, width=0.4)
     assert np.allclose([cs.M, cs.N], [521.93902914533874, -3448.901578806112])
         

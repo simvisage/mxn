@@ -142,8 +142,6 @@ class CCLawQuadratic(CCLawBase):
         xdata = eps_arr
         ydata = sig_c_arr
 
-        print 'cc', xdata
-        print 'cc', ydata
         return MFnLineArray(xdata=xdata, ydata=ydata)
 
 class CCLawQuad(CCLawBase):

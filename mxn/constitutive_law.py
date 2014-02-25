@@ -37,7 +37,7 @@ class CLBase(HasStrictTraits):
 
     def _notify_cs(self):
         if self.cs:
-            self.cs.set_modified()
+            self.cs.changed = True
 
     def set_cparams(self, *args):
         for name, value in zip(self.cnames, args):

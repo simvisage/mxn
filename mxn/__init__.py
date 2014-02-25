@@ -14,7 +14,7 @@ from mxn.reinf_bar import \
     SteelBar
 
 from ecb_law_calib import \
-    ECBLCalib
+    ECBLCalib, ECBLCalibModelView
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection

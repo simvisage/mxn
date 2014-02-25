@@ -53,9 +53,9 @@ def test05_cross_section_mn():
     bar_lst[3].area = 0.0004
     assert np.allclose([cs.M, cs.N], [1261.0959216705535, -9400.9390846971837])
     ge.radius = 0.33
-    assert np.allclose([cs.M, cs.N], [1642.5772498095203, -11306.262165932989])
+    assert np.allclose([cs.M, cs.N], [1633.3672379266914, -11401.890822653208])
     cs.eps_lo = 0.004
-    assert np.allclose([cs.M, cs.N], [1677.4116782656272, -8055.6401549652082])
+    assert np.allclose([cs.M, cs.N], [1518.12642619, -7293.98121796])
     
 if __name__ == '__main__':
     test05_cross_section_mn()
