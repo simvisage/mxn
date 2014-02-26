@@ -4,7 +4,7 @@ Created on Nov 21, 2013
 @author: rch
 '''
 
-from quaducom.assess.assess_shell.mn_resistance  import \
+from mxn import \
     ECBLCalib
 
 import numpy as np

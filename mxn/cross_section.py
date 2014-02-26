@@ -7,6 +7,7 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
+
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
@@ -21,21 +22,14 @@ from matplotlib.figure import \
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, VGroup, HGroup
 
-from mxn.cross_section_state import \
+from cross_section_state import \
     CrossSectionState
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection
 
-from mxn.reinf_component import \
-    ReinfComponent
-
-from mxn.reinf_tex_layer import \
-    ReinfTexLayer
-from mxn.reinf_tex_uniform import \
-    ReinfTexUniform
-from mxn.reinf_bar import \
-    SteelBar
+from reinf_layout_component import \
+    ReinfLayoutComponent
 
 import numpy as np
 
@@ -47,7 +41,7 @@ class CrossSection(CrossSectionState):
     def _matrix_cs_default(self):
         return MatrixCrossSection()
 
-    reinf = List(ReinfComponent)
+    reinf = List(ReinfLayoutComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
     
@@ -171,56 +165,57 @@ class CrossSection(CrossSectionState):
 class CrossSectionTree(HasStrictTraits):
     cs = Instance(CrossSection)
     
-tree_editor = TreeEditor(
-            nodes=[
-                   TreeNode( node_for = [CrossSection],
-                             auto_open = True,
-                             children = '',
-                             label = '=Cross section',
-                            ),
-                   TreeNode( node_for = [CrossSection],
-                             auto_open = True,
-                             children = 'reinf',
-                             label = '=Reinforcement',
-                             view = View(),
-                             add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
-                            ),
-                   TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
-                             auto_open = True,
-                            ),
-                   TreeNode( node_for = [MatrixCrossSection],
-                              auto_open = True,
-                            ),
-                   ],
-                         orientation='vertical'
-                         )
-
-view = View(
-               Group(
-                   Item(
-                        name = 'cs',
-                        editor = tree_editor,
-                        resizable = True ),
-                    orientation = 'vertical',
-                    show_labels = True,
-                    show_left = True, ),
-                title = 'Cross section structure',
-                dock = 'horizontal',
-                drop_class = HasStrictTraits,
-                buttons = [ 'Undo', 'OK', 'Cancel' ],
-                resizable = True,
-                width = .5,
-                height = .5 )
+# tree_editor = TreeEditor(
+#             nodes=[
+#                    TreeNode( node_for = [CrossSection],
+#                              auto_open = True,
+#                              children = '',
+#                              label = '=Cross section',
+#                             ),
+#                    TreeNode( node_for = [CrossSection],
+#                              auto_open = True,
+#                              children = 'reinf',
+#                              label = '=Reinforcement',
+#                              view = View(),
+#                              add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
+#                             ),
+#                    TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
+#                              auto_open = True,
+#                             ),
+#                    TreeNode( node_for = [MatrixCrossSection],
+#                               auto_open = True,
+#                             ),
+#                    ],
+#                          orientation='vertical'
+#                          )
+# 
+# view = View(
+#                Group(
+#                    Item(
+#                         name = 'cs',
+#                         editor = tree_editor,
+#                         resizable = True ),
+#                     orientation = 'vertical',
+#                     show_labels = True,
+#                     show_left = True, ),
+#                 title = 'Cross section structure',
+#                 dock = 'horizontal',
+#                 drop_class = HasStrictTraits,
+#                 buttons = [ 'Undo', 'OK', 'Cancel' ],
+#                 resizable = True,
+#                 width = .5,
+#                 height = .5 )
     
 
 if __name__ == '__main__':
-    from mxn.cross_section_geo import GeoRect
-    ecs = CrossSection(reinf=[ReinfTexUniform(n_layers=3)],
-                         matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05),
-                                                         n_cj=20),
-                         eps_lo=0.014,
-                         eps_up= -0.0033,
-                         )
-    print ecs.M
-    cst = CrossSectionTree(cs=ecs)
-    cst.configure_traits(view=view)
+#     from mxn.matrix_cross_section.matrix_cross_section_geo import GeoRect
+#     ecs = CrossSection(reinf=[ReinfTexUniform(n_layers=3)],
+#                          matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05),
+#                                                          n_cj=20),
+#                          eps_lo=0.014,
+#                          eps_up= -0.0033,
+#                          )
+#     print ecs.M
+#     cst = CrossSectionTree(cs=ecs)
+#     cst.configure_traits(view=view)
+    pass

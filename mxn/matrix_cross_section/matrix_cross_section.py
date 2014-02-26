@@ -11,14 +11,17 @@ from traits.api import \
     Event, on_trait_change, Callable, Instance, WeakRef, Trait, \
     Button, List
 
-from mxn.cross_section_component import \
-    CrossSectionComponent
+from matrix_cross_section_geo import \
+    MCSGeo
 
-from mxn.cross_section_state import \
-    CrossSectionState
+from matrix_cross_section_geo_I import \
+    MCSGeoI
 
-from mxn.cross_section_geo import \
-    CrossSectionGeo, GeoRect, GeoI, GeoCirc
+from matrix_cross_section_geo_circ import \
+    MCSGeoCirc
+
+from matrix_cross_section_geo_rect import \
+    MCSGeoRect
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -34,6 +37,9 @@ from constitutive_law import \
 
 from cc_law import \
     CCLawBase, CCLawBlock, CCLawLinear, CCLawQuadratic, CCLawQuad
+    
+from mxn import \
+    CrossSectionComponent
 
 import numpy as np
 
@@ -111,11 +117,11 @@ class MatrixCrossSection(CrossSectionComponent):
     # Cross section geometry and related parameters
     #===========================================================================
 
-    geo = Instance(CrossSectionGeo)
+    geo = Instance(MCSGeo)
     '''Geometry of the cross section
     '''
     
-    geo_lst = List([GeoRect(),GeoI(),GeoCirc()])
+    geo_lst = List([MCSGeoRect(),MCSGeoI(),MCSGeoCirc()])
 
     w_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Discretization of the  compressive zone - weight factors for general cross section
@@ -220,9 +226,9 @@ class MatrixCrossSection(CrossSectionComponent):
 
 if __name__ == '__main__':
             
-    from mxn.cross_section import CrossSection
+    from mxn import CrossSection
 
     state = CrossSection(eps_lo=0.02)
-    ecs = MatrixCrossSection(state=state,geo=GeoRect())
+    ecs = MatrixCrossSection(state=state,geo=MCSGeoRect())
 
     ecs.configure_traits()

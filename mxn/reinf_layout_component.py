@@ -8,35 +8,25 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, WeakRef
-
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
-
-from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup
+    Property, cached_property, \
+    Trait, Instance, Button, WeakRef
 
 from ecb_law import \
     ECBLBase, ECBLLinear, ECBLFBM, ECBLCubic, ECBLBilinear, ECBLSteel
 
 from constitutive_law import \
     ConstitutiveLawModelView
-
-from mxn.matrix_cross_section import \
+ 
+from matrix_cross_section import \
     MatrixCrossSection
 
-from mxn.cross_section_component import \
+from mxn import \
     CrossSectionComponent
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input'
 
-class ReinfComponent(CrossSectionComponent):
+class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
@@ -68,4 +58,3 @@ class ReinfComponent(CrossSectionComponent):
         ecb_law_mw.edit_traits(kind='live')
         return
 
-    tt_modified = Event

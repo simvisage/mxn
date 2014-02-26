@@ -5,7 +5,7 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, GeoRect, ReinfTexLayer, GeoI
+    CrossSection, SteelBar, MatrixCrossSection, MCSGeoRect, ReinfTexLayer, MCSGeoI
 
 import numpy as np
     
@@ -14,7 +14,7 @@ def test06_cross_section_mn():
     I - shaped cross section with mixed reinforcement. Change of geometry
     to rectangular also tested.
     '''
-    ge = GeoI(height=0.4, height_up=0.05, width_up=0.25, height_lo=0.05, width_lo=0.35, width_st=0.05)
+    ge = MCSGeoI(height=0.4, height_up=0.05, width_up=0.25, height_lo=0.05, width_lo=0.35, width_st=0.05)
     mcs = MatrixCrossSection(geo=ge, n_cj=20)    
     '''Cross section geometry + matrix
     '''
@@ -44,7 +44,7 @@ def test06_cross_section_mn():
     assert np.allclose([cs.M, cs.N], [228.13663252701798, -1032.9945885108996])
     cs.eps_lo = 0.004
     assert np.allclose([cs.M, cs.N], [247.49122203, -843.661746225])
-    mcs.geo = GeoRect(height=0.4, width=0.4)
+    mcs.geo = MCSGeoRect(height=0.4, width=0.4)
     assert np.allclose([cs.M, cs.N], [521.93902914533874, -3448.901578806112])
         
 if __name__ == '__main__':

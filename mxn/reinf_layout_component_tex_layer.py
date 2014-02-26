@@ -5,25 +5,23 @@ Created on 31. 1. 2014
 '''
 
 from traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant
+    Float, Property, cached_property, Int
 
 from constitutive_law import \
     ConstitutiveLawModelView
 
 from traitsui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup
+    View, Item, VGroup
 
-from mxn.reinf_component import \
-    ReinfComponent, \
+from reinf_layout_component import \
+    ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
 
 import numpy as np
 
 
-class ReinfTexLayer(ReinfComponent):
+class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
@@ -118,7 +116,7 @@ class ReinfTexLayer(ReinfComponent):
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
         
-        # eps ti
+        # eps t
         ax.hlines([h-self.z_coord], [0], [-self.eps_t], lw=4, color='red')
 
         # reinforcement layer
@@ -127,7 +125,7 @@ class ReinfTexLayer(ReinfComponent):
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
         
-        # sig ti
+        # sig t
         ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='red')
     
     view = View(VGroup(
@@ -143,5 +141,5 @@ class ReinfTexLayer(ReinfComponent):
                 )
     
 if __name__ == '__main__':
-    Layer = ReinfTexLayer()
+    Layer = RLCTexLayer()
     Layer.configure_traits()

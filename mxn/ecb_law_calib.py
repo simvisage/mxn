@@ -20,20 +20,20 @@ from scipy.optimize import fsolve
 from mxn.cross_section import \
     CrossSection
 
-from mxn.reinf_tex_uniform import \
-    ReinfTexUniform
-from mxn.reinf_tex_layer import \
-    ReinfTexLayer
-from mxn.reinf_tex_uniform import \
-    ReinfTexUniform
-from mxn.reinf_bar import \
-    SteelBar
+from reinf_layout_component_tex_uniform import \
+    RLCTexUniform
 
-from mxn.matrix_cross_section import \
+from reinf_layout_component_tex_layer import \
+    RLCTexLayer
+
+from reinf_layout_component_bar_steel import \
+    RLCSteelBar
+
+from matrix_cross_section import \
     MatrixCrossSection
 
-from mxn.cross_section_geo import \
-    GeoRect
+from matrix_cross_section import \
+    MCSGeoRect
     
 from ecb_law import ECBLBase
 
@@ -60,8 +60,8 @@ class ECBLCalib(HasStrictTraits):
 
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection(reinf=[ReinfTexUniform(n_layers=12)],
-                               matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20))
+        return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
+                               matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20))
         
     notify_change = Callable(None)
 
@@ -222,9 +222,9 @@ tree_editor = TreeEditor(
                              children = 'reinf',
                              label = '=Reinforcement',
                              view = View(),
-                             add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
+                             add = [RLCTexUniform, RLCTexLayer, RLCSteelBar]
                             ),
-                   TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
+                   TreeNode( node_for = [RLCTexUniform, RLCTexLayer, RLCSteelBar],
                              auto_open = True,
                              name = 'name',
                             ),

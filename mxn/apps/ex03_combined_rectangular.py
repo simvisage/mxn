@@ -9,7 +9,7 @@ of textile layers and steel bars
 '''
 
 from mxn import \
-    CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, GeoRect
+    CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, MCSGeoRect
 
 from matplotlib.figure import \
     Figure
@@ -29,7 +29,7 @@ bar4 = SteelBar(position=[0.2, 0.04], area=0.0002)
 '''Four steel reinforcement bars
 '''
 
-ge = GeoRect(height=0.4, width=0.3)
+ge = MCSGeoRect(height=0.4, width=0.3)
 '''Cross section geometry
 '''
 

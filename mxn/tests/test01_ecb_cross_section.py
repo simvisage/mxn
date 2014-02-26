@@ -5,15 +5,21 @@ Created on Nov 21, 2013
 '''
 
 from mxn import \
-    CrossSection, ReinfTexUniform, MatrixCrossSection, GeoRect
+    CrossSection
 
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+
+from mxn.reinf_layout_component_tex_uniform import \
+    RLCTexUniform
+    
 import numpy as np
 
 def test_ecb_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     '''
-    cp = CrossSection(reinf=[ReinfTexUniform(n_layers=3)],
-                         matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05),
+    cp = CrossSection(reinf=[RLCTexUniform(n_layers=3)],
+                         matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.1, height=0.05),
                                                          n_cj=20),
                          eps_lo=0.014,
                          eps_up= -0.0033,

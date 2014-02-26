@@ -5,7 +5,7 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, GeoRect
+    CrossSection, SteelBar, MatrixCrossSection, MCSGeoRect
 
 import numpy as np
 
@@ -15,7 +15,7 @@ def test03_cross_section_mn():
     '''
     
     bar = SteelBar(position=[0.1, 0.45], area=0.0002)
-    ge = GeoRect(height=0.5, width=0.3)
+    ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,
                                                          n_cj=20),

@@ -22,13 +22,13 @@ from ecb_law_calib import \
 from mxn.cross_section import \
     CrossSection
 
-from mxn.reinf_tex_uniform import \
+from mxn.reinf_layout.reinf_tex_uniform import \
     ReinfTexUniform
 
-from mxn.matrix_cross_section import \
+from mxn.matrix_cross_section.matrix_cross_section import \
     MatrixCrossSection
 
-from mxn.cross_section_geo import \
+from mxn.matrix_cross_section.matrix_cross_section_geo import \
     GeoRect
 
 import numpy as np

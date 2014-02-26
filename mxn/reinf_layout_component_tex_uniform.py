@@ -8,32 +8,24 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant
-
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
+    Float, Property, cached_property, Int
 
 from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup
+    View, Item, VGroup
 
 from constitutive_law import \
     ConstitutiveLawModelView
 
-from mxn.reinf_component import \
-    ReinfComponent, \
+from reinf_layout_component import \
+    ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE
+
+from reinf_layout_component_tex_layer import \
+    RLCTexLayer
 
 import numpy as np
 
-from mxn.reinf_tex_layer import \
-    ReinfTexLayer
-
-class ReinfTexUniform(ReinfComponent):
+class RLCTexUniform(ReinfLayoutComponent):
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
@@ -109,7 +101,7 @@ class ReinfTexUniform(ReinfComponent):
     def _get_layer_lst(self):
         lst = []
         for i in range(self.n_layers):
-            lst.append(ReinfTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
+            lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
                                      ecb_law_type=self.ecb_law_type))
@@ -162,5 +154,5 @@ class ReinfTexUniform(ReinfComponent):
                 )
 
 if __name__ == '__main__':
-    Layers = ReinfTexUniform()
+    Layers = RLCTexUniform()
     Layers.configure_traits()

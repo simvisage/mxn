@@ -8,7 +8,13 @@ Created on 1. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, ReinfTexLayer, MatrixCrossSection, GeoRect
+    CrossSection
+    
+from matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+
+from reinf_layout import \
+    RLCTexLayer
 
 from matplotlib.figure import \
     Figure
@@ -16,12 +22,12 @@ from matplotlib.figure import \
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
     
-tl1 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
-tl2 = ReinfTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
+tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
+tl2 = RLCTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
 '''Two layers of textile reinforcement
 '''
 
-ge = GeoRect(height=0.5, width=0.3)
+ge = MCSGeoRect(height=0.5, width=0.3)
 '''Cross section geometry
 '''
 

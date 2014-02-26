@@ -5,30 +5,22 @@ Created on 31. 1. 2014
 '''
 
 from etsproxy.traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, WeakRef, List
-
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
+    Float, Property, cached_property, List
 
 from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup
+    View, Item, VGroup
 
 from constitutive_law import \
     ConstitutiveLawModelView
 
-from mxn.reinf_component import \
-    ReinfComponent, \
+from reinf_layout_component import \
+    ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
     
 import numpy as np
 
-class ReinfBar(ReinfComponent):
+class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
     '''
 
@@ -103,14 +95,10 @@ class ReinfBar(ReinfComponent):
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
-        
-        # eps ti
         ax.hlines([h-self.z_up], [0], [-self.eps], lw=4, color='green')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        
-        # sig ti
         ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='green')
 
     view = View(VGroup(
@@ -123,14 +111,5 @@ class ReinfBar(ReinfComponent):
                        buttons=['OK', 'Cancel']
                        )
     
-class SteelBar(ReinfBar):
-    '''Steel reinforcement bar
-    '''
-    ecb_law_type = 'steel'
-    def _get_ecb_law(self):
-        return self.ecb_law_type_(f_yk=500., E_s=200000., eps_s_u=0.025)
-    
 if __name__ == '__main__':
-    bar = SteelBar()
-    bar.configure_traits()
-    print bar.position
+    pass

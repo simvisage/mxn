@@ -13,7 +13,7 @@ from etsproxy.traits.api import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HGroup
 
-from mxn.cross_section_state import \
+from cross_section_state import \
     CrossSectionState
 
 import numpy as np

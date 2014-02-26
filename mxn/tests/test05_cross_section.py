@@ -5,7 +5,7 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, GeoRect, ReinfTexLayer, GeoCirc
+    CrossSection, SteelBar, MatrixCrossSection, ReinfTexLayer, MCSGeoCirc
 
 import numpy as np
     
@@ -15,7 +15,7 @@ def test05_cross_section_mn():
     '''
     
     radius = 0.3
-    ge = GeoCirc(radius=0.3)
+    ge = MCSGeoCirc(radius=0.3)
     '''Cross section geometry
     '''
 

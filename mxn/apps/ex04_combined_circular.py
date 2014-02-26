@@ -9,7 +9,7 @@ of textile layers and steel bars
 '''
 
 from mxn import \
-    CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, GeoCirc
+    CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, MCSGeoCirc
     
 import numpy as np
 
@@ -20,7 +20,7 @@ from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
     
 radius = 0.3
-ge = GeoCirc(radius=0.3)
+ge = MCSGeoCirc(radius=0.3)
 '''Cross section geometry
 '''
 
