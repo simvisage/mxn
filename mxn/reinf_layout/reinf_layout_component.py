@@ -17,7 +17,7 @@ from ecb_law import \
 from constitutive_law import \
     ConstitutiveLawModelView
  
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection
 
 from mxn import \

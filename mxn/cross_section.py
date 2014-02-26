@@ -28,7 +28,7 @@ from cross_section_state import \
 from matrix_cross_section import \
     MatrixCrossSection
 
-from reinf_layout_component import \
+from mxn.reinf_layout.reinf_layout_component import \
     ReinfLayoutComponent
 
 import numpy as np

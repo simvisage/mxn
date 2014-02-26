@@ -10,7 +10,7 @@ from mxn import \
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from mxn.reinf_layout_component_tex_uniform import \
+from mxn.reinf_layout import \
     RLCTexUniform
     
 import numpy as np

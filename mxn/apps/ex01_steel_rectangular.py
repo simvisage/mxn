@@ -13,7 +13,7 @@ from mxn import \
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from mxn.reinf_layout_component_bar_steel import \
+from mxn.reinf_layout import \
     RLCSteelBar
 
 from matplotlib.figure import \

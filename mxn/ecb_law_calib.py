@@ -20,14 +20,8 @@ from scipy.optimize import fsolve
 from mxn.cross_section import \
     CrossSection
 
-from reinf_layout_component_tex_uniform import \
-    RLCTexUniform
-
-from reinf_layout_component_tex_layer import \
-    RLCTexLayer
-
-from reinf_layout_component_bar_steel import \
-    RLCSteelBar
+from reinf_layout import \
+    RLCTexUniform, RLCTexLayer, RLCSteelBar
 
 from matrix_cross_section import \
     MatrixCrossSection
