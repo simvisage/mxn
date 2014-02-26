@@ -39,9 +39,9 @@ cs = CrossSection(reinf=[bar],
 print 'normal force', cs.N
 print 'moment', cs.M
 
-fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
+fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
 canvas = FigureCanvasAgg(fig)
-ax = fig.add_subplot(1,1,1)
+ax = fig.add_subplot(1, 1, 1)
 ge.plot_geometry(ax)
 bar.plot_geometry(ax)
 canvas.print_figure('ex01.png')

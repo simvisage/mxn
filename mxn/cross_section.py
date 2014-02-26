@@ -161,61 +161,6 @@ class CrossSection(CrossSectionState):
                       label='plot sheet',
                       dock='tab',
                       )))
-        
-class CrossSectionTree(HasStrictTraits):
-    cs = Instance(CrossSection)
-    
-# tree_editor = TreeEditor(
-#             nodes=[
-#                    TreeNode( node_for = [CrossSection],
-#                              auto_open = True,
-#                              children = '',
-#                              label = '=Cross section',
-#                             ),
-#                    TreeNode( node_for = [CrossSection],
-#                              auto_open = True,
-#                              children = 'reinf',
-#                              label = '=Reinforcement',
-#                              view = View(),
-#                              add = [ReinfTexUniform, ReinfTexLayer, SteelBar]
-#                             ),
-#                    TreeNode( node_for = [ReinfTexUniform, ReinfTexLayer, SteelBar],
-#                              auto_open = True,
-#                             ),
-#                    TreeNode( node_for = [MatrixCrossSection],
-#                               auto_open = True,
-#                             ),
-#                    ],
-#                          orientation='vertical'
-#                          )
-# 
-# view = View(
-#                Group(
-#                    Item(
-#                         name = 'cs',
-#                         editor = tree_editor,
-#                         resizable = True ),
-#                     orientation = 'vertical',
-#                     show_labels = True,
-#                     show_left = True, ),
-#                 title = 'Cross section structure',
-#                 dock = 'horizontal',
-#                 drop_class = HasStrictTraits,
-#                 buttons = [ 'Undo', 'OK', 'Cancel' ],
-#                 resizable = True,
-#                 width = .5,
-#                 height = .5 )
-    
 
 if __name__ == '__main__':
-#     from mxn.matrix_cross_section.matrix_cross_section_geo import GeoRect
-#     ecs = CrossSection(reinf=[ReinfTexUniform(n_layers=3)],
-#                          matrix_cs=MatrixCrossSection(geo=GeoRect(width=0.1, height=0.05),
-#                                                          n_cj=20),
-#                          eps_lo=0.014,
-#                          eps_up= -0.0033,
-#                          )
-#     print ecs.M
-#     cst = CrossSectionTree(cs=ecs)
-#     cst.configure_traits(view=view)
     pass
