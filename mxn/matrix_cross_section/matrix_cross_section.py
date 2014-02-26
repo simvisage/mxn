@@ -35,8 +35,8 @@ from traitsui.api import \
 from constitutive_law import \
     ConstitutiveLawModelView
 
-from cc_law import \
-    CCLawBase, CCLawBlock, CCLawLinear, CCLawQuadratic, CCLawQuad
+from mxn.matrix_laws import \
+    MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
     
 from mxn import \
     CrossSectionComponent
@@ -134,16 +134,16 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    cc_law_type = Trait('constant', dict(constant=CCLawBlock,
-                                         linear=CCLawLinear,
-                                         quadratic=CCLawQuadratic,
-                                         quad=CCLawQuad),
+    cc_law_type = Trait('constant', dict(constant=MatrixLawBlock,
+                                         linear=MatrixLawLinear,
+                                         quadratic=MatrixLawQuadratic,
+                                         quad=MatrixLawQuad),
                         law_input=True)
     
     '''Selector of the concrete compression law type
     ['constant', 'linear', 'quadratic', 'quad']'''
 
-    cc_law = Property(Instance(CCLawBase), depends_on='+law_input')
+    cc_law = Property(Instance(MatrixLawBase), depends_on='+law_input')
     '''Compressive concrete law corresponding to cc_law_type'''
     @cached_property
     def _get_cc_law(self):
