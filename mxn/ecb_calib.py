@@ -17,19 +17,17 @@ import pylab as p
 
 from scipy.optimize import fsolve
 
-from mxn.cross_section import \
+from cross_section import \
     CrossSection
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
 
 from matrix_cross_section import \
-    MatrixCrossSection
-
-from matrix_cross_section import \
-    MCSGeoRect
+    MatrixCrossSection, MCSGeoRect
     
-from ecb_law import ECBLBase
+from reinf_laws import \
+    ReinfLawBase
 
 from util.traits.editors.mpl_figure_editor import  \
     MPLFigureEditor
@@ -40,7 +38,7 @@ from matplotlib.figure import \
 from matresdev.db.simdb import SimDB
 simdb = SimDB()
 
-class ECBLCalib(HasStrictTraits):
+class ECBCalib(HasStrictTraits):
 
     # rupture moment and normal force measured in the calibration experiment
     # (three point bending test)
@@ -148,12 +146,12 @@ class ECBLCalib(HasStrictTraits):
                 buttons=['OK', 'Cancel']
                 )
 
-class ECBLCalibModelView(ModelView):
+class ECBCalibModelView(ModelView):
     '''Model in a viewable window.
     '''
-    model = Instance(ECBLCalib)
+    model = Instance(ECBCalib)
     def _model_default(self):
-        return ECBLCalib()
+        return ECBCalib()
 
     cs_state = Property(Instance(CrossSection), depends_on='model')
     @cached_property
@@ -178,7 +176,7 @@ class ECBLCalibModelView(ModelView):
         self.figure.clear()
         self.data_changed = True
 
-    calibrated_ecb_law = Property(Instance(ECBLBase), depends_on='model')
+    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='model')
     @cached_property
     def _get_calibrated_ecb_law(self):
         return self.model.calibrated_ecb_law
@@ -268,7 +266,7 @@ if __name__ == '__main__':
     print 'setup ECBLCalib'
     print '\n'
 
-    ec = ECBLCalib(Mu=3.49)
-    ecw = ECBLCalibModelView(model=ec)
+    ec = ECBCalib(Mu=3.49)
+    ecw = ECBCalibModelView(model=ec)
     ecw.configure_traits(view=view)
 

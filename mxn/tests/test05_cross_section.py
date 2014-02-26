@@ -5,7 +5,13 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, ReinfTexLayer, MCSGeoCirc
+    CrossSection
+    
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoCirc
+    
+from mxn.reinf_layout import \
+    RLCSteelBar, RLCTexLayer
 
 import numpy as np
     
@@ -35,10 +41,10 @@ def test05_cross_section_mn():
     '''List of bars
     '''
     for i in range(n_bars):
-        bar_lst.append(SteelBar(position=[x_bar_arr[i], z_bar_arr[i]], area=bar_area))
+        bar_lst.append(RLCSteelBar(position=[x_bar_arr[i], z_bar_arr[i]], area=bar_area))
                        
-    tl1 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.45)
-    tl2 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.44)
+    tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.45)
+    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.44)
     '''Two layers of textile reinforcement
     '''
     

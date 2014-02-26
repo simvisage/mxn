@@ -10,5 +10,5 @@ from cross_section_component import \
 from cross_section import \
     CrossSection
 
-from ecb_law_calib import \
-    ECBLCalib, ECBLCalibModelView
+from ecb_calib import \
+    ECBCalib, ECBCalibModelView

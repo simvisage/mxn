@@ -5,7 +5,13 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, MCSGeoRect
+    CrossSection
+    
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+    
+from mxn.reinf_layout import \
+    RLCSteelBar
 
 import numpy as np
 
@@ -14,7 +20,7 @@ def test03_cross_section_mn():
     Rectangular cross section with steel reinforcement.
     '''
     
-    bar = SteelBar(position=[0.1, 0.45], area=0.0002)
+    bar = RLCSteelBar(position=[0.1, 0.45], area=0.0002)
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,

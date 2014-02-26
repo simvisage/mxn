@@ -16,29 +16,26 @@ from matplotlib.figure import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, RangeEditor, InstanceEditor
 
-from ecb_law_calib import \
-    ECBLCalib
+from mxn.ecb_calib import \
+    ECBCalib
 
-from mxn.cross_section import \
+from cross_section import \
     CrossSection
 
-from mxn.reinf_layout.reinf_tex_uniform import \
-    ReinfTexUniform
+from reinf_layout import \
+    RLCTexUniform
 
-from mxn.matrix_cross_section.matrix_cross_section import \
-    MatrixCrossSection
-
-from mxn.matrix_cross_section.matrix_cross_section_geo import \
-    GeoRect
+from matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
 
 import numpy as np
 
-class ECBLMNDiagram(HasTraits):
+class MxNDiagram(HasTraits):
 
     # calibrator supplying the effective material law
-    calib = Instance(ECBLCalib)
+    calib = Instance(ECBCalib)
     def _calib_default(self):
-        return ECBLCalib(notify_change=self.set_modified)
+        return ECBCalib(notify_change=self.set_modified)
     def _calib_changed(self):
         self.calib.notify_change = self.set_modified
 
@@ -242,13 +239,13 @@ class ECBLMNDiagram(HasTraits):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    rf = ReinfTexUniform(n_layers=12,ecb_law_type='fbm')
-    mx = MatrixCrossSection(geo=GeoRect(width=0.2, height=0.06), n_cj=20, cc_law_type='quadratic')    
+    rf = RLCTexUniform(n_layers=12,ecb_law_type='fbm')
+    mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20, cc_law_type='quadratic')    
     cs1 = CrossSection(reinf = [rf], matrix_cs = mx)
     
-    c = ECBLCalib(Mu=3.49, cs = cs1)
+    c = ECBCalib(Mu=3.49, cs = cs1)
 
-    mn = ECBLMNDiagram(calib=c,
+    mn = MxNDiagram(calib=c,
                        n_eps=5,
                       )
 

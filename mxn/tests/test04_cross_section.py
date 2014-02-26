@@ -5,7 +5,13 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, MCSGeoRect, ReinfTexLayer
+    CrossSection
+    
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+    
+from mxn.reinf_layout import \
+    RLCSteelBar, RLCTexLayer
 
 import numpy as np
     
@@ -13,8 +19,8 @@ def test04_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     Rectangular cross section with spread textile reinforcement.
     '''
-    tl1 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
-    tl2 = ReinfTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
+    tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
+    tl2 = RLCTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,

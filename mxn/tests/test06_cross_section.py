@@ -5,7 +5,13 @@ Created on 15. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, SteelBar, MatrixCrossSection, MCSGeoRect, ReinfTexLayer, MCSGeoI
+    CrossSection
+    
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect, MCSGeoI
+    
+from mxn.reinf_layout import \
+    RLCSteelBar, RLCTexLayer
 
 import numpy as np
     
@@ -19,15 +25,15 @@ def test06_cross_section_mn():
     '''Cross section geometry + matrix
     '''
     
-    bar1 = SteelBar(position=[0.025, 0.375], area=0.00005)
-    bar2 = SteelBar(position=[0.125, 0.375], area=0.00005)
-    bar3 = SteelBar(position=[0.225, 0.375], area=0.00005)
-    bar4 = SteelBar(position=[0.325, 0.375], area=0.00005)
+    bar1 = RLCSteelBar(position=[0.025, 0.375], area=0.00005)
+    bar2 = RLCSteelBar(position=[0.125, 0.375], area=0.00005)
+    bar3 = RLCSteelBar(position=[0.225, 0.375], area=0.00005)
+    bar4 = RLCSteelBar(position=[0.325, 0.375], area=0.00005)
     '''Four steel reinforcement bars in lower flange
     '''
     
-    tl1 = ReinfTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39)
-    tl2 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01)
+    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39)
+    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01)
     '''Two layers of textile reinforcement
     '''
     

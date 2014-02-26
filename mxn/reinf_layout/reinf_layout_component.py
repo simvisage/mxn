@@ -11,8 +11,8 @@ from etsproxy.traits.api import \
     Property, cached_property, \
     Trait, Instance, Button, WeakRef
 
-from ecb_law import \
-    ECBLBase, ECBLLinear, ECBLFBM, ECBLCubic, ECBLBilinear, ECBLSteel
+from mxn.reinf_laws import \
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
 
 from constitutive_law import \
     ConstitutiveLawModelView
@@ -35,16 +35,16 @@ class ReinfLayoutComponent(CrossSectionComponent):
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================
-    ecb_law_type = Trait('fbm', dict(fbm=ECBLFBM,
-                                  cubic=ECBLCubic,
-                                  linear=ECBLLinear,
-                                  bilinear=ECBLBilinear,
-                                  steel=ECBLSteel),
+    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
+                                  cubic=ReinfLawCubic,
+                                  linear=ReinfLawLinear,
+                                  bilinear=ReinfLawBilinear,
+                                  steel=ReinfLawSteel),
                       law_input=True)
     '''Selector of the effective crack bridge law type
     ['fbm', 'cubic', 'linear', 'bilinear','steel']'''
 
-    ecb_law = Property(Instance(ECBLBase), depends_on='+law_input')
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
