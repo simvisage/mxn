@@ -104,6 +104,7 @@ class RLCBar(ReinfLayoutComponent):
     view = View(VGroup(
                        Item('area'),
                        Item('position', style = 'readonly'),
+                       Item('ecb_law_type'),
                        label='Reinforcement Bar',
                        springy=True
                        ),

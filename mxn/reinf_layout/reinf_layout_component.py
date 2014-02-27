@@ -50,7 +50,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+        return self.ecb_law_type_(cs=self.state)
 
     show_ecb_law = Button
     '''Button launching a separate view of the effective crack bridge law.

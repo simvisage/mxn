@@ -8,10 +8,13 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    Float, Property, cached_property, Int
+    Float, Property, cached_property, Int, Instance, Trait
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup
+    
+from mxn.reinf_laws import \
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
 
 from constitutive_law import \
     ConstitutiveLawModelView
@@ -54,7 +57,7 @@ class RLCTexUniform(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         height = self.matrix_cs.geo.height
         return (eps_up + (eps_lo - eps_up) / height * self.z_ti_arr[0])
-
+    
     #===========================================================================
     # material properties 
     #===========================================================================
@@ -63,6 +66,22 @@ class RLCTexUniform(ReinfLayoutComponent):
                       law_input=True)
     '''Ultimate textile stress measured in the tensile test [MPa]
     '''
+    #===========================================================================
+    # Effective crack bridge law
+    #===========================================================================
+    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
+                                  cubic=ReinfLawCubic,
+                                  linear=ReinfLawLinear,
+                                  bilinear=ReinfLawBilinear),
+                      law_input=True)
+    '''Selector of the effective crack bridge law type
+    ['fbm', 'cubic', 'linear', 'bilinear']'''
+
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
+    '''Effective crack bridge law corresponding to ecb_law_type'''
+    @cached_property
+    def _get_ecb_law(self):
+        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
 
     #===========================================================================
     # Distribution of reinforcement
@@ -148,6 +167,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                       Item('n_rovings'),
                       Item('A_roving'),
                       Item('n_layers'),
+                      Item('ecb_law_type'),
                       label='Uniformly distributed textile layers',
                       springy=True,
                       ),

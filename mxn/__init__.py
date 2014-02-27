@@ -14,7 +14,10 @@ from cross_section_view import \
     CrossSectionView
 
 from ecb_calib import \
-    ECBCalib, ECBCalibModelView
+    ECBCalib
+
+from ecb_calib_view import \
+    ECBCalibModelView
 
 from mxn_diagram import \
     MxNDiagram

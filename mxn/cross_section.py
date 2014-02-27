@@ -132,8 +132,11 @@ class CrossSection(CrossSectionState):
     
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
-                       Item('matrix_cs')
-                      )
+                       Item('matrix_cs'),
+                       label='Cross section'
+                      ),
+                resizable=True,
+                buttons=['OK', 'Cancel']
                 )
 
 if __name__ == '__main__':

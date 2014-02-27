@@ -13,12 +13,6 @@ from mxn.matrix_cross_section import \
 from mxn.reinf_layout import \
     RLCSteelBar
 
-from matplotlib.figure import \
-    Figure
-
-from matplotlib.backends.backend_agg import \
-    FigureCanvasAgg
-
 bar = RLCSteelBar(position=[0.1, 0.45], area=0.0002)
 '''Single steel reinforcement bar
 '''
