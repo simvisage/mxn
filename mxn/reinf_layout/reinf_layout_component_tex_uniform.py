@@ -27,6 +27,8 @@ import numpy as np
 
 class RLCTexUniform(ReinfLayoutComponent):
 
+    name = 'Uniform textile layers'
+
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
     '''

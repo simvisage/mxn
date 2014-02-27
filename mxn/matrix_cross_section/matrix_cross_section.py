@@ -212,15 +212,16 @@ class MatrixCrossSection(CrossSectionComponent):
                       Item('n_cj'),
                       Item('f_ck'),
                       Item('eps_c_u'),
-                      Item('geo',label='Cross section geometry',show_label=False,
+                      Item('cc_law_type'),
+                      Item('geo',label='Cross section geometry',show_label=True,
                            editor=InstanceEditor(name='geo_lst',editable=True), style='custom'),
                       label='Matrix',
                       springy=True
                       ),
                 springy=True,
                 ),
-                width=0.8,
-                height=0.6,
+                width=0.4,
+                height=0.4,
                 resizable=True,
                 buttons=['OK', 'Cancel'])
 

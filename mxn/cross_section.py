@@ -101,24 +101,6 @@ class CrossSection(CrossSectionState):
         M = M_matrix + np.sum([c.M for c in self.reinf_components_with_state])
         return M - self.N * self.matrix_cs.geo.gravity_centre
 
-    figure = Instance(Figure)
-    def _figure_default(self):
-        figure = Figure(facecolor='white')
-        figure.add_axes([0.08, 0.13, 0.85, 0.74])
-        return figure
-
-    replot = Button
-    def _replot_fired(self):
-        self.figure.clear()
-        fig = self.figure
-        ax1 = fig.add_subplot(131)
-        ax2 = fig.add_subplot(132)
-        ax3 = fig.add_subplot(133)
-
-        self.plot_geometry(ax1)
-        self.plot_eps(ax2)
-        self.plot_sig(ax3)
-
     def plot_geometry(self, ax):
         self.matrix_cs_with_state.geo.plot_geometry(ax)
         for r in self.reinf_components_with_state:
@@ -148,19 +130,11 @@ class CrossSection(CrossSectionState):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
     
-    view = View(HSplit(
-                    VGroup(Item('eps_up'),
-                           Item('eps_lo'),
-                           Item('matrix_cs')
-                            ),
-                      Group(
-                      Item('replot', show_label=False),
-                      Item('figure', editor=MPLFigureEditor(),
-                           resizable=True, show_label=False),
-                      id='simexdb.plot_sheet',
-                      label='plot sheet',
-                      dock='tab',
-                      )))
+    view = View(VGroup(Item('eps_up'),
+                       Item('eps_lo'),
+                       Item('matrix_cs')
+                      )
+                )
 
 if __name__ == '__main__':
     pass

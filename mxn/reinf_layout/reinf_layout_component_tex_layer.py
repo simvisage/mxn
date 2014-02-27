@@ -25,6 +25,8 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
+    name = 'Textile layer'
+    
     n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
     '''number of rovings in 0-direction of one composite layer of the
     bending test [-]:

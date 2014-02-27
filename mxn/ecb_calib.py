@@ -10,7 +10,8 @@ from etsproxy.traits.api import \
     on_trait_change
 
 from etsproxy.traits.ui.api import \
-    TreeEditor, TreeNode, View, Item, Group, HSplit, ModelView, VGroup, HGroup, RangeEditor, InstanceEditor
+    TreeEditor, TreeNode, View, Item, Group, HSplit, ModelView, \
+    VGroup, HGroup, RangeEditor, InstanceEditor
 
 import numpy as np
 import pylab as p
@@ -211,7 +212,7 @@ tree_editor = TreeEditor(
                             ),
                    TreeNode( node_for = [CrossSection],
                              auto_open = True,
-                             children = 'reinf',
+                             children = 'reinf_components_with_state',
                              label = '=Reinforcement',
                              view = View(),
                              add = [RLCTexUniform, RLCTexLayer, RLCSteelBar]
@@ -262,6 +263,7 @@ if __name__ == '__main__':
     # crack bridge function 'var_a' for a given 'eps_c_u'
     #------------------------------------------------
     #
+    
     print '\n'
     print 'setup ECBLCalib'
     print '\n'

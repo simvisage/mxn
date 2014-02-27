@@ -5,7 +5,7 @@ Created on 31. 1. 2014
 '''
 
 from etsproxy.traits.api import \
-    Float, Property, cached_property, List
+    Float, Property, cached_property, List, Str
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup
@@ -102,8 +102,8 @@ class RLCBar(ReinfLayoutComponent):
         ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='green')
 
     view = View(VGroup(
-                       Item('position', style = 'readonly'),
                        Item('area'),
+                       Item('position', style = 'readonly'),
                        label='Reinforcement Bar',
                        springy=True
                        ),

@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 '''
 from etsproxy.traits.api import \
     Property, cached_property, \
-    Trait, Instance, Button, WeakRef
+    Trait, Instance, Button, WeakRef, Str
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
@@ -29,6 +29,8 @@ STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+l
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
+    
+    name = Str()
 
     matrix_cs = WeakRef(MatrixCrossSection)
 
