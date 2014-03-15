@@ -21,3 +21,6 @@ from ecb_calib_view import \
 
 from mxn_diagram import \
     MxNDiagram
+    
+from mxn_diagram_view import \
+    MxNDiagramView

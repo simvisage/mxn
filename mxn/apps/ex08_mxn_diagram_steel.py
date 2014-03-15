@@ -9,7 +9,7 @@ with steel reinforcement
 '''
 
 from mxn import \
-    CrossSection, MxNDiagram
+    CrossSection, MxNDiagram, MxNDiagramView
     
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
@@ -33,4 +33,5 @@ cs = CrossSection(reinf=[bar1, bar2],
                          )
 
 mn = MxNDiagram(cs=cs)
-mn.configure_traits()
+mnw = MxNDiagramView(mxn=mn)
+mnw.configure_traits()
