@@ -17,11 +17,11 @@ class ReinfLawPiecewiseLinear(ReinfLawBase):
 
     sig_level_arr = Array(float, input = True)
     def _sig_level_arr_default(self):
-        E_eff = self.sig_tex_u / self.eps_tex_u
+        E_eff = self.sig_tex_u / self.eps_u
         return E_eff * self.eps_arr
 
     sig_tex_u = Float(800.0, input = True)
-    eps_tex_u = Float(0.01, input = True)
+    eps_u = Float(0.01, input = True)
     n_eps = Int(2, input = True)
 
     eps_fraction_arr = Property(depends_on = 'n_eps')
@@ -29,16 +29,16 @@ class ReinfLawPiecewiseLinear(ReinfLawBase):
     def _get_eps_fraction_arr(self):
         return np.linspace(0.0, 1.0, self.n_eps)
 
-    cnames = ['eps_tex_u', 'sig_level_arr']
+    cnames = ['eps_u', 'sig_level_arr']
 
-    u0 = Property(depends_on = 'eps_tex_u, sig_tex_u, eps_fraction_list')
+    u0 = Property(depends_on = 'eps_u, sig_tex_u, eps_fraction_list')
     @cached_property
     def _get_u0(self):
         return self.sig_level_arr[1:]
 
     eps_arr = Array(float)
     def _eps_arr_default(self):
-        return self.eps_fraction_arr * self.eps_tex_u
+        return self.eps_fraction_arr * self.eps_u
 
     sig_arr = Array(float)
     def _sig_arr_default(self):

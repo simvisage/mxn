@@ -15,17 +15,17 @@ from reinf_law_base import \
 class ReinfLawSteel(ReinfLawBase):
     f_yk = Float(500, enter_set = True, auto_set = False, input = True)
     E_s = Float(200000, enter_set = True, auto_set = False, input = True)
-    eps_s_u = Float(0.025, enter_set = True, auto_set = False, input = True)
+    eps_u = Float(0.025, enter_set = True, auto_set = False, input = True)
 
-    eps_s_y = Property(depends_on = '+input')
+    eps_y = Property(depends_on = '+input')
     @cached_property
-    def _get_eps_s_y(self):
+    def _get_eps_y(self):
         return self.f_yk / self.E_s
 
     eps_arr = Property(depends_on = '+input')
     @cached_property
     def _get_eps_arr(self):
-        return np.array([-self.eps_s_u, -self.eps_s_y, 0., self.eps_s_y, self.eps_s_u])
+        return np.array([-self.eps_u, -self.eps_y, 0., self.eps_y, self.eps_u])
 
     sig_arr = Property(depends_on = '+input')
     @cached_property

@@ -34,31 +34,31 @@ class MxNDiagram(HasTraits):
 
     # calibrator supplying the effective material law
     calib = Instance(ECBCalib)
-    def _calib_default(self):
-        return ECBCalib(notify_change=self.set_modified)
     def _calib_changed(self):
+        c = self.calib.calibrated_ecb_law
+        self.cs = self.calib.cs
         self.calib.notify_change = self.set_modified
-
+            
     modified = Event
     def set_modified(self):
         self.modified = True
 
     # cross section
-    cs = DelegatesTo('calib')
-
-    calibrated_ecb_law = Property(depends_on='modified')
-    @cached_property
-    def _get_calibrated_ecb_law(self):
-        print 'NEW CALIBRATION'
-        return self.calib.calibrated_ecb_law
-
+    cs = Instance(CrossSection)
+    def _cs_default(self):
+        return CrossSection()
+            
     eps_cu = Property()
     def _get_eps_cu(self):
         return -self.cs.matrix_cs_with_state.cc_law.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
-        return self.calibrated_ecb_law.eps_tex_u
+        eps = 0
+        for r in self.cs.reinf_components_with_state:
+            if eps < r.ecb_law.eps_u:
+                eps = r.ecb_law.eps_u
+        return eps
 
     n_eps = Int(5, auto_set=False, enter_set=True)
     eps_range = Property(depends_on='n_eps')
@@ -146,9 +146,9 @@ class MxNDiagram(HasTraits):
 
         ax = self.figure.add_subplot(2, 2, 1)
 
-        ax.plot(-self.eps_range, [0, 0.06], color='black')
+        ax.plot(-self.eps_range, [0, self.cs.matrix_cs_with_state.geo.height], color='black')
 
-        ax.plot(-self.current_eps, [0, 0.06], lw=3, color='red')
+        ax.plot(-self.current_eps, [0, self.cs.matrix_cs_with_state.geo.height], lw=3, color='red')
 
         ax.spines['left'].set_position('zero')
         ax.spines['right'].set_color('none')
@@ -244,9 +244,7 @@ if __name__ == '__main__':
     
     c = ECBCalib(Mu=3.49, cs = cs1)
 
-    mn = MxNDiagram(calib=c,
-                       n_eps=5,
-                      )
+    mn = MxNDiagram(calib=c, n_eps=5)
 
     print mn.MN_arr
     mn.configure_traits()
