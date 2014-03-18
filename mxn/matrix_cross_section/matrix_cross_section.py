@@ -23,9 +23,6 @@ from matrix_cross_section_geo_circ import \
 from matrix_cross_section_geo_rect import \
     MCSGeoRect
 
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
 from matplotlib.figure import \
     Figure
 

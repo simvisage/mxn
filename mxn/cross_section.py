@@ -13,9 +13,6 @@ from traits.api import \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
     DelegatesTo, Constant, List
 
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
 from matplotlib.figure import \
     Figure
 

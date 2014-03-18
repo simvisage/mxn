@@ -9,23 +9,32 @@ of textile layers and steel bars
 '''
 
 from mxn import \
-    CrossSection, ReinfTexLayer, MatrixCrossSection, SteelBar, MCSGeoRect
+    CrossSection
 
+from mxn.matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+
+from mxn.reinf_layout import \
+    RLCTexLayer, RLCSteelBar
+    
 from matplotlib.figure import \
     Figure
 
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
+
+from mxn.utils import \
+    get_outfile
     
-tl1 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.39)
-tl2 = ReinfTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.38)
+tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.39)
+tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.38)
 '''Two layers of textile reinforcement
 '''
 
-bar1 = SteelBar(position=[0.1, 0.36], area=0.0002)
-bar2 = SteelBar(position=[0.2, 0.36], area=0.0002)
-bar3 = SteelBar(position=[0.1, 0.04], area=0.0002)
-bar4 = SteelBar(position=[0.2, 0.04], area=0.0002)
+bar1 = RLCSteelBar(position=[0.1, 0.36], area=0.0002)
+bar2 = RLCSteelBar(position=[0.2, 0.36], area=0.0002)
+bar3 = RLCSteelBar(position=[0.1, 0.04], area=0.0002)
+bar4 = RLCSteelBar(position=[0.2, 0.04], area=0.0002)
 '''Four steel reinforcement bars
 '''
 
@@ -46,7 +55,7 @@ print 'moment', cs.M
 fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
 canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1,1,1)
-ge.plot_geometry(ax)
-for i in range(len(cs.reinf)):
-    cs.reinf[i].plot_geometry(ax)
-canvas.print_figure('ex03.png')
+cs.plot_geometry(ax)
+
+canvas.print_figure(get_outfile(folder_name='.mxn',
+                                file_name='ex03.png'))

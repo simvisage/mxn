@@ -65,7 +65,6 @@ class MxNDiagramView(HasStrictTraits):
         ax = self.figure.add_subplot(2, 2, 2)
 
         ax.plot(self.mxn.MN_arr[0], -self.mxn.MN_arr[1], lw=2, color='blue')
-
         ax.plot(self.mxn.current_MN[0], -self.mxn.current_MN[1], 'g.', markersize=20.0, color='red')
 
         ax.spines['left'].set_position('zero')
