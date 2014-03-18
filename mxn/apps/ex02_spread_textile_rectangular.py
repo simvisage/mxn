@@ -10,10 +10,10 @@ Created on 1. 2. 2014
 from mxn import \
     CrossSection
     
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexLayer
 
 from matplotlib.figure import \
@@ -22,6 +22,9 @@ from matplotlib.figure import \
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
     
+from mxn.utils import \
+    get_outfile
+
 tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4)
 tl2 = RLCTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45)
 '''Two layers of textile reinforcement
@@ -44,7 +47,7 @@ print 'moment', cs.M
 fig = Figure(figsize=(10,7),dpi=80,facecolor='white')
 canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1,1,1)
-ge.plot_geometry(ax)
-for i in range(len(cs.reinf)):
-    cs.reinf[i].plot_geometry(ax)
-canvas.print_figure('ex02.png')
+cs.plot_geometry(ax)
+
+canvas.print_figure(get_outfile(folder_name='.mxn',
+                                file_name='ex02.png'))

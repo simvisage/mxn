@@ -22,7 +22,8 @@ ge = MCSGeoRect(height=0.5, width=0.3)
 '''
 
 cs = CrossSection(reinf=[bar],
-                         matrix_cs=MatrixCrossSection(geo=ge,n_cj=20),
+                         matrix_cs=MatrixCrossSection(geo=ge,
+                                                      n_cj=20),
                          eps_lo=0.002,
                          eps_up=-0.0033
                          )
