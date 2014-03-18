@@ -17,7 +17,7 @@ from mxn.matrix_cross_section import \
 from mxn.reinf_layout import \
     RLCSteelBar
 
-bar1 = RLCSteelBar(position=[0.1, 0.45], area=0.002)
+bar1 = RLCSteelBar(position=[0.1, 0.45], area=0.0005)
 bar2 = RLCSteelBar(position=[0.1, 0.05], area=0.002)
 '''Single steel reinforcement bar
 '''

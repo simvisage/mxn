@@ -69,9 +69,8 @@ class MatrixCrossSection(CrossSectionComponent):
         height = self.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
-        if eps_up == eps_lo:
-            # @todo: explain
-            return (abs(eps_up) / (abs(eps_up - eps_lo * 1e-9)) * height)
+        if eps_up <= 0 and eps_lo <= 0:
+            return height
         else:
             return (abs(eps_up) / (abs(eps_up - eps_lo)) * height)
 

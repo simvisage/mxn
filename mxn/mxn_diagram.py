@@ -102,7 +102,8 @@ class MxNDiagram(HasTraits):
     MN_arr = Property(depends_on='modified,n_eps')
     @cached_property
     def _get_MN_arr(self):
-        return self.MN_vct(self.eps_range[0, :], self.eps_range[1, :])
+        return self.MN_vct(np.hstack([self.eps_range[0, :], self.eps_range[1, :]]), np.hstack([self.eps_range[1, :],self.eps_range[0, :]]))
+#        return self.MN_vct(self.eps_range[1, :], self.eps_range[0, :])
 
     #===========================================================================
     # f_eps Diagram
@@ -113,7 +114,7 @@ class MxNDiagram(HasTraits):
     current_eps = Property(depends_on='current_eps_idx')
     @cached_property
     def _get_current_eps(self):
-        return self.eps_range[(0, 1), self.current_eps_idx]
+        return self.eps_range[(1, 0), self.current_eps_idx]
 
     current_MN = Property(depends_on='current_eps_idx')
     @cached_property
