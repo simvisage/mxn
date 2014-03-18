@@ -9,7 +9,7 @@ Created on Jan 30, 2014
 
 from mxn import \
     CrossSection
-    
+
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
@@ -31,7 +31,7 @@ ge = MCSGeoRect(height=0.5, width=0.3)
 '''
 
 cs = CrossSection(reinf=[bar],
-                         matrix_cs=MatrixCrossSection(geo=ge,n_cj=20),
+                         matrix_cs=MatrixCrossSection(geo=ge, n_cj=20),
                          eps_lo=0.002,
                          eps_up=-0.0033
                          )
@@ -44,4 +44,14 @@ canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1, 1, 1)
 ge.plot_geometry(ax)
 bar.plot_geometry(ax)
-canvas.print_figure('ex01.png')
+
+import os
+
+HOME_DIR = os.path.expanduser("~")
+out_dir = os.path.join(HOME_DIR, '.mxn')
+if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
+outfile = os.path.join(out_dir, 'ex01.png')
+
+canvas.print_figure(outfile)
+
