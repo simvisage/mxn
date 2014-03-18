@@ -99,7 +99,7 @@ class MxNDiagram(HasTraits):
     def _get_MN_vct(self):
         return np.vectorize(self._get_MN_fn)
 
-    MN_arr = Property(depends_on='modified')
+    MN_arr = Property(depends_on='modified,n_eps')
     @cached_property
     def _get_MN_arr(self):
         return self.MN_vct(self.eps_range[0, :], self.eps_range[1, :])
