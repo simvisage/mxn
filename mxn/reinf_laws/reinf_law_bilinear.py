@@ -21,12 +21,12 @@ class ReinfLawBilinear(ReinfLawBase):
 
     sig_tex_u = Float(1250, input = True)
     eps_u = Float(0.014, input = True)
-    var_a = Float(50000, input = True)
+    var_a = Float(0.8, input = True)
     eps_el_fraction = Float(0.0001, input = True)
 
     cnames = ['eps_u', 'var_a']
 
-    u0 = List([ 0.014, 50000. ])
+    u0 = List([ 0.014, 0.8 ])
 
     eps_arr = Property(depends_on = '+input')
     @cached_property

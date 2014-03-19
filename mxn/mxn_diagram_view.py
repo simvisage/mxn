@@ -49,33 +49,10 @@ class MxNDiagramView(HasStrictTraits):
     def _replot_fired(self):
 
         ax = self.figure.add_subplot(2, 2, 1)
-
-        ax.plot(-self.mxn.eps_range, [0, self.mxn.cs.matrix_cs_with_state.geo.height], color='black')
-
-        ax.plot(-self.mxn.current_eps, [0, self.mxn.cs.matrix_cs_with_state.geo.height], lw=3, color='red')
-
-        ax.spines['left'].set_position('zero')
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
+        self.mxn.plot_eps(ax)
 
         ax = self.figure.add_subplot(2, 2, 2)
-
-        ax.plot(self.mxn.MN_arr[0], -self.mxn.MN_arr[1], lw=2, color='blue')
-        ax.plot(self.mxn.current_MN[0], -self.mxn.current_MN[1], 'g.', markersize=20.0, color='red')
-
-        ax.spines['left'].set_position('zero')
-        ax.spines['bottom'].set_position('zero')
-        ax.spines['right'].set_color('none')
-        ax.spines['top'].set_color('none')
-        ax.spines['left'].set_smart_bounds(True)
-        ax.spines['bottom'].set_smart_bounds(True)
-        ax.xaxis.set_ticks_position('bottom')
-        ax.yaxis.set_ticks_position('left')
-        ax.grid(b=None, which='major')
+        self.mxn.plot_MN(ax)
 
         self.mxn.cs.set(eps_lo=self.mxn.current_eps[0],
                     eps_up=self.mxn.current_eps[1])

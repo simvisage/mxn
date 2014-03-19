@@ -114,13 +114,39 @@ class MxNDiagram(HasTraits):
     current_eps = Property(depends_on='current_eps_idx')
     @cached_property
     def _get_current_eps(self):
-        return self.eps_range[(1, 0), self.current_eps_idx]
+        return self.eps_range[(0, 1), self.current_eps_idx]
 
     current_MN = Property(depends_on='current_eps_idx')
     @cached_property
     def _get_current_MN(self):
         return self._get_MN_fn(*self.current_eps)
 
+    def plot_eps(self, ax):
+        ax.plot(-self.eps_range, [0, self.cs.matrix_cs_with_state.geo.height], color='black')
+        ax.plot(-self.current_eps, [0, self.cs.matrix_cs_with_state.geo.height], lw=3, color='red')
+
+        ax.spines['left'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+
+    def plot_MN(self, ax):
+        ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=2, color='blue')
+        ax.plot(self.current_MN[0], -self.current_MN[1], 'g.', markersize=20.0, color='red')
+
+        ax.spines['left'].set_position('zero')
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+        ax.grid(b=None, which='major')
+                
     view = View(HSplit(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
