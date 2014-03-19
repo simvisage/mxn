@@ -48,6 +48,10 @@ ax = fig.add_subplot(1, 1, 1)
 mxn.plot_MN_custom(ax,color='black',linestyle='-',linewidth=2.0,label='fbm')
 uni_layers.ecb_law_type = 'bilinear'
 mxn.plot_MN_custom(ax,color='black',linestyle='--',linewidth=2.0,label='bilinear')
+uni_layers.ecb_law_type = 'linear'
+mxn.plot_MN_custom(ax,color='black',linestyle='-.',linewidth=2.0,label='linear')
+uni_layers.ecb_law_type = 'cubic'
+mxn.plot_MN_custom(ax,color='black',linestyle=':',linewidth=2.0,label='cubic')
 
 ax.legend()
 ax.set_xlabel('M[kNm]')

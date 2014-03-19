@@ -8,7 +8,7 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    Float, Property, cached_property, Int, Instance, Trait
+    Float, Property, cached_property, Int, Instance, Trait, on_trait_change
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup
@@ -81,7 +81,10 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+        if self.ecb_law_type == 'linear':
+            return self.ecb_law_type_(cs=self.state)
+        else:
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
 
     #===========================================================================
     # Distribution of reinforcement
@@ -127,7 +130,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                                      z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
                                      ecb_law_type=self.ecb_law_type))
         return lst
-
+            
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''

@@ -60,7 +60,10 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+        if self.ecb_law_type == 'linear':
+            return self.ecb_law_type_(cs=self.state)
+        else:
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
 
     #===========================================================================
     # Discretization conform to the tex layers
