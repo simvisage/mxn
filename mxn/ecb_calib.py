@@ -140,6 +140,7 @@ class ECBCalib(HasStrictTraits):
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(*self.u_sol)
+        self.n = 0
         return self.cs.reinf_components_with_state[0].ecb_law
 
     view = View(Item('Mu'),

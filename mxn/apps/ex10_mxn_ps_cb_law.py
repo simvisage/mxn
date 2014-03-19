@@ -44,9 +44,14 @@ mxn = MxNDiagram(calib=calib,n_eps=20)
 fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
 canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1, 1, 1)
-mxn.plot_MN(ax)
+
+mxn.plot_MN_custom(ax,color='black',linestyle='-',linewidth=2.0,label='fbm')
 uni_layers.ecb_law_type = 'bilinear'
-mxn.plot_MN(ax)
+mxn.plot_MN_custom(ax,color='black',linestyle='--',linewidth=2.0,label='bilinear')
+
+ax.legend()
+ax.set_xlabel('M[kNm]')
+ax.set_ylabel('N[kN]')
 
 canvas.print_figure(get_outfile(folder_name='.mxn',
                                 file_name='ex10.png'))
