@@ -34,7 +34,7 @@ from constitutive_law import \
 
 from mxn.matrix_laws import \
     MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
-    
+
 from mxn import \
     CrossSectionComponent
 
@@ -80,12 +80,12 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_z_ti_arr(self):
-        if self.state.eps_up <= 0: # bending
+        if self.state.eps_up <= 0:  # bending
             zx = min(self.geo.height, self.x)
             return np.linspace(0, zx, self.n_cj)
-        elif self.state.eps_lo <= 0: # bending
+        elif self.state.eps_lo <= 0:  # bending
             return np.linspace(self.x, self.geo.height, self.n_cj)
-        else: # no compression
+        else:  # no compression
             return np.array([0], dtype='f')
 
     eps_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
@@ -117,8 +117,8 @@ class MatrixCrossSection(CrossSectionComponent):
     geo = Instance(MCSGeo)
     '''Geometry of the cross section
     '''
-    
-    geo_lst = List([MCSGeoRect(),MCSGeoI(),MCSGeoCirc()])
+
+    geo_lst = List([MCSGeoRect(), MCSGeoI(), MCSGeoCirc()])
 
     w_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Discretization of the  compressive zone - weight factors for general cross section
@@ -126,7 +126,7 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_w_ti_arr(self):
         return self.geo.width_vct(self.z_ti_arr)
-    
+
     #===========================================================================
     # Compressive concrete constitutive law
     #===========================================================================
@@ -136,7 +136,7 @@ class MatrixCrossSection(CrossSectionComponent):
                                          quadratic=MatrixLawQuadratic,
                                          quad=MatrixLawQuad),
                         law_input=True)
-    
+
     '''Selector of the concrete compression law type
     ['constant', 'linear', 'quadratic', 'quad']'''
 
@@ -190,7 +190,7 @@ class MatrixCrossSection(CrossSectionComponent):
 
     def plot_eps(self, ax):
         h = self.geo.height
-        
+
         # eps ti
         ec = np.hstack([self.eps_ti_arr] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
@@ -200,9 +200,17 @@ class MatrixCrossSection(CrossSectionComponent):
         h = self.geo.height
 
         # sig ti
-        ec = np.hstack([self.f_ti_arr*self.x/self.n_cj] + [0, 0])
+        ec = np.hstack([self.f_ti_arr * self.x / self.n_cj] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
         ax.fill(-ec, zz, color='blue')
+
+    #===========================================================================
+    # Auxiliary methods for tree editor
+    #===========================================================================
+    tree_node_list = Property(depends_on='cc_law_type')
+    @cached_property
+    def _get_tree_node_list(self):
+        return [ self.cc_law ]
 
     view = View(HGroup(
                 Group(
@@ -210,8 +218,8 @@ class MatrixCrossSection(CrossSectionComponent):
                       Item('f_ck'),
                       Item('eps_c_u'),
                       Item('cc_law_type'),
-                      Item('geo',label='Cross section geometry',show_label=True,
-                           editor=InstanceEditor(name='geo_lst',editable=True), style='custom'),
+                      Item('geo', label='Cross section geometry', show_label=True,
+                           editor=InstanceEditor(name='geo_lst', editable=True), style='custom'),
                       label='Matrix',
                       springy=True
                       ),
@@ -223,10 +231,10 @@ class MatrixCrossSection(CrossSectionComponent):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-            
+
     from mxn import CrossSection
 
     state = CrossSection(eps_lo=0.02)
-    ecs = MatrixCrossSection(state=state,geo=MCSGeoRect())
+    ecs = MatrixCrossSection(state=state, geo=MCSGeoRect())
 
     ecs.configure_traits()

@@ -6,7 +6,7 @@ Created on 27. 2. 2014
 
 from etsproxy.traits.api import \
     Instance, Property, cached_property, Event, Button
-    
+
 from etsproxy.traits.ui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, \
     ModelView, VGroup, HGroup
@@ -14,15 +14,9 @@ from etsproxy.traits.ui.api import \
 from cross_section import \
     CrossSection
 
-from reinf_layout import \
-    RLCTexUniform, RLCTexLayer, RLCSteelBar
-
-from matrix_cross_section import \
-    MatrixCrossSection, MCSGeoRect
-    
 from reinf_laws import \
     ReinfLawBase
-    
+
 from ecb_calib import \
     ECBCalib
 

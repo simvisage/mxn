@@ -6,7 +6,7 @@ Created on 26. 2. 2014
 
 from mxn import \
     CrossSection, CrossSectionView
-    
+
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
@@ -22,11 +22,11 @@ ge = MCSGeoRect(height=0.5, width=0.3)
 '''
 
 cs = CrossSection(reinf=[bar],
-                         matrix_cs=MatrixCrossSection(geo=ge,
-                                                      n_cj=20),
-                         eps_lo=0.002,
-                         eps_up=-0.0033
-                         )
+                  matrix_cs=MatrixCrossSection(geo=ge,
+                                               n_cj=20),
+                  eps_lo=0.002,
+                  eps_up=-0.0033
+                  )
 
 csw = CrossSectionView(cs=cs)
 csw.configure_traits()
