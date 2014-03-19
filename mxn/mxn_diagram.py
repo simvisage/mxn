@@ -35,9 +35,9 @@ class MxNDiagram(HasTraits):
     # calibrator supplying the effective material law
     calib = Instance(ECBCalib)
     def _calib_changed(self):
-        c = self.calib.calibrated_ecb_law
         self.cs = self.calib.cs
         self.calib.notify_change = self.set_modified
+        self.set_modified
             
     modified = Event
     def set_modified(self):
@@ -61,7 +61,7 @@ class MxNDiagram(HasTraits):
         return eps
 
     n_eps = Int(5, auto_set=False, enter_set=True)
-    eps_range = Property(depends_on='n_eps')
+    eps_range = Property(depends_on='n_eps,modified')
     @cached_property
     def _get_eps_range(self):
         eps_c_space = np.linspace(self.eps_cu, 0, self.n_eps)
@@ -82,10 +82,11 @@ class MxNDiagram(HasTraits):
 
         return np.hstack([eps1, eps2, eps3, eps4])
 
-    n_eps_range = Property(depends_on='n_eps')
+    n_eps_range = Property(depends_on='n_eps,modified')
     @cached_property
     def _get_n_eps_range(self):
         return self.eps_range.shape[1]
+    
     #===========================================================================
     # MN Diagram
     #===========================================================================
@@ -102,6 +103,9 @@ class MxNDiagram(HasTraits):
     MN_arr = Property(depends_on='modified,n_eps')
     @cached_property
     def _get_MN_arr(self):
+        if self.calib:
+            c = self.calib.calibrated_ecb_law
+#        return self.MN_vct(np.hstack([self.eps_range[0, :], self.eps_range[1, :]]), np.hstack([self.eps_range[1, :],self.eps_range[0, :]]))
         return self.MN_vct(self.eps_range[0, :], self.eps_range[1, :])
 
     #===========================================================================
@@ -119,6 +123,45 @@ class MxNDiagram(HasTraits):
     @cached_property
     def _get_current_MN(self):
         return self._get_MN_fn(*self.current_eps)
+
+    def plot_eps(self, ax):
+        ax.plot(-self.eps_range, [0, self.cs.matrix_cs_with_state.geo.height], color='black')
+        ax.plot(-self.current_eps, [0, self.cs.matrix_cs_with_state.geo.height], lw=3, color='red')
+
+        ax.spines['left'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+
+    def plot_MN(self, ax):
+        ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=2, color='blue')
+        ax.plot(self.current_MN[0], -self.current_MN[1], 'g.', markersize=20.0, color='red')
+
+        ax.spines['left'].set_position('zero')
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+        ax.grid(b=None, which='major')
+                
+    def plot_MN_custom(self, ax, color, linestyle, linewidth,label):
+        ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls = linestyle, label=label)
+
+        ax.spines['left'].set_position('zero')
+        ax.spines['bottom'].set_position('zero')
+        ax.spines['right'].set_color('none')
+        ax.spines['top'].set_color('none')
+        ax.spines['left'].set_smart_bounds(True)
+        ax.spines['bottom'].set_smart_bounds(True)
+        ax.xaxis.set_ticks_position('bottom')
+        ax.yaxis.set_ticks_position('left')
+        ax.grid(b=None, which='major')
 
     view = View(HSplit(Group(
                 HGroup(
