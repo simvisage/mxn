@@ -11,7 +11,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, List
+    DelegatesTo, Constant, List, WeakRef
 
 from matplotlib.figure import \
     Figure
@@ -41,7 +41,7 @@ class CrossSection(CrossSectionState):
     reinf = List(ReinfLayoutComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
-    
+
     matrix_cs_with_state = Property(depends_on='matrix_cs')
     @cached_property
     def _get_matrix_cs_with_state(self):
@@ -126,7 +126,24 @@ class CrossSection(CrossSectionState):
         ax.spines['bottom'].set_smart_bounds(True)
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
-    
+
+    #===========================================================================
+    # Auxiliary access methods
+    #===========================================================================
+
+    tree_node_list = Property(depends_on='matrix_cs')
+    @cached_property
+    def _get_tree_node_list(self):
+        return [self.matrix_cs_with_state, ReinfLayout(cs_state=self)]
+
+    matrix_cs_tree_node = Property(depends_on='matrix_cs')
+    '''Auxiliary property for tree node visualization.
+    (must be a list)
+    '''
+    @cached_property
+    def _get_matrix_cs_tree_node(self):
+        return [self.matrix_cs_with_state]
+
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        Item('matrix_cs'),
@@ -135,6 +152,16 @@ class CrossSection(CrossSectionState):
                 resizable=True,
                 buttons=['OK', 'Cancel']
                 )
+
+class ReinfLayout(HasStrictTraits):
+    '''Method accommodating the list of all reinforcement components.
+    '''
+    cs_state = WeakRef(CrossSection)
+
+    tree_node_list = Property(depends_on='cs_state.reinf_components')
+    @cached_property
+    def _get_tree_node_list(self):
+        return self.cs_state.reinf_components_with_state
 
 if __name__ == '__main__':
     pass

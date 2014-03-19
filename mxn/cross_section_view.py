@@ -5,19 +5,26 @@ Created on 26. 2. 2014
 '''
 
 from traits.api import \
-    HasStrictTraits, Instance, Button, Event
+    HasStrictTraits, Instance, Button, Event, \
+    Property, cached_property
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, HGroup
 
 from cross_section import \
-    CrossSection
+    CrossSection, ReinfLayout
 
-from reinf_layout import \
-    RLCTexUniform, RLCTexLayer, RLCSteelBar
+from matrix_laws import \
+    MatrixLawBase
+
+from reinf_laws import \
+    ReinfLawBase
 
 from matrix_cross_section import \
     MatrixCrossSection
+
+from reinf_layout import \
+    ReinfLayoutComponent, RLCTexUniform, RLCTexLayer, RLCSteelBar
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -29,28 +36,43 @@ tree_editor = TreeEditor(
             nodes=[
                    TreeNode(node_for=[CrossSection],
                              auto_open=True,
-                             children='',
+                             children='tree_node_list',
                              label='=Cross section',
                             ),
-                   TreeNode(node_for=[CrossSection],
+                   TreeNode(node_for=[ReinfLayout],
                              auto_open=True,
-                             children='reinf_components_with_state',
-                             label='=Reinforcement',
+                             children='tree_node_list',
+                             label='=Reinforcement Layout',
                              view=View(),
                              add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
                             ),
                    TreeNode(node_for=[RLCTexUniform, RLCTexLayer, RLCSteelBar],
                              auto_open=True,
+                             children='tree_node_list',
                              label='name'
                             ),
                    TreeNode(node_for=[MatrixCrossSection],
                               auto_open=True,
+                             children='tree_node_list',
+                              label='=Matrix',
+                            ),
+                   TreeNode(node_for=[ReinfLawBase],
+                              auto_open=True,
+                             children='',
+                              label='=Constitutive law',
+                            ),
+                   TreeNode(node_for=[MatrixLawBase],
+                              auto_open=True,
+                             children='',
+                              label='=Constitutive law',
                             ),
                    ],
                          orientation='vertical'
                          )
 
 class CrossSectionView(HasStrictTraits):
+    '''View object for a cross section state.
+    '''
     cs = Instance(CrossSection)
 
     figure = Instance(Figure)
@@ -87,7 +109,7 @@ class CrossSectionView(HasStrictTraits):
                              dock='tab',
                              )
                     ),
-                    width=0.5,
+                    width=0.7,
                     height=0.4,
                     buttons=['OK', 'Cancel'],
                     resizable=True)

@@ -16,7 +16,7 @@ from mxn.reinf_laws import \
 
 from constitutive_law import \
     ConstitutiveLawModelView
- 
+
 from mxn.matrix_cross_section import \
     MatrixCrossSection
 
@@ -29,7 +29,7 @@ STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+l
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
-    
+
     name = Str()
 
     matrix_cs = WeakRef(MatrixCrossSection)
@@ -59,4 +59,12 @@ class ReinfLayoutComponent(CrossSectionComponent):
         ecb_law_mw = ConstitutiveLawModelView(model=self.ecb_law)
         ecb_law_mw.edit_traits(kind='live')
         return
+
+    #===========================================================================
+    # Auxiliary methods for tree editor
+    #===========================================================================
+    tree_node_list = Property(depends_on='ecb_law_type')
+    @cached_property
+    def _get_tree_node_list(self):
+        return [ self.ecb_law ]
 

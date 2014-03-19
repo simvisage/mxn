@@ -26,7 +26,7 @@ from reinf_layout import \
 
 from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
-    
+
 from reinf_laws import \
     ReinfLawBase
 
@@ -44,8 +44,8 @@ class ECBCalib(HasStrictTraits):
     # rupture moment and normal force measured in the calibration experiment
     # (three point bending test)
     #
-    Mu = Float(3.5, calib_input=True) # [kNm]
-    Nu = Float(0.0, calib_input=True) # [kN]
+    Mu = Float(3.5, calib_input=True)  # [kNm]
+    Nu = Float(0.0, calib_input=True)  # [kN]
 
     #===========================================================================
     # Cross Section Specification (Geometry and Layout)
@@ -55,7 +55,7 @@ class ECBCalib(HasStrictTraits):
     def _cs_default(self):
         return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
                                matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20))
-        
+
     notify_change = Callable(None)
 
     modified = Event
@@ -100,7 +100,7 @@ class ECBCalib(HasStrictTraits):
 
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])
-        
+
         for layer in self.cs.reinf_components_with_state[0].layer_lst:
             layer.ecb_law.set_cparams(eps_tex_u, u[1])
 
@@ -124,7 +124,7 @@ class ECBCalib(HasStrictTraits):
 
         # use scipy-functionality to get the iterated value of 'eps_t'
         # NOTE: get_lack_of_fit must have a sign change as a requirement
-        # for the function call 'brentq' to work property. 
+        # for the function call 'brentq' to work property.
 
         # The method brentq has optional arguments such as
         #   'xtol'    - absolut error (default value = 1.0e-12)
@@ -147,21 +147,19 @@ class ECBCalib(HasStrictTraits):
                 Item('Nu'),
                 buttons=['OK', 'Cancel']
                 )
-                
+
 if __name__ == '__main__':
 
     #------------------------------------------------
     # 1) CALIBRATION:
-    # get 'eps_t' and the parameter of the effective 
+    # get 'eps_t' and the parameter of the effective
     # crack bridge function 'var_a' for a given 'eps_c_u'
     #------------------------------------------------
     #
-    
+
     print '\n'
     print 'setup ECBLCalib'
     print '\n'
 
     ec = ECBCalib(Mu=3.49)
-    ecw = ECBCalibModelView(model=ec)
-    ecw.configure_traits(view=view)
 
