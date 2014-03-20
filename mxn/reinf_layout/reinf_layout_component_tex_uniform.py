@@ -118,7 +118,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    layer_lst = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
+    layer_lst = Property(depends_on='+geo_input,matrix_cs.geo.changed,+law_input')
     '''List of reinforcement layers
     '''
     @cached_property
@@ -131,6 +131,11 @@ class RLCTexUniform(ReinfLayoutComponent):
                                      ecb_law_type=self.ecb_law_type))
         return lst
     
+    @on_trait_change('eps_changed')
+    def notify_eps_change(self):
+        for i in range(self.n_layers):
+            self.layer_lst[i].eps_changed = True
+        
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''
