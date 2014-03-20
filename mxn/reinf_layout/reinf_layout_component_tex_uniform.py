@@ -130,7 +130,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                                      z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
                                      ecb_law_type=self.ecb_law_type))
         return lst
-            
+    
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''

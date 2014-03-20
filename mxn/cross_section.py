@@ -158,7 +158,7 @@ class ReinfLayout(HasStrictTraits):
     '''
     cs_state = WeakRef(CrossSection)
 
-    tree_node_list = Property(depends_on='cs_state.reinf_components')
+    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
     def _get_tree_node_list(self):
         return self.cs_state.reinf_components_with_state
