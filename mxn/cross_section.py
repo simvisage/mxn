@@ -127,23 +127,6 @@ class CrossSection(CrossSectionState):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
 
-    #===========================================================================
-    # Auxiliary access methods
-    #===========================================================================
-
-    tree_node_list = Property(depends_on='matrix_cs')
-    @cached_property
-    def _get_tree_node_list(self):
-        return [self.matrix_cs_with_state, ReinfLayout(cs_state=self)]
-
-    matrix_cs_tree_node = Property(depends_on='matrix_cs')
-    '''Auxiliary property for tree node visualization.
-    (must be a list)
-    '''
-    @cached_property
-    def _get_matrix_cs_tree_node(self):
-        return [self.matrix_cs_with_state]
-
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        Item('matrix_cs'),
@@ -153,15 +136,6 @@ class CrossSection(CrossSectionState):
                 buttons=['OK', 'Cancel']
                 )
 
-class ReinfLayout(HasStrictTraits):
-    '''Method accommodating the list of all reinforcement components.
-    '''
-    cs_state = WeakRef(CrossSection)
-
-    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
-    @cached_property
-    def _get_tree_node_list(self):
-        return self.cs_state.reinf_components_with_state
 
 if __name__ == '__main__':
     pass

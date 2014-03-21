@@ -6,13 +6,13 @@ Created on 26. 2. 2014
 
 from traits.api import \
     HasStrictTraits, Instance, Button, Event, \
-    Property, cached_property
+    Property, cached_property, WeakRef
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, HGroup
 
 from cross_section import \
-    CrossSection, ReinfLayout
+    CrossSection
 
 from matrix_laws import \
     MatrixLawBase
@@ -32,14 +32,44 @@ from util.traits.editors.mpl_figure_editor import \
 from matplotlib.figure import \
     Figure
 
+class CrossSectionTreeNode(CrossSection):
+
+    #===========================================================================
+    # Auxiliary access methods
+    #===========================================================================
+
+    tree_node_list = Property(depends_on='matrix_cs')
+    @cached_property
+    def _get_tree_node_list(self):
+        return [self.matrix_cs_with_state, ReinfLayoutTreeNode(cs_state=self)]
+
+    matrix_cs_tree_node = Property(depends_on='matrix_cs')
+    '''Auxiliary property for tree node visualization.
+    (must be a list)
+    '''
+    @cached_property
+    def _get_matrix_cs_tree_node(self):
+        return [self.matrix_cs_with_state]
+
+
+class ReinfLayoutTreeNode(HasStrictTraits):
+    '''Method accommodating the list of all reinforcement components.
+    '''
+    cs_state = WeakRef(CrossSectionTreeNode)
+
+    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
+    @cached_property
+    def _get_tree_node_list(self):
+        return self.cs_state.reinf_components_with_state
+
 tree_editor = TreeEditor(
             nodes=[
-                   TreeNode(node_for=[CrossSection],
+                   TreeNode(node_for=[CrossSectionTreeNode],
                              auto_open=True,
                              children='tree_node_list',
                              label='=Cross section',
                             ),
-                   TreeNode(node_for=[ReinfLayout],
+                   TreeNode(node_for=[ReinfLayoutTreeNode],
                              auto_open=True,
                              children='tree_node_list',
                              label='=Reinforcement Layout',
