@@ -6,12 +6,11 @@ Created on Jun 23, 2010
 
 from etsproxy.traits.api import \
     Float, Instance, Array, Property, cached_property, \
-    HasStrictTraits, DelegatesTo, Int, Event, Callable, Button, \
+    HasStrictTraits, Int, Event, Callable, Button, \
     on_trait_change
 
 from etsproxy.traits.ui.api import \
-    TreeEditor, TreeNode, View, Item, Group, HSplit, ModelView, \
-    VGroup, HGroup, RangeEditor, InstanceEditor
+    TreeEditor, TreeNode, View, Item
 
 import numpy as np
 import pylab as p
@@ -26,15 +25,6 @@ from reinf_layout import \
 
 from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
-
-from reinf_laws import \
-    ReinfLawBase
-
-from util.traits.editors.mpl_figure_editor import  \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
 
 from matresdev.db.simdb import SimDB
 simdb = SimDB()

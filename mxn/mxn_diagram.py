@@ -7,12 +7,6 @@ from etsproxy.traits.api import \
     HasTraits, Int, Instance, Property, cached_property, DelegatesTo, \
     Event, Button
 
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
-
 from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, RangeEditor, InstanceEditor
 

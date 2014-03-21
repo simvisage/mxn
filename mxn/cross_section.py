@@ -72,7 +72,6 @@ class CrossSection(CrossSectionState):
 
     @on_trait_change('+eps_input')
     def _notify_eps_change(self):
-        self.changed = True
         self.matrix_cs.eps_changed = True
         for c in self.reinf:
             c.eps_changed = True
@@ -81,7 +80,7 @@ class CrossSection(CrossSectionState):
     # Cross-sectional stress resultants
     #===========================================================================
 
-    N = Property(depends_on='changed')
+    N = Property(depends_on='changed,+eps_input')
     '''Get the resulting normal force.
     '''
     @cached_property
@@ -89,7 +88,7 @@ class CrossSection(CrossSectionState):
         N_matrix = self.matrix_cs_with_state.N
         return N_matrix + np.sum([c.N for c in self.reinf_components_with_state])
 
-    M = Property(depends_on='changed')
+    M = Property(depends_on='changed,+eps_input')
     '''Get the resulting moment.
     '''
     @cached_property
