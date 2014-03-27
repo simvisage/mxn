@@ -117,7 +117,14 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Geometry of the cross section
     '''
 
-    geo_lst = List([MCSGeoRect(), MCSGeoI(), MCSGeoCirc()])
+    geo_lst = Property()
+    @cached_property
+    def _get_geo_lst(self):
+        lst = [MCSGeoRect(), MCSGeoCirc(), MCSGeoI()]
+        for i in range(len(lst)):
+            if lst[i].__class__ == self.geo.__class__:
+                lst[i] = self.geo
+        return lst
 
     w_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Discretization of the  compressive zone - weight factors for general cross section
@@ -237,3 +244,4 @@ if __name__ == '__main__':
     ecs = MatrixCrossSection(state=state, geo=MCSGeoRect())
 
     ecs.configure_traits()
+    print ecs.geo_lst

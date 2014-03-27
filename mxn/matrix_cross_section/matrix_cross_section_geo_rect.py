@@ -52,7 +52,6 @@ class MCSGeoRect(MCSGeo):
         ax.axis('equal')
         ax.axis([dx - 0.1 * self.width, dx + 1.1 * self.width, dz - 0.1 * self.height, dz + 1.1 * self.height])
         
-
     view = View(Group(Item('width'),
                       Item('height'),
                       label='Geometry',
