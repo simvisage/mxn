@@ -24,7 +24,7 @@ from matrix_cross_section import \
     MatrixCrossSection
 
 from reinf_layout import \
-    ReinfLayoutComponent, RLCTexUniform, RLCTexLayer, RLCSteelBar
+    RLCTexUniform, RLCTexLayer, RLCSteelBar
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -32,30 +32,19 @@ from util.traits.editors.mpl_figure_editor import \
 from matplotlib.figure import \
     Figure
 
-class CrossSectionTreeNode(CrossSection):
-
-    #===========================================================================
-    # Auxiliary access methods
-    #===========================================================================
-
-    tree_node_list = Property(depends_on='matrix_cs')
-    @cached_property
-    def _get_tree_node_list(self):
-        return [self.matrix_cs_with_state, ReinfLayoutTreeNode(cs_state=self)]
-
-    matrix_cs_tree_node = Property(depends_on='matrix_cs')
-    '''Auxiliary property for tree node visualization.
-    (must be a list)
+class CrossSectionTreeNode(HasStrictTraits):
+    '''Proxy class for the cross section node returning the two subnotes.
     '''
-    @cached_property
-    def _get_matrix_cs_tree_node(self):
-        return [self.matrix_cs_with_state]
+    cs = WeakRef(CrossSection)
 
+    tree_node_list = Property
+    def _get_tree_node_list(self):
+        return [self.cs.matrix_cs_with_state, ReinfLayoutTreeNode(cs_state=self.cs)]
 
 class ReinfLayoutTreeNode(HasStrictTraits):
     '''Method accommodating the list of all reinforcement components.
     '''
-    cs_state = WeakRef(CrossSectionTreeNode)
+    cs_state = WeakRef(CrossSection)
 
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
@@ -64,7 +53,7 @@ class ReinfLayoutTreeNode(HasStrictTraits):
 
 tree_editor = TreeEditor(
             nodes=[
-                   TreeNode(node_for=[CrossSectionTreeNode],
+                   TreeNode(node_for=[CrossSectionTreeNode ],
                              auto_open=True,
                              children='tree_node_list',
                              label='=Cross section',
@@ -105,6 +94,10 @@ class CrossSectionView(HasStrictTraits):
     '''
     cs = Instance(CrossSection)
 
+    root = Property
+    def _get_root(self):
+        return CrossSectionTreeNode(cs=self.cs)
+
     figure = Instance(Figure)
     def _figure_default(self):
         figure = Figure(facecolor='white')
@@ -125,7 +118,7 @@ class CrossSectionView(HasStrictTraits):
     def _clear_fired(self):
         self.figure.clear()
 
-    view = View(HSplit(Group(Item('cs',
+    view = View(HSplit(Group(Item('root',
                             editor=tree_editor,
                             resizable=True,
                             show_label=False),
