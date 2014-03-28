@@ -9,7 +9,8 @@ from traits.api import \
     Property, cached_property, WeakRef
 
 from traitsui.api import \
-    TreeEditor, TreeNode, View, Item, Group, HSplit, HGroup
+    TreeEditor, TreeNode, View, Item, Group, \
+    HSplit, HGroup, VGroup
 
 from cross_section import \
     CrossSection
@@ -46,10 +47,10 @@ class ReinfLayoutTreeNode(HasStrictTraits):
     '''
     cs_state = WeakRef(CrossSection)
 
-    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
-    @cached_property
+    tree_node_list = Property
     def _get_tree_node_list(self):
         return self.cs_state.reinf_components_with_state
+
 
 tree_editor = TreeEditor(
             nodes=[
@@ -57,6 +58,7 @@ tree_editor = TreeEditor(
                              auto_open=True,
                              children='tree_node_list',
                              label='=Cross section',
+                             view=View()
                             ),
                    TreeNode(node_for=[ReinfLayoutTreeNode],
                              auto_open=True,
@@ -72,7 +74,7 @@ tree_editor = TreeEditor(
                             ),
                    TreeNode(node_for=[MatrixCrossSection],
                               auto_open=True,
-                             children='tree_node_list',
+                              children='tree_node_list',
                               label='=Matrix',
                             ),
                    TreeNode(node_for=[ReinfLawBase],
@@ -88,6 +90,7 @@ tree_editor = TreeEditor(
                    ],
                          orientation='vertical'
                          )
+
 
 class CrossSectionView(HasStrictTraits):
     '''View object for a cross section state.
