@@ -9,8 +9,9 @@ from traits.api import \
     Property, cached_property, WeakRef
 
 from traitsui.api import \
-    TreeEditor, TreeNode, View, Item, Group, HSplit, HGroup
-
+    TreeEditor, TreeNode, View, Item, Group, \
+    HSplit, HGroup, VGroup
+    
 from cross_section import \
     CrossSection
 
@@ -43,13 +44,13 @@ class CrossSectionTreeNode(CrossSection):
     def _get_tree_node_list(self):
         return [self.matrix_cs_with_state, ReinfLayoutTreeNode(cs_state=self)]
 
-    matrix_cs_tree_node = Property(depends_on='matrix_cs')
-    '''Auxiliary property for tree node visualization.
-    (must be a list)
-    '''
-    @cached_property
-    def _get_matrix_cs_tree_node(self):
-        return [self.matrix_cs_with_state]
+#     matrix_cs_tree_node = Property(depends_on='matrix_cs')
+#     '''Auxiliary property for tree node visualization.
+#     (must be a list)
+#     '''
+#     @cached_property
+#     def _get_matrix_cs_tree_node(self):
+#         return [self.matrix_cs_with_state]
 
 
 class ReinfLayoutTreeNode(HasStrictTraits):
@@ -62,12 +63,20 @@ class ReinfLayoutTreeNode(HasStrictTraits):
     def _get_tree_node_list(self):
         return self.cs_state.reinf_components_with_state
 
+
 tree_editor = TreeEditor(
             nodes=[
                    TreeNode(node_for=[CrossSectionTreeNode],
                              auto_open=True,
                              children='tree_node_list',
                              label='=Cross section',
+                             view=View(VGroup(Item('eps_up'),
+                                              Item('eps_lo'),
+                                              label='Cross section'
+                                              ),
+                                       resizable=True,
+                                       buttons=['OK', 'Cancel']
+                                       )
                             ),
                    TreeNode(node_for=[ReinfLayoutTreeNode],
                              auto_open=True,
@@ -83,7 +92,7 @@ tree_editor = TreeEditor(
                             ),
                    TreeNode(node_for=[MatrixCrossSection],
                               auto_open=True,
-                             children='tree_node_list',
+                              children='tree_node_list',
                               label='=Matrix',
                             ),
                    TreeNode(node_for=[ReinfLawBase],
@@ -99,6 +108,7 @@ tree_editor = TreeEditor(
                    ],
                          orientation='vertical'
                          )
+
 
 class CrossSectionView(HasStrictTraits):
     '''View object for a cross section state.

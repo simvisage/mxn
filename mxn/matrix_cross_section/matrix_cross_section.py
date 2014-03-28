@@ -244,4 +244,3 @@ if __name__ == '__main__':
     ecs = MatrixCrossSection(state=state, geo=MCSGeoRect())
 
     ecs.configure_traits()
-    print ecs.geo_lst
