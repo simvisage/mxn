@@ -5,7 +5,7 @@ Created on 26. 2. 2014
 '''
 
 from mxn import \
-    CrossSection, CrossSectionView, CrossSectionTreeNode
+    CrossSection, CrossSectionView
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
