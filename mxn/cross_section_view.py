@@ -85,7 +85,7 @@ tree_editor = TreeEditor(
                             ),
                    TreeNode(node_for=[MatrixLawBase],
                               auto_open=True,
-                             children='',
+                              children='',
                               label='=Constitutive law',
                             ),
                    ],

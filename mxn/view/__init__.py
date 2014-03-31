@@ -20,13 +20,19 @@ from traits.api import \
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, VGroup
+    HSplit, HGroup, VGroup, Handler
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
 
 from matplotlib.figure import \
     Figure
+
+from traitsui.menu import \
+    Menu, Action, Separator
+    
+from traitsui.wx.tree_editor import \
+    NewAction, DeleteAction
 
 class MxNTreeNode(HasStrictTraits):
     '''Base class of all model classes that can appear in a tree node.
@@ -35,25 +41,47 @@ class MxNTreeNode(HasStrictTraits):
 
     tree_node_list = List([])
 
-    def plot(self, ax):
-        return
+    def plot(self, fig):
+        print 'Node "', self.node_name, '" recieved', fig
 
+plot_self = Action(name='Plot',action='plot_node')
+'''Menu action for plotting tree nodes
+''' 
+
+def pass_node(node):
+    '''Called whenever a tree node is selected,
+    used to keep track of the currently selected node
+    for purposes of context dependent plotting.
+    '''
+    MxNTreeView.selected_node = node
+  
 tree_editor = TreeEditor(
-                nodes=[
-                       TreeNode(node_for=[MxNTreeNode ],
-                                 auto_open=True,
-                                 children='tree_node_list',
-                                 label='node_name',
-                                 view=View()
-                                ),
-                       ],
-                         orientation='vertical'
-                         )
+                    nodes=[
+                           TreeNode(node_for=[MxNTreeNode ],
+                                     auto_open=True,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view=View(),
+                                     on_select = pass_node,
+                                     menu = Menu(NewAction, DeleteAction, plot_self),
+                                    ),
+                           ],
+                             orientation='vertical'
+                             )
+
+class MxNTreeViewHandler(Handler):
+    '''Handler for MxNTreeView class
+    '''
+    def plot_node(self, info, node):
+        '''Handles context menu action Plot for tree nodes
+        '''
+        node.plot(info.object.figure)
 
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''
     root = Instance(MxNTreeNode)
+    selected_node = Instance(MxNTreeNode)
 
     figure = Instance(Figure)
     def _figure_default(self):
@@ -66,10 +94,7 @@ class MxNTreeView(HasStrictTraits):
     replot = Button
     def _replot_fired(self):
         self.figure.clear()
-        fig = self.figure
-        ax1 = fig.axes()
-        # ax1 = fig.add_subplot(111)
-        self.plot_geometry(ax1)
+        MxNTreeView.selected_node.plot(self.figure)
         self.data_changed = True
 
     clear = Button()
@@ -93,7 +118,8 @@ class MxNTreeView(HasStrictTraits):
                     width=0.7,
                     height=0.4,
                     buttons=['OK', 'Cancel'],
-                    resizable=True)
+                    resizable=True,
+                    handler=MxNTreeViewHandler())
 
 if __name__ == '__main__':
 
