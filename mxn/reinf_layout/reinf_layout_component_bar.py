@@ -100,6 +100,9 @@ class RLCBar(ReinfLayoutComponent):
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
         ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='green')
+        
+    def plot(self, fig):
+        return
 
     view = View(VGroup(
                        Item('area'),

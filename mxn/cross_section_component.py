@@ -16,12 +16,15 @@ from etsproxy.traits.ui.api import \
 from cross_section_state import \
     CrossSectionState
 
+from mxn.view import \
+    MxNTreeNode
+
 import numpy as np
 
 
 COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed'
 
-class CrossSectionComponent(HasStrictTraits):
+class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..
     '''
     state = WeakRef(CrossSectionState)

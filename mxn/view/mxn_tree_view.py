@@ -52,7 +52,7 @@ tree_node = TreeNode(node_for=[MxNTreeNode ],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',
-                                     view=View(),
+                                     #view=View(),
                                      menu=Menu(NewAction, DeleteAction, plot_self)
                                      )
 
@@ -68,7 +68,9 @@ class MxNTreeViewHandler(Handler):
     def plot_node(self, info, node):
         '''Handles context menu action Plot for tree nodes
         '''
+        info.object.figure.clear()
         node.plot(info.object.figure)
+        info.object.data_changed = True
 
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
@@ -76,9 +78,6 @@ class MxNTreeView(HasStrictTraits):
     root = Instance(MxNTreeNode)
 
     selected_node = Instance(MxNTreeNode)
-
-    def _selected_node_changed(self):
-        print 'changed tree node'
 
     figure = Instance(Figure)
     def _figure_default(self):
@@ -91,12 +90,13 @@ class MxNTreeView(HasStrictTraits):
     replot = Button
     def _replot_fired(self):
         self.figure.clear()
-        MxNTreeView.selected_node.plot(self.figure)
+        self.selected_node.plot(self.figure)
         self.data_changed = True
 
     clear = Button()
     def _clear_fired(self):
         self.figure.clear()
+        self.data_changed = True
 
     view = View(HSplit(Group(Item('root',
                             editor=tree_editor,

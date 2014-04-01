@@ -30,7 +30,7 @@ import numpy as np
 
 class RLCTexUniform(ReinfLayoutComponent):
 
-    name = 'Uniform textile layers'
+    node_name = 'Uniform textile layers'
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
@@ -162,14 +162,18 @@ class RLCTexUniform(ReinfLayoutComponent):
             self.layer_lst[i].plot_geometry(ax)
             
     def plot_eps(self, ax):
-        '''Plot geometry'''
+        '''Plot strains'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_eps(ax)
     
     def plot_sig(self, ax):
-        '''Plot geometry'''
+        '''Plot stresses'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
+        
+    def plot(self, fig):
+        for i in range(self.n_layers):
+            self.layer_lst[i].plot(fig)
 
     view = View(VGroup(
                       Item('n_rovings'),

@@ -14,7 +14,7 @@ from etsproxy.traits.api import \
 class RLCSteelBar(RLCBar):
     '''Steel reinforcement bar
     '''
-    name = 'Steel bar'
+    node_name = 'Steel bar'
     ecb_law_type = 'steel'
     def _get_ecb_law(self):
         return self.ecb_law_type_(f_yk=500., E_s=200000., eps_u=0.025)

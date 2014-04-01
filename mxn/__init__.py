@@ -8,10 +8,10 @@ from cross_section_component import \
     CrossSectionComponent
 
 from cross_section import \
-    CrossSection
+    CrossSection, ReinfLayoutTreeNode
 
 from cross_section_view import \
-    CrossSectionView, CrossSectionTreeNode
+    CrossSectionView
 
 from ecb_calib import \
     ECBCalib

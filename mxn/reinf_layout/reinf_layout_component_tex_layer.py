@@ -28,7 +28,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
-    name = 'Textile layer'
+    node_name = 'Textile layer'
     
     n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
     '''number of rovings in 0-direction of one composite layer of the
@@ -151,6 +151,9 @@ class RLCTexLayer(ReinfLayoutComponent):
         
         # sig t
         ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='red')
+        
+    def plot(self, fig):
+        return
     
     view = View(VGroup(
                       Item('n_rovings'),

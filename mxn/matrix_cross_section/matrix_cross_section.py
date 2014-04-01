@@ -210,9 +210,14 @@ class MatrixCrossSection(CrossSectionComponent):
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
         ax.fill(-ec, zz, color='blue')
 
+    def plot(self, fig):
+        ax = fig.add_subplot(1,1,1)
+        self.geo.plot_geometry(ax)
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
+    node_name = 'Matrix cross section'
+    
     tree_node_list = Property(depends_on='cc_law_type')
     @cached_property
     def _get_tree_node_list(self):

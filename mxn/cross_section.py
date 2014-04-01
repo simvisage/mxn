@@ -11,7 +11,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, List, WeakRef
+    DelegatesTo, Constant, List, WeakRef, Str
 
 from matplotlib.figure import \
     Figure
@@ -28,6 +28,9 @@ from matrix_cross_section import \
 from reinf_layout import \
     ReinfLayoutComponent
 
+from view import \
+    MxNTreeNode
+    
 import numpy as np
 
 
@@ -97,6 +100,10 @@ class CrossSection(CrossSectionState):
         M = M_matrix + np.sum([c.M for c in self.reinf_components_with_state])
         return M - self.N * self.matrix_cs.geo.gravity_centre
 
+    #===============================================================================
+    # Plotting functions
+    #===============================================================================
+
     def plot_geometry(self, ax):
         self.matrix_cs_with_state.geo.plot_geometry(ax)
         for r in self.reinf_components_with_state:
@@ -125,6 +132,27 @@ class CrossSection(CrossSectionState):
         ax.spines['bottom'].set_smart_bounds(True)
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
+        
+    def plot(self, fig):
+        ax1 = fig.add_subplot(1,3,1)
+        ax2 = fig.add_subplot(1,3,2)
+        ax3 = fig.add_subplot(1,3,3)
+        self.plot_geometry(ax1)
+        self.plot_eps(ax2)
+        self.plot_sig(ax3)
+        return
+    
+    #===========================================================================
+    # Visualisation related attributes
+    #===========================================================================
+    
+    node_name = 'Cross section'
+    
+    tree_node_list = Property
+    @cached_property
+    def _get_tree_node_list(self):
+        return [self.matrix_cs_with_state, 
+                ReinfLayoutTreeNode(cs_state=self)]
 
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
@@ -134,6 +162,17 @@ class CrossSection(CrossSectionState):
                 resizable=True,
                 buttons=['OK', 'Cancel']
                 )
+
+class ReinfLayoutTreeNode(HasStrictTraits):
+    '''Method accommodating the list of all reinforcement components.
+    '''
+    node_name = Str('Reinforcement layout')
+    cs_state = WeakRef(CrossSection)
+ 
+    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
+    @cached_property
+    def _get_tree_node_list(self):
+        return self.cs_state.reinf_components_with_state
 
 
 if __name__ == '__main__':
