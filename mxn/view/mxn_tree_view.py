@@ -37,12 +37,12 @@ from traitsui.wx.tree_editor import \
 class MxNTreeNode(HasStrictTraits):
     '''Base class of all model classes that can appear in a tree node.
     '''
-    node_name = Str('<unnambed>')
+    node_name = Str('<unnamed>')
 
     tree_node_list = List([])
 
     def plot(self, fig):
-        print 'Node "', self.node_name, '" recieved', fig
+        print 'Node "', self.node_name, '" received', fig
 
 plot_self = Action(name='Plot', action='plot_node')
 '''Menu action for plotting tree nodes
