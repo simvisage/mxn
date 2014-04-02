@@ -71,6 +71,8 @@ class MatrixCrossSection(CrossSectionComponent):
         eps_up = self.state.eps_up
         if eps_up <= 0 and eps_lo <= 0:
             return height
+        elif eps_up == eps_lo:
+            return 0.
         else:
             return (abs(eps_up) / (abs(eps_up - eps_lo)) * height)
 

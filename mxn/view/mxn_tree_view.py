@@ -40,9 +40,12 @@ class MxNTreeNode(HasStrictTraits):
     node_name = Str('<unnamed>')
 
     tree_node_list = List([])
+    
+    view = View()
 
     def plot(self, fig):
-        print 'Node "', self.node_name, '" received', fig
+        return
+        #print 'Node "', self.node_name, '" received', fig
 
 plot_self = Action(name='Plot', action='plot_node')
 '''Menu action for plotting tree nodes

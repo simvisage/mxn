@@ -60,6 +60,7 @@ class ReinfLayoutTreeNode(HasStrictTraits):
     '''
     cs_state = WeakRef(CrossSection)
     node_name = Str('Reinforcement layout')
+    view = View()
  
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property

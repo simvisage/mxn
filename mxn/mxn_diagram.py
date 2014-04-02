@@ -165,8 +165,10 @@ class MxNDiagram(MxNTreeNode):
     #===========================================================================
     
     def plot(self,fig):
-        ax = fig.add_subplot(1,1,1)
-        self.plot_MN(ax)
+        ax1 = fig.add_subplot(1,2,1)
+        self.plot_eps(ax1)
+        ax2 = fig.add_subplot(1,2,2)
+        self.plot_MN(ax2)
         
     node_name = 'MxN diagram'
     
@@ -203,6 +205,30 @@ class MxNDiagram(MxNTreeNode):
                 ),
                 scrollable=True,
                 ),
+                ),
+                width=1.0,
+                height=0.8,
+                resizable=True,
+                buttons=['OK', 'Cancel'])
+
+    traits_view = View(Group(
+                HGroup(
+                Group(Item('n_eps', springy=True),
+                      Item('current_eps_idx', editor=RangeEditor(low=0,
+                                   high_name='n_eps_range',
+                                   format='(%s)',
+                                   mode='slider',
+                                   auto_set=False,
+                                   enter_set=False,
+                                   ),
+                           show_label=False,
+                           ),
+                      label='Discretization',
+                      springy=True
+                      ),
+                springy=True,
+                ),
+                scrollable=True,
                 ),
                 width=1.0,
                 height=0.8,
