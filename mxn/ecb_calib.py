@@ -29,7 +29,10 @@ from matrix_cross_section import \
 from matresdev.db.simdb import SimDB
 simdb = SimDB()
 
-class ECBCalib(HasStrictTraits):
+from view import \
+    MxNTreeNode
+
+class ECBCalib(MxNTreeNode):
 
     # rupture moment and normal force measured in the calibration experiment
     # (three point bending test)
@@ -132,6 +135,20 @@ class ECBCalib(HasStrictTraits):
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(*self.u_sol)
         self.n = 0
         return self.cs.reinf_components_with_state[0].ecb_law
+
+    #===========================================================================
+    # Visualisation related attributes
+    #===========================================================================
+    
+    def plot(self,fig):
+        self.calibrated_ecb_law.plot(fig)
+        
+    node_name = 'ECB law calibration'
+    
+    tree_node_list = Property
+    @cached_property
+    def _get_tree_node_list(self):
+        return [self.cs]
 
     view = View(Item('Mu'),
                 Item('Nu'),

@@ -24,7 +24,10 @@ from matrix_cross_section import \
 
 import numpy as np
 
-class MxNDiagram(HasTraits):
+from view import \
+    MxNTreeNode
+
+class MxNDiagram(MxNTreeNode):
 
     # calibrator supplying the effective material law
     calib = Instance(ECBCalib)
@@ -156,6 +159,24 @@ class MxNDiagram(HasTraits):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
+
+    #===========================================================================
+    # Visualisation related attributes
+    #===========================================================================
+    
+    def plot(self,fig):
+        ax = fig.add_subplot(1,1,1)
+        self.plot_MN(ax)
+        
+    node_name = 'MxN diagram'
+    
+    tree_node_list = Property
+    @cached_property
+    def _get_tree_node_list(self):
+        if self.calib:
+            return [self.calib]
+        else:
+            return [self.cs]
 
     view = View(HSplit(Group(
                 HGroup(

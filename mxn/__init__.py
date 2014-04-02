@@ -8,7 +8,7 @@ from cross_section_component import \
     CrossSectionComponent
 
 from cross_section import \
-    CrossSection, ReinfLayoutTreeNode
+    CrossSection
 
 from cross_section_view import \
     CrossSectionView

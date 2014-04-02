@@ -140,7 +140,6 @@ class CrossSection(CrossSectionState):
         self.plot_geometry(ax1)
         self.plot_eps(ax2)
         self.plot_sig(ax3)
-        return
     
     #===========================================================================
     # Visualisation related attributes
@@ -152,7 +151,8 @@ class CrossSection(CrossSectionState):
     @cached_property
     def _get_tree_node_list(self):
         return [self.matrix_cs_with_state, 
-                ReinfLayoutTreeNode(cs_state=self)]
+                MxNTreeNode(tree_node_list=self.reinf_components_with_state,
+                            node_name='Reinforcement layout')]
 
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
@@ -162,18 +162,6 @@ class CrossSection(CrossSectionState):
                 resizable=True,
                 buttons=['OK', 'Cancel']
                 )
-
-class ReinfLayoutTreeNode(HasStrictTraits):
-    '''Method accommodating the list of all reinforcement components.
-    '''
-    node_name = Str('Reinforcement layout')
-    cs_state = WeakRef(CrossSection)
- 
-    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
-    @cached_property
-    def _get_tree_node_list(self):
-        return self.cs_state.reinf_components_with_state
-
 
 if __name__ == '__main__':
     pass
