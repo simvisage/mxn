@@ -152,7 +152,8 @@ class CrossSection(CrossSectionState):
     def _get_tree_node_list(self):
         return [self.matrix_cs_with_state, 
                 MxNTreeNode(tree_node_list=self.reinf_components_with_state,
-                            node_name='Reinforcement layout')]
+                            node_name='Reinforcement layout',
+                            plot_state=self)]
 
     traits_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),

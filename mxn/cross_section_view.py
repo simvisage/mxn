@@ -34,7 +34,8 @@ from matplotlib.figure import \
     Figure
     
 from mxn.view import \
-    tree_node, MxNTreeNode, plot_self, MxNTreeViewHandler
+    tree_node, MxNTreeNode, plot_self, \
+    MxNTreeViewHandler, leaf_node
 
 from traitsui.menu import \
     Menu, Action, Separator
@@ -77,7 +78,7 @@ reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
                                      children='tree_node_list',
                                      label='node_name',
                                      view=View(),
-                                     menu=Menu(NewAction),
+                                     menu=Menu(NewAction, plot_self),
                                      add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
                                      )
 
@@ -104,6 +105,7 @@ reinf_layout_node_tex_uniform = TreeNode(node_for=[RLCTexUniform],
 
 tree_editor = TreeEditor(
                     nodes=[tree_node, 
+                           leaf_node,
                            reinf_layout_node, 
                            reinf_layout_node_steel,
                            reinf_layout_node_tex_layer,

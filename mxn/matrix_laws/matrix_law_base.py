@@ -12,9 +12,9 @@ import numpy as np
 from constitutive_law import CLBase
 
 from mxn.view import \
-    MxNTreeNode
+    MxNLeafNode
 
-class MatrixLawBase(CLBase, MxNTreeNode):
+class MatrixLawBase(CLBase, MxNLeafNode):
     '''Base class for concrete constitutive laws.'''
     # characteristic compressive stress [MPa]
     #

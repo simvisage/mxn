@@ -16,7 +16,7 @@ inherit from the MxNTreeNode and supply the attributes
 
 from traits.api import \
     HasStrictTraits, Instance, Button, Event, \
-    Property, cached_property, Str, List
+    Property, cached_property, Str, List, WeakRef
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
@@ -42,25 +42,46 @@ class MxNTreeNode(HasStrictTraits):
     tree_node_list = List([])
     
     view = View()
+    
+    plot_state = WeakRef(HasStrictTraits)
+    '''Allows for passing a reference to cross section
+    to reinforcement layout node for purposes of plotting
+    '''
+
+    def plot(self, fig):
+        if self.plot_state:
+            ax = fig.add_subplot(1,1,1)
+            self.plot_state.plot_geometry(ax)
+        return
+
+class MxNLeafNode(HasStrictTraits):
+    '''Base class of all model classes that can appear in a tree node.
+    '''
+    node_name = Str('<unnamed>')
 
     def plot(self, fig):
         return
-        #print 'Node "', self.node_name, '" received', fig
 
 plot_self = Action(name='Plot', action='plot_node')
 '''Menu action for plotting tree nodes
 '''
 
-tree_node = TreeNode(node_for=[MxNTreeNode ],
+tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',
-                                     #view=View(),
                                      menu=Menu(NewAction, DeleteAction, plot_self)
                                      )
 
+leaf_node = TreeNode(node_for=[MxNLeafNode],
+                                     auto_open=True,
+                                     children='',
+                                     label='node_name',
+                                     menu=Menu(plot_self)
+                                     )
+
 tree_editor = TreeEditor(
-                    nodes=[ tree_node ],
+                    nodes=[ tree_node, leaf_node ],
                     selected='selected_node',
                     orientation='vertical'
                              )
