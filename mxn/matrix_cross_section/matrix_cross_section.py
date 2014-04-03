@@ -202,7 +202,7 @@ class MatrixCrossSection(CrossSectionComponent):
         # eps ti
         ec = np.hstack([self.eps_ti_arr] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
-        ax.fill(-ec, zz, color='blue')
+        ax.fill(-ec, zz, color='DodgerBlue')
 
     def plot_sig(self, ax):
         h = self.geo.height
@@ -210,7 +210,7 @@ class MatrixCrossSection(CrossSectionComponent):
         # sig ti
         ec = np.hstack([self.f_ti_arr * self.x / self.n_cj] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
-        ax.fill(-ec, zz, color='blue')
+        ax.fill(-ec, zz, color='DodgerBlue')
 
     def plot(self, fig):
         ax = fig.add_subplot(1,1,1)

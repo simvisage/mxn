@@ -172,8 +172,13 @@ class RLCTexUniform(ReinfLayoutComponent):
             self.layer_lst[i].plot_sig(ax)
         
     def plot(self, fig):
+        '''Plots the cross section - particular reinforcement component 
+        plotted with distinctive color to others 
+        '''
+        ax = fig.add_subplot(1,1,1)
+        self.state.plot_geometry(ax)
         for i in range(self.n_layers):
-            self.layer_lst[i].plot(fig)
+            self.layer_lst[i].plot_geometry(ax, clr='red')
 
     view = View(VGroup(
                       Item('n_rovings'),

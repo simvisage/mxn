@@ -47,6 +47,7 @@ class CrossSectionTreeNode(MxNTreeNode):
     '''
     cs = WeakRef(CrossSection)
     node_name = 'Cross section'
+    view = View(Item('cs@'))
     
     def plot(self, fig):
         self.cs.plot(fig)

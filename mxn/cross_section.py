@@ -154,6 +154,14 @@ class CrossSection(CrossSectionState):
                 MxNTreeNode(tree_node_list=self.reinf_components_with_state,
                             node_name='Reinforcement layout')]
 
+    traits_view = View(VGroup(Item('eps_up'),
+                       Item('eps_lo'),
+                       label='Cross section'
+                      ),
+                resizable=True,
+                buttons=['OK', 'Cancel']
+                )
+
     view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        Item('matrix_cs'),
