@@ -28,7 +28,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
-    name = 'Textile layer'
+    node_name = 'Textile layer'
     
     n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
     '''number of rovings in 0-direction of one composite layer of the
@@ -129,11 +129,12 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _get_M(self):
         return self.f_t * self.z_coord
 
-    def plot_geometry(self, ax):
+    def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
         width = self.matrix_cs.geo.get_width(self.z_coord)
         w_max = self.matrix_cs.geo.width
-        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, (w_max + width) / 2, lw=2, color='red', linestyle='dashed')
+        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, 
+                  (w_max + width) / 2, lw=2, color=clr, linestyle='dashed')
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
@@ -141,16 +142,28 @@ class RLCTexLayer(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         
         # eps t
-        ax.hlines([h-self.z_coord], [0], [-self.eps_t], lw=4, color='red')
+        ax.hlines([h-self.z_coord], [0], [-self.eps_t], lw=4, color='DarkOrange')
 
         # reinforcement layer
-        ax.hlines([h-self.z_coord], [min(0.0, -eps_lo, -eps_up)], [max(0.0, -eps_lo, -eps_up)], lw=1, color='black', linestyle='--')
+        ax.hlines([h-self.z_coord], [min(0.0, -eps_lo, -eps_up)], 
+                  [max(0.0, -eps_lo, -eps_up)], lw=1, color='black', linestyle='--')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
         
         # sig t
-        ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='red')
+        ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
+        
+    def plot(self, fig):
+        '''Plots the cross section - particular reinforcement component 
+        plotted with distinctive color to others 
+        '''
+        ax = fig.add_subplot(1,1,1)
+        self.state.plot_geometry(ax)
+        width = self.matrix_cs.geo.get_width(self.z_coord)
+        w_max = self.matrix_cs.geo.width
+        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, 
+                  (w_max + width) / 2, lw=2, color='red', linestyle='dashed')
     
     view = View(VGroup(
                       Item('n_rovings'),

@@ -58,13 +58,17 @@ class CLBase(HasStrictTraits):
     def _get_mfn_vct(self):
         return np.vectorize(self.mfn.get_value, otypes = [np.float])
 
-    def plot(self, ax, **kw):
-        ax.plot(*self.arr, **kw)
-#        ax.autoscale(tight = True)
-#        ax.xaxis.set_minor_locator(AutoMinorLocator(2))
-#        ax.tick_params(direction = 'out', length = 2, width = 4)
-        ax.ticklabel_format(axis = 'x', style = 'sci')
+#     def plot(self, ax, **kw):
+#         ax.plot(*self.arr, **kw)
+# #        ax.autoscale(tight = True)
+# #        ax.xaxis.set_minor_locator(AutoMinorLocator(2))
+# #        ax.tick_params(direction = 'out', length = 2, width = 4)
+#         ax.ticklabel_format(axis = 'x', style = 'sci')
 
+    def plot(self, fig):
+        ax = fig.add_subplot(1,1,1)
+        ax.plot(*self.arr)
+        
     def default_traits_view(self):
 
         input_traits = self.traits(input = lambda x: x != None)

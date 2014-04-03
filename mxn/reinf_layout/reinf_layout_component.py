@@ -30,8 +30,6 @@ class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
-    name = Str()
-
     matrix_cs = WeakRef(MatrixCrossSection)
 
     #===========================================================================

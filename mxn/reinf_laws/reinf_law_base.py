@@ -9,10 +9,14 @@ from etsproxy.traits.api import \
 
 from constitutive_law import CLBase
 
-class ReinfLawBase(CLBase):
+from mxn.view import \
+    MxNTreeNode
+
+class ReinfLawBase(CLBase, MxNTreeNode):
     '''Base class for Effective Crack Bridge Laws.'''
 
     u0 = List([0.0, 0.0])
+    node_name = 'Constitutive law'
 
 if __name__ == '__main__':
     from constitutive_law import ConstitutiveLawModelView

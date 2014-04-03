@@ -24,7 +24,10 @@ from matrix_cross_section import \
 
 import numpy as np
 
-class MxNDiagram(HasTraits):
+from view import \
+    MxNTreeNode
+
+class MxNDiagram(MxNTreeNode):
 
     # calibrator supplying the effective material law
     calib = Instance(ECBCalib)
@@ -157,6 +160,26 @@ class MxNDiagram(HasTraits):
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
 
+    #===========================================================================
+    # Visualisation related attributes
+    #===========================================================================
+    
+    def plot(self,fig):
+        ax1 = fig.add_subplot(1,2,1)
+        self.plot_eps(ax1)
+        ax2 = fig.add_subplot(1,2,2)
+        self.plot_MN(ax2)
+        
+    node_name = 'MxN diagram'
+    
+    tree_node_list = Property
+    @cached_property
+    def _get_tree_node_list(self):
+        if self.calib:
+            return [self.calib]
+        else:
+            return [self.cs]
+
     view = View(HSplit(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
@@ -182,6 +205,30 @@ class MxNDiagram(HasTraits):
                 ),
                 scrollable=True,
                 ),
+                ),
+                width=1.0,
+                height=0.8,
+                resizable=True,
+                buttons=['OK', 'Cancel'])
+
+    traits_view = View(Group(
+                HGroup(
+                Group(Item('n_eps', springy=True),
+                      Item('current_eps_idx', editor=RangeEditor(low=0,
+                                   high_name='n_eps_range',
+                                   format='(%s)',
+                                   mode='slider',
+                                   auto_set=False,
+                                   enter_set=False,
+                                   ),
+                           show_label=False,
+                           ),
+                      label='Discretization',
+                      springy=True
+                      ),
+                springy=True,
+                ),
+                scrollable=True,
                 ),
                 width=1.0,
                 height=0.8,

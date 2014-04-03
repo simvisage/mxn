@@ -91,15 +91,23 @@ class RLCBar(ReinfLayoutComponent):
 
     def plot_geometry(self, ax):
         '''Plot geometry'''
-        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'go')
+        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'o', color='DarkOrange')
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z_up], [0], [-self.eps], lw=4, color='green')
+        ax.hlines([h-self.z_up], [0], [-self.eps], lw=4, color='DarkOrange')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='green')
+        ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='DarkOrange')
+        
+    def plot(self, fig):
+        '''Plots the cross section - particular reinforcement component 
+        plotted with distinctive color to others 
+        '''
+        ax = fig.add_subplot(1,1,1)
+        self.state.plot_geometry(ax)
+        ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'o', color='red')
 
     view = View(VGroup(
                        Item('area'),

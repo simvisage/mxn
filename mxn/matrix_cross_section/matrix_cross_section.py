@@ -71,6 +71,8 @@ class MatrixCrossSection(CrossSectionComponent):
         eps_up = self.state.eps_up
         if eps_up <= 0 and eps_lo <= 0:
             return height
+        elif eps_up == eps_lo:
+            return 0.
         else:
             return (abs(eps_up) / (abs(eps_up - eps_lo)) * height)
 
@@ -200,7 +202,7 @@ class MatrixCrossSection(CrossSectionComponent):
         # eps ti
         ec = np.hstack([self.eps_ti_arr] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
-        ax.fill(-ec, zz, color='blue')
+        ax.fill(-ec, zz, color='DodgerBlue')
 
     def plot_sig(self, ax):
         h = self.geo.height
@@ -208,11 +210,16 @@ class MatrixCrossSection(CrossSectionComponent):
         # sig ti
         ec = np.hstack([self.f_ti_arr * self.x / self.n_cj] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
-        ax.fill(-ec, zz, color='blue')
+        ax.fill(-ec, zz, color='DodgerBlue')
 
+    def plot(self, fig):
+        ax = fig.add_subplot(1,1,1)
+        self.geo.plot_geometry(ax)
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
+    node_name = 'Matrix cross section'
+    
     tree_node_list = Property(depends_on='cc_law_type')
     @cached_property
     def _get_tree_node_list(self):
