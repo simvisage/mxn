@@ -1,7 +1,7 @@
 '''
 Created on 28. 3. 2014
 
-The module defines the framework for tree visualizatoin of the model
+The module defines the framework for tree visualization of the model
 in a ModelView window. The components of the model classes should
 inherit from the MxNTreeNode and supply the attributes
 
@@ -16,11 +16,11 @@ inherit from the MxNTreeNode and supply the attributes
 
 from traits.api import \
     HasStrictTraits, Instance, Button, Event, \
-    Property, cached_property, Str, List
+    Str, List
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, VGroup, Handler
+    HSplit, HGroup, Handler
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -29,7 +29,7 @@ from matplotlib.figure import \
     Figure
 
 from traitsui.menu import \
-    Menu, Action, Separator
+    Menu, Action
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
