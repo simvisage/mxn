@@ -31,10 +31,10 @@ tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.38)
 '''Two layers of textile reinforcement
 '''
 
-bar1 = RLCSteelBar(position=[0.1, 0.36], area=0.0002)
-bar2 = RLCSteelBar(position=[0.2, 0.36], area=0.0002)
-bar3 = RLCSteelBar(position=[0.1, 0.04], area=0.0002)
-bar4 = RLCSteelBar(position=[0.2, 0.04], area=0.0002)
+bar1 = RLCSteelBar(x=0.1,z=0.36, area=0.0002)
+bar2 = RLCSteelBar(x=0.2,z=0.36, area=0.0002)
+bar3 = RLCSteelBar(x=0.1,z=0.04, area=0.0002)
+bar4 = RLCSteelBar(x=0.2,z=0.04, area=0.0002)
 '''Four steel reinforcement bars
 '''
 

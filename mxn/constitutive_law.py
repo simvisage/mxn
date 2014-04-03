@@ -67,8 +67,11 @@ class CLBase(HasStrictTraits):
 
     def plot(self, fig):
         ax = fig.add_subplot(1,1,1)
-        ax.plot(*self.arr)
+        self.plot_ax(ax)
         
+    def plot_ax(self, ax):
+        ax.plot(*self.arr)
+
     def default_traits_view(self):
 
         input_traits = self.traits(input = lambda x: x != None)

@@ -46,7 +46,6 @@ class CrossSectionComponent(MxNTreeNode):
         if self.state:
             self.state.changed = True
 
-
     #===========================================================================
     # Cross-sectional stress resultants
     #===========================================================================

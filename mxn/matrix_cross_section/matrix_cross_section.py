@@ -154,16 +154,6 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_cc_law(self):
         return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self.state)
 
-    show_cc_law = Button
-    '''Button launching a separate view of the compression law.
-    '''
-    def _show_cc_law_fired(self):
-        cc_law_mw = ConstitutiveLawModelView(model=self.cc_law)
-        cc_law_mw.edit_traits(kind='live')
-        return
-
-    cc_modified = Event
-
     #===========================================================================
     # Calculation of compressive stresses and forces
     #===========================================================================
@@ -195,7 +185,11 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
-
+    
+    #===============================================================================
+    # Plotting functions
+    #===============================================================================
+    
     def plot_eps(self, ax):
         h = self.geo.height
 
@@ -213,8 +207,13 @@ class MatrixCrossSection(CrossSectionComponent):
         ax.fill(-ec, zz, color='DodgerBlue')
 
     def plot(self, fig):
-        ax = fig.add_subplot(1,1,1)
-        self.geo.plot_geometry(ax)
+        '''Plots the geometry + concrete law
+        '''
+        ax1 = fig.add_subplot(1,2,1)
+        self.geo.plot_geometry(ax1)
+        ax2 = fig.add_subplot(1,2,2)
+        self.cc_law.plot_ax(ax2)
+
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
@@ -231,8 +230,12 @@ class MatrixCrossSection(CrossSectionComponent):
                       Item('f_ck'),
                       Item('eps_c_u'),
                       Item('cc_law_type'),
-                      Item('geo', label='Cross section geometry', show_label=True,
-                           editor=InstanceEditor(name='geo_lst', editable=True), style='custom'),
+                      Group(
+                      Item('geo', show_label=False,
+                           editor=InstanceEditor(name='geo_lst', 
+                           editable=True), style='custom'),
+                      label='Geometry'
+                      ),
                       label='Matrix',
                       springy=True
                       ),

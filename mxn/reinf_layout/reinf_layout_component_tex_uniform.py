@@ -11,7 +11,7 @@ from etsproxy.traits.api import \
     Float, Property, cached_property, Int, Instance, Trait, on_trait_change
 
 from etsproxy.traits.ui.api import \
-    View, Item, VGroup
+    View, Item, VGroup, Group
     
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
@@ -156,10 +156,10 @@ class RLCTexUniform(ReinfLayoutComponent):
             M += self.layer_lst[i].M
         return M
 
-    def plot_geometry(self, ax):
+    def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
         for i in range(self.n_layers):
-            self.layer_lst[i].plot_geometry(ax)
+            self.layer_lst[i].plot_geometry(ax, clr=clr)
             
     def plot_eps(self, ax):
         '''Plot strains'''
@@ -171,21 +171,18 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
         
-    def plot(self, fig):
-        '''Plots the cross section - particular reinforcement component 
-        plotted with distinctive color to others 
-        '''
-        ax = fig.add_subplot(1,1,1)
-        self.state.plot_geometry(ax)
-        for i in range(self.n_layers):
-            self.layer_lst[i].plot_geometry(ax, clr='red')
-
     view = View(VGroup(
+                      Group(
                       Item('n_rovings'),
                       Item('A_roving'),
                       Item('n_layers'),
+                      label='Geometry'
+                      ),
+                      Group(
+                      Item('sig_tex_u'),
                       Item('ecb_law_type'),
-                      label='Uniformly distributed textile layers',
+                      label='Reinforcement law',
+                      ),
                       springy=True,
                       ),
                 resizable=True,

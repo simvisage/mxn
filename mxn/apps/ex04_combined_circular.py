@@ -51,8 +51,8 @@ bar_lst = []
 '''List of bars
 '''
 for i in range(n_bars):
-    bar_lst.append(RLCSteelBar(position=[x_bar_arr[i],
-                            z_bar_arr[i]], area=bar_area))
+    bar_lst.append(RLCSteelBar(x=x_bar_arr[i],
+                            z=z_bar_arr[i], area=bar_area))
                    
 tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.45)
 tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.44)

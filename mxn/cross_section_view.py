@@ -47,7 +47,7 @@ class CrossSectionTreeNode(MxNTreeNode):
     '''
     cs = WeakRef(CrossSection)
     node_name = 'Cross section'
-    view = View(Item('cs@'))
+    view = View(Item('cs@',show_label=False))
     
     def plot(self, fig):
         self.cs.plot(fig)
@@ -63,51 +63,15 @@ class ReinfLayoutTreeNode(HasStrictTraits):
     node_name = Str('Reinforcement layout')
     view = View()
  
+    def plot(self, fig):
+        ax = fig.add_subplot(1,1,1)
+        self.cs_state.plot_geometry(ax)
+
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
     def _get_tree_node_list(self):
         return self.cs_state.reinf_components_with_state
  
- 
-# tree_editor = TreeEditor(
-#             nodes=[
-#                    TreeNode(node_for=[CrossSectionTreeNode ],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='=Cross section',
-#                              view=View()
-#                             ),
-#                    TreeNode(node_for=[ReinfLayoutTreeNode],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='=Reinforcement Layout',
-#                              view=View(),
-#                              add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
-#                             ),
-#                    TreeNode(node_for=[RLCTexUniform, RLCTexLayer, RLCSteelBar],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='name'
-#                             ),
-#                    TreeNode(node_for=[MatrixCrossSection],
-#                               auto_open=True,
-#                               children='tree_node_list',
-#                               label='=Matrix',
-#                             ),
-#                    TreeNode(node_for=[ReinfLawBase],
-#                               auto_open=True,
-#                              children='',
-#                               label='=Constitutive law',
-#                             ),
-#                    TreeNode(node_for=[MatrixLawBase],
-#                               auto_open=True,
-#                               children='',
-#                               label='=Constitutive law',
-#                             ),
-#                    ],
-#                          orientation='vertical'
-#                          )
-
 reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
                                      auto_open=True,
                                      children='tree_node_list',
@@ -152,7 +116,7 @@ class CrossSectionView(HasStrictTraits):
     '''View object for a cross section state.
     '''
     cs = Instance(CrossSection)
-    selected_node = Instance(MxNTreeNode)
+    selected_node = Instance(HasStrictTraits)
 
     root = Property(depends_on='cs')
     @cached_property

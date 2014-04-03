@@ -14,7 +14,7 @@ from constitutive_law import \
     ConstitutiveLawModelView
 
 from traitsui.api import \
-    View, Item, VGroup
+    View, Item, VGroup, Group
 
 from reinf_layout_component import \
     ReinfLayoutComponent, \
@@ -154,24 +154,18 @@ class RLCTexLayer(ReinfLayoutComponent):
         # sig t
         ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
         
-    def plot(self, fig):
-        '''Plots the cross section - particular reinforcement component 
-        plotted with distinctive color to others 
-        '''
-        ax = fig.add_subplot(1,1,1)
-        self.state.plot_geometry(ax)
-        width = self.matrix_cs.geo.get_width(self.z_coord)
-        w_max = self.matrix_cs.geo.width
-        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, 
-                  (w_max + width) / 2, lw=2, color='red', linestyle='dashed')
-    
     view = View(VGroup(
+                      Group(
                       Item('n_rovings'),
                       Item('A_roving'),
                       Item('z_coord'),
+                      label='Geometry'
+                      ),
+                      Group(
                       Item('sig_tex_u'),
                       Item('ecb_law_type'),
-                      label='Textile layer',
+                      label='Reinforcement law',
+                      ),
                       springy=True,
                       ),
                 resizable=True,

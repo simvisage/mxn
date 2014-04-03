@@ -66,9 +66,6 @@ class MCSGeoCirc(MCSGeo):
         ax.axis('equal')
         ax.axis([dx - self.radius * 1.1, dx + self.radius * 1.1, dz - self.radius * 1.1, dz + self.radius * 1.1])
 
-    view = View(Group(
-                    Item('radius'),
-                    label='Geometry',
-                    ),
+    view = View(Item('radius'),
                 resizable=True,
                 buttons=['OK', 'Cancel'])

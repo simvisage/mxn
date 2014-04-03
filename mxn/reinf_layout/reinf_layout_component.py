@@ -49,14 +49,31 @@ class ReinfLayoutComponent(CrossSectionComponent):
     @cached_property
     def _get_ecb_law(self):
         return self.ecb_law_type_(cs=self.state)
-
-    show_ecb_law = Button
-    '''Button launching a separate view of the effective crack bridge law.
-    '''
-    def _show_ecb_law_fired(self):
-        ecb_law_mw = ConstitutiveLawModelView(model=self.ecb_law)
-        ecb_law_mw.edit_traits(kind='live')
+    
+    #===============================================================================
+    # Plotting functions
+    #===============================================================================
+    
+    def plot_geometry(self, ax, clr):
+        '''Plot geometry'''
         return
+
+    def plot_eps(self, ax):
+        return
+    
+    def plot_sig(self, ax):
+        return
+    
+    def plot(self, fig):
+        '''Plots the cross section - particular reinforcement component 
+        plotted with distinctive color to others 
+        '''
+        ax1 = fig.add_subplot(1,2,1)
+        self.state.plot_geometry(ax1)
+        self.plot_geometry(ax1, clr='red')
+        ax2 = fig.add_subplot(1,2,2)
+        self.ecb_law.plot_ax(ax2)
+
 
     #===========================================================================
     # Auxiliary methods for tree editor

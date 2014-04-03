@@ -91,14 +91,11 @@ class MCSGeoI(MCSGeo):
         ax.axis('equal')
         ax.axis([dx - 0.1 * w_max, dx + 1.1 * w_max, dz - 0.1 * self.height, dz + 1.1 * self.height])
 
-    view = View(Group(
-                      Item('width_up'),
-                      Item('width_lo'),
-                      Item('width_st'),
-                      Item('height'),
-                      Item('height_lo'),
-                      Item('height_up'),
-                      label='Geometry',
-                      ),
+    view = View(Item('width_up'),
+                Item('width_lo'),
+                Item('width_st'),
+                Item('height'),
+                Item('height_lo'),
+                Item('height_up'),
                 resizable=True,
                 buttons=['OK', 'Cancel'])
