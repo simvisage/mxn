@@ -155,7 +155,7 @@ class CrossSection(CrossSectionState):
                             node_name='Reinforcement layout',
                             plot_state=self)]
 
-    traits_view = View(VGroup(Item('eps_up'),
+    tree_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        label='Cross section'
                       ),
@@ -163,7 +163,7 @@ class CrossSection(CrossSectionState):
                 buttons=['OK', 'Cancel']
                 )
 
-    view = View(VGroup(Item('eps_up'),
+    traits_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        Item('matrix_cs'),
                        label='Cross section'

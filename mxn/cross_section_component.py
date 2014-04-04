@@ -32,6 +32,10 @@ class CrossSectionComponent(MxNTreeNode):
     '''
 
     unit_conversion_factor = Constant(1000.0)
+    
+    law_changed = Event
+    '''Notifier set to True when internal values of a constitutive law change
+    '''
 
     eps_changed = Event
     '''State notifier that is set to true if the cross section state has changed

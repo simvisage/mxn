@@ -29,9 +29,6 @@ from matplotlib.figure import \
 from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
-from constitutive_law import \
-    ConstitutiveLawModelView
-
 from mxn.matrix_laws import \
     MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
 
@@ -41,7 +38,7 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -152,7 +149,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Compressive concrete law corresponding to cc_law_type'''
     @cached_property
     def _get_cc_law(self):
-        return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self.state)
+        return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self)
 
     #===========================================================================
     # Calculation of compressive stresses and forces
@@ -224,7 +221,7 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_tree_node_list(self):
         return [ self.cc_law ]
 
-    view = View(HGroup(
+    tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
                       Item('f_ck'),

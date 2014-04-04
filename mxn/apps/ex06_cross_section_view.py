@@ -30,3 +30,6 @@ cs = CrossSection(reinf=[bar],
 
 csw = CrossSectionView(cs=cs)
 csw.configure_traits()
+print cs.M
+csw.configure_traits()
+print cs.M

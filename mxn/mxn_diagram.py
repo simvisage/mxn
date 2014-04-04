@@ -44,13 +44,14 @@ class MxNDiagram(MxNTreeNode):
     cs = Instance(CrossSection)
     def _cs_default(self):
         return CrossSection()
-            
+
     eps_cu = Property()
     def _get_eps_cu(self):
         return -self.cs.matrix_cs_with_state.cc_law.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
+        #return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law.eps_u)
         eps = 0
         for r in self.cs.reinf_components_with_state:
             if eps < r.ecb_law.eps_u:
@@ -180,7 +181,7 @@ class MxNDiagram(MxNTreeNode):
         else:
             return [self.cs]
 
-    view = View(HSplit(Group(
+    traits_view = View(HSplit(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
                       label='Discretization',
@@ -211,7 +212,7 @@ class MxNDiagram(MxNTreeNode):
                 resizable=True,
                 buttons=['OK', 'Cancel'])
 
-    traits_view = View(Group(
+    tree_view = View(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
                       Item('current_eps_idx', editor=RangeEditor(low=0,

@@ -11,9 +11,6 @@ from etsproxy.traits.api import \
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
 
-from constitutive_law import \
-    ConstitutiveLawModelView
-
 from reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
@@ -58,7 +55,7 @@ class RLCBar(ReinfLayoutComponent):
         #
         return eps_up + (eps_lo - eps_up) * self.z / height
 
-    sig = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
+    sig = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Stress of the bar
     '''
     @cached_property
@@ -100,7 +97,7 @@ class RLCBar(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         ax.hlines([h-self.z], [0], [-self.f], lw=4, color='DarkOrange')
         
-    view = View(VGroup(
+    tree_view = View(VGroup(
                        Item('area'),
                        Group(
                        Item('x'),

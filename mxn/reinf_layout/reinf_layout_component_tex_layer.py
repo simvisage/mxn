@@ -5,13 +5,12 @@ Created on 31. 1. 2014
 '''
 
 from traits.api import \
-    Float, Property, cached_property, Int, Instance, Trait
+    Float, Property, cached_property, \
+    Int, Instance, Trait
     
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
-
-from constitutive_law import \
-    ConstitutiveLawModelView
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
+    ReinfLawCubic, ReinfLawBilinear
 
 from traitsui.api import \
     View, Item, VGroup, Group
@@ -55,15 +54,19 @@ class RLCTexLayer(ReinfLayoutComponent):
                       law_input=True)
     '''Selector of the effective crack bridge law type
     ['fbm', 'cubic', 'linear', 'bilinear']'''
+    
+    adapted_ecb_law = Instance(ReinfLawBase)
 
     ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
+        if self.adapted_ecb_law:
+            return self.adapted_ecb_law
         if self.ecb_law_type == 'linear':
-            return self.ecb_law_type_(cs=self.state)
+            return self.ecb_law_type_(cs=self)
         else:
-            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
 
     #===========================================================================
     # Discretization conform to the tex layers
@@ -154,7 +157,7 @@ class RLCTexLayer(ReinfLayoutComponent):
         # sig t
         ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
         
-    view = View(VGroup(
+    tree_view = View(VGroup(
                       Group(
                       Item('n_rovings'),
                       Item('A_roving'),

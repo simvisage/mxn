@@ -16,9 +16,6 @@ from etsproxy.traits.ui.api import \
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
 
-from constitutive_law import \
-    ConstitutiveLawModelView
-
 from reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE
@@ -82,9 +79,9 @@ class RLCTexUniform(ReinfLayoutComponent):
     @cached_property
     def _get_ecb_law(self):
         if self.ecb_law_type == 'linear':
-            return self.ecb_law_type_(cs=self.state)
+            return self.ecb_law_type_(cs=self)
         else:
-            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
 
     #===========================================================================
     # Distribution of reinforcement
@@ -96,8 +93,6 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _get_s_tex_z(self):
         return self.matrix_cs.geo.height / (self.n_layers + 1)
         
-
-
     z_ti_arr = Property(depends_on='+geo_input,matrix_cs.geo.changed')
     '''property: distance of each reinforcement layer from the top [m]:
     '''
@@ -128,14 +123,16 @@ class RLCTexUniform(ReinfLayoutComponent):
             lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
-                                     ecb_law_type=self.ecb_law_type))
+                                     ecb_law_type=self.ecb_law_type,
+                                     #adapted_ecb_law=self.ecb_law
+                                     ))
         return lst
     
     @on_trait_change('eps_changed')
     def notify_eps_change(self):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
-        
+
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''
@@ -171,7 +168,7 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
         
-    view = View(VGroup(
+    tree_view = View(VGroup(
                       Group(
                       Item('n_rovings'),
                       Item('A_roving'),

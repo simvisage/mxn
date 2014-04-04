@@ -70,6 +70,7 @@ tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',
+                                     view='tree_view',
                                      menu=Menu(NewAction, DeleteAction, plot_self)
                                      )
 
@@ -77,6 +78,7 @@ leaf_node = TreeNode(node_for=[MxNLeafNode],
                                      auto_open=True,
                                      children='',
                                      label='node_name',
+                                     view='tree_view',
                                      menu=Menu(plot_self)
                                      )
 

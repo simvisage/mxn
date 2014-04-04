@@ -9,13 +9,12 @@ Created on Sep 4, 2012
 '''
 from etsproxy.traits.api import \
     Property, cached_property, \
-    Trait, Instance, Button, WeakRef, Str
+    Trait, Instance, Button, WeakRef, \
+    Str, Event, on_trait_change
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
-
-from constitutive_law import \
-    ConstitutiveLawModelView
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
+    ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -24,14 +23,14 @@ from mxn import \
     CrossSectionComponent
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
     matrix_cs = WeakRef(MatrixCrossSection)
-
+    
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================
@@ -48,7 +47,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(cs=self.state)
+        return self.ecb_law_type_(cs=self)
     
     #===============================================================================
     # Plotting functions

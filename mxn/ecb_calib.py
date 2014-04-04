@@ -10,7 +10,8 @@ from etsproxy.traits.api import \
     on_trait_change
 
 from etsproxy.traits.ui.api import \
-    TreeEditor, TreeNode, View, Item
+    TreeEditor, TreeNode, View, Item, Group, \
+    InstanceEditor, VGroup
 
 import numpy as np
 import pylab as p
@@ -22,6 +23,9 @@ from cross_section import \
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
+    
+from reinf_laws import \
+    ReinfLawBase
 
 from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
@@ -47,7 +51,8 @@ class ECBCalib(MxNTreeNode):
     cs = Instance(CrossSection)
     def _cs_default(self):
         return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
-                               matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20))
+                               matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
+                                                            height=0.06), n_cj=20))
 
     notify_change = Callable(None)
 
@@ -126,7 +131,7 @@ class ECBCalib(MxNTreeNode):
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
 
-    calibrated_ecb_law = Property(depends_on='cs.changed,+calib_input')
+    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input')
     '''Calibrated ecbl_mfn
     '''
     @cached_property
@@ -136,6 +141,12 @@ class ECBCalib(MxNTreeNode):
         self.n = 0
         return self.cs.reinf_components_with_state[0].ecb_law
 
+    ecb_law = Property(Instance(ReinfLawBase))
+    '''Not calibrated law
+    '''
+    def _get_ecb_law(self):
+        return self.cs.reinf_components_with_state[0].ecb_law
+    
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
@@ -149,9 +160,25 @@ class ECBCalib(MxNTreeNode):
     @cached_property
     def _get_tree_node_list(self):
         return [self.cs]
-
-    view = View(Item('Mu'),
+    
+    traits_view = View(Item('Mu'),
                 Item('Nu'),
+                buttons=['OK', 'Cancel']
+                )
+
+    tree_view = View(VGroup(
+                Group(
+                Item('Mu'),
+                Item('Nu'),
+                ),
+                Group(
+                Item('ecb_law',
+                     editor=InstanceEditor(editable=True),
+                     style='custom',
+                     show_label=False),
+                label='Effective crack bridge law'
+                ),
+                ),
                 buttons=['OK', 'Cancel']
                 )
 
