@@ -1,7 +1,13 @@
+'''
+Created on 6. 4. 2014
+
+@author: Vancikv
+
+Defines a tree view for a parameter study.
+'''
 
 from traits.api import \
-    HasStrictTraits, Instance, Button, Event, \
-    Property, cached_property, WeakRef, Str
+    HasStrictTraits, Instance, Button, Event
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
@@ -17,7 +23,7 @@ from mxn_diagram import \
     MxNDiagram
 
 from mxn_parametric_study import \
-    MxNParametricStudy
+    MxNParametricStudy, MxNDescription
     
 from mxn.view import \
     tree_node, MxNTreeNode, plot_self, \
@@ -31,13 +37,13 @@ from traitsui.wx.tree_editor import \
  
 mxn_ps_node = TreeNode(node_for=[MxNParametricStudy],
                                      auto_open=False,
-                                     children='mxn_lst_with_calib',
+                                     children='description_lst',
                                      label='node_name',
                                      menu=Menu(NewAction, DeleteAction, plot_self),
-                                     add=[MxNDiagram]
+                                     add=[MxNDescription]
                                      )
 
-mxn_diagram_node = TreeNode(node_for=[MxNDiagram],
+mxn_description_node = TreeNode(node_for=[MxNDescription],
                                      auto_open=False,
                                      children='tree_node_list',
                                      label='node_name',
@@ -48,7 +54,7 @@ tree_editor = TreeEditor(
                     nodes=[tree_node, 
                            leaf_node,
                            mxn_ps_node,
-                           mxn_diagram_node],
+                           mxn_description_node],
                     selected='selected_node',
                     orientation='vertical'
                              )
