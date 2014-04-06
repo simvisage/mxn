@@ -51,7 +51,8 @@ class MxNDiagram(MxNTreeNode):
 
     eps_tu = Property()
     def _get_eps_tu(self):
-        #return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law.eps_u)
+        if len(self.cs.reinf_components_with_state) == 1 and self.cs.reinf_components_with_state[0].__class__ == RLCTexUniform:
+            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law.eps_u)
         eps = 0
         for r in self.cs.reinf_components_with_state:
             if eps < r.ecb_law.eps_u:
@@ -94,7 +95,7 @@ class MxNDiagram(MxNTreeNode):
                     eps_up=eps_up)
         return (self.cs.M, self.cs.N)
 
-    MN_vct = Property(depends_on='modified')
+    MN_vct = Property()
     def _get_MN_vct(self):
         return np.vectorize(self._get_MN_fn)
 

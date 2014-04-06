@@ -70,7 +70,7 @@ class CrossSection(CrossSectionState):
     # State management
     #===========================================================================
     changed = Event
-    '''Notifier of a changed in some component of a cross section
+    '''Notifier of a change in some component of a cross section
     '''
 
     @on_trait_change('+eps_input')

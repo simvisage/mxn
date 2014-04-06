@@ -122,9 +122,8 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
-                                     z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
-                                     ecb_law_type=self.ecb_law_type,
-                                     #adapted_ecb_law=self.ecb_law
+                                     z_coord=self.z_ti_arr[i],
+                                     adapted_ecb_law=self.ecb_law
                                      ))
         return lst
     

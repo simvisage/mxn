@@ -22,7 +22,7 @@ from mxn.view import \
 import numpy as np
 
 
-COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed'
+COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed,law_changed'
 
 class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..

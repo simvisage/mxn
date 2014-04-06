@@ -103,7 +103,7 @@ class MxNTreeView(HasStrictTraits):
     '''
     root = Instance(MxNTreeNode)
 
-    selected_node = Instance(MxNTreeNode)
+    selected_node = Instance(HasStrictTraits)
 
     figure = Instance(Figure)
     def _figure_default(self):

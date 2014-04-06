@@ -99,9 +99,6 @@ class ECBCalib(MxNTreeNode):
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])
 
-        for layer in self.cs.reinf_components_with_state[0].layer_lst:
-            layer.ecb_law.set_cparams(eps_tex_u, u[1])
-
         N_internal = self.cs.N
         M_internal = self.cs.M
 
@@ -137,7 +134,8 @@ class ECBCalib(MxNTreeNode):
     @cached_property
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(*self.u_sol)
+        eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
+        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
         return self.cs.reinf_components_with_state[0].ecb_law
 
