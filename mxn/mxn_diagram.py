@@ -19,9 +19,6 @@ from cross_section import \
 from reinf_layout import \
     RLCTexUniform
 
-from matrix_cross_section import \
-    MatrixCrossSection, MCSGeoRect
-
 import numpy as np
 
 from view import \
@@ -149,7 +146,7 @@ class MxNDiagram(MxNTreeNode):
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
                 
-    def plot_MN_custom(self, ax, color, linestyle, linewidth,label):
+    def plot_MN_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
         ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls = linestyle, label=label)
 
         ax.spines['left'].set_position('zero')
@@ -238,14 +235,4 @@ class MxNDiagram(MxNTreeNode):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    rf = RLCTexUniform(n_layers=12,ecb_law_type='fbm')
-    mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20, cc_law_type='quadratic')    
-    cs1 = CrossSection(reinf = [rf], matrix_cs = mx)
-    
-    c = ECBCalib(Mu=3.49, cs = cs1)
-
-    mn = MxNDiagram(calib=c, n_eps=5)
-
-    print mn.MN_arr
-    mn.configure_traits()
-
+    pass

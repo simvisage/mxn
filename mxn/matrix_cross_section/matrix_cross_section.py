@@ -115,6 +115,8 @@ class MatrixCrossSection(CrossSectionComponent):
     geo = Instance(MCSGeo)
     '''Geometry of the cross section
     '''
+    def _geo_default(self):
+        return MCSGeoRect(height=0.06, width=0.2)
 
     geo_lst = Property()
     @cached_property

@@ -26,7 +26,7 @@ from matrix_cross_section import \
     MatrixCrossSection
 
 from reinf_layout import \
-    ReinfLayoutComponent
+    ReinfLayoutComponent, RLCTexUniform
 
 from view import \
     MxNTreeNode
@@ -44,6 +44,8 @@ class CrossSection(CrossSectionState):
     reinf = List(ReinfLayoutComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
+    def _reinf_default(self):
+        return [RLCTexUniform()]
 
     matrix_cs_with_state = Property(depends_on='matrix_cs')
     @cached_property
