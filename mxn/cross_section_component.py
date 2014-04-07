@@ -7,11 +7,8 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Event, on_trait_change, DelegatesTo, Instance, WeakRef, Constant
-
-from etsproxy.traits.ui.api import \
-    View, Item, Group, HGroup
+    HasStrictTraits, Property, \
+    Event, on_trait_change, WeakRef, Constant
 
 from cross_section_state import \
     CrossSectionState
@@ -19,17 +16,26 @@ from cross_section_state import \
 from mxn.view import \
     MxNTreeNode
 
-import numpy as np
-
-
 COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed,law_changed'
 
 class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..
     '''
-    state = WeakRef(CrossSectionState)
+    state = WeakRef(CrossSectionState, transient=True)
     '''Strain state of a cross section
     '''
+    
+    def __getstate__ ( self ):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super( HasStrictTraits, self ).__getstate__()
+        
+        for key in [ 'state', 'state_', 'plot_state', 'plot_state_' ]:
+            if state.has_key( key ):
+                del state[ key ]
+                
+        return state    
+
 
     unit_conversion_factor = Constant(1000.0)
     
@@ -63,5 +69,4 @@ class CrossSectionComponent(MxNTreeNode):
     '''
 
 if __name__ == '__main__':
-    #ecs.configure_traits()
     pass

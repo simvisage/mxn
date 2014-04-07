@@ -8,9 +8,8 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    Property, cached_property, \
-    Trait, Instance, Button, WeakRef, \
-    Str, Event, on_trait_change
+    Property, cached_property, HasStrictTraits, \
+    Trait, Instance, WeakRef
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
@@ -29,8 +28,20 @@ class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
-    matrix_cs = WeakRef(MatrixCrossSection)
-    
+    matrix_cs = WeakRef(MatrixCrossSection, transient=True)
+
+    def __getstate__ ( self ):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super( HasStrictTraits, self ).__getstate__()
+        
+        for key in [ 'state', 'state_', 'plot_state', 
+                    'plot_state_', 'matrix_cs', 'matrix_cs_' ]:
+            if state.has_key( key ):
+                del state[ key ]
+                
+        return state    
+
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================

@@ -11,7 +11,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, List, WeakRef, Str
+    DelegatesTo, Constant, List
 
 from matplotlib.figure import \
     Figure
@@ -44,8 +44,6 @@ class CrossSection(CrossSectionState):
     reinf = List(ReinfLayoutComponent)
     '''Components of the cross section including the matrix and reinforcement.
     '''
-    def _reinf_default(self):
-        return [RLCTexUniform()]
 
     matrix_cs_with_state = Property(depends_on='matrix_cs')
     @cached_property

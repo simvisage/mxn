@@ -54,7 +54,7 @@ class ECBCalib(MxNTreeNode):
                                matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
                                                             height=0.06), n_cj=20))
 
-    notify_change = Callable(None)
+    notify_change = Callable(None, transient=True)
 
     modified = Event
     @on_trait_change('cs.changed,+calib_input')
@@ -161,7 +161,7 @@ class ECBCalib(MxNTreeNode):
     
     traits_view = View(Item('Mu'),
                 Item('Nu'),
-                buttons=['OK', 'Cancel']
+                buttons=['OK', 'Cancel'],
                 )
 
     tree_view = View(VGroup(
@@ -177,7 +177,7 @@ class ECBCalib(MxNTreeNode):
                 label='Effective crack bridge law'
                 ),
                 ),
-                buttons=['OK', 'Cancel']
+                buttons=['OK', 'Cancel'],
                 )
 
 if __name__ == '__main__':

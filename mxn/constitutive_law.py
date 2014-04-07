@@ -18,7 +18,7 @@ from mathkit.mfn import MFnLineArray
 class CLBase(HasStrictTraits):
     '''Base class for Effective Crack Bridge Laws.'''
 
-    cs = WeakRef
+    cs = WeakRef(transient=True)
 
     def __init__(self, *args, **kw):
         super(HasStrictTraits, self).__init__(*args, **kw)

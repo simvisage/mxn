@@ -12,7 +12,7 @@ from mxn.reinf_laws import \
     
 from etsproxy.traits.api import \
     Property, cached_property, \
-    Trait, Instance, Button, WeakRef
+    Trait, Instance, Button
 
 class RLCSteelBar(RLCBar):
     '''Steel reinforcement bar

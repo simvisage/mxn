@@ -8,7 +8,7 @@ Created on Sep 4, 2012
 '''
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
-    Event, on_trait_change, Callable, Instance, WeakRef, Trait, \
+    Event, on_trait_change, Callable, Instance, Trait, \
     Button, List
 
 from matrix_cross_section_geo import \

@@ -43,10 +43,20 @@ class MxNTreeNode(HasStrictTraits):
     
     view = View()
     
-    plot_state = WeakRef(HasStrictTraits)
+    plot_state = WeakRef(transient=True)
     '''Allows for passing a reference to cross section
     to reinforcement layout node for purposes of plotting
     '''
+    def __getstate__ ( self ):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super( HasStrictTraits, self ).__getstate__()
+        
+        for key in [ 'plot_state', 'plot_state_' ]:
+            if state.has_key( key ):
+                del state[ key ]
+                
+        return state    
 
     def plot(self, fig):
         if self.plot_state:
