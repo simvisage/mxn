@@ -23,7 +23,7 @@ class ReinfLawFBM(ReinfLawBase):
 
     cnames = ['eps_u', 'm']
 
-    u0 = List([0.01266923, 0.5 ])
+    u0 = List([0.014, 0.5 ])
 
     eps_arr = Property(depends_on = '+input')
     @cached_property
