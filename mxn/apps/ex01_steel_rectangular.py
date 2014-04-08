@@ -25,7 +25,7 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-bar = RLCSteelBar(position=[0.1, 0.45], area=0.0002)
+bar = RLCSteelBar(x=0.1,z=0.45, area=0.0002)
 '''Single steel reinforcement bar
 '''
 

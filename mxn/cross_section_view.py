@@ -10,19 +10,10 @@ from traits.api import \
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, VGroup
+    HSplit, HGroup
 
 from cross_section import \
     CrossSection
-
-from matrix_laws import \
-    MatrixLawBase
-
-from reinf_laws import \
-    ReinfLawBase
-
-from matrix_cross_section import \
-    MatrixCrossSection
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
@@ -34,10 +25,11 @@ from matplotlib.figure import \
     Figure
 
 from mxn.view import \
-    tree_node, MxNTreeNode, plot_self, MxNTreeViewHandler
+    tree_node, MxNTreeNode, plot_self, \
+    MxNTreeViewHandler, leaf_node
 
 from traitsui.menu import \
-    Menu, Action, Separator
+    Menu
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
@@ -47,7 +39,7 @@ class CrossSectionTreeNode(MxNTreeNode):
     '''
     cs = WeakRef(CrossSection)
     node_name = 'Cross section'
-    view = View(Item('cs@'))
+    view = View(Item('cs@', show_label=False))
 
     def plot(self, fig):
         self.cs.plot(fig)
@@ -63,6 +55,10 @@ class ReinfLayoutTreeNode(HasStrictTraits):
     node_name = Str('Reinforcement layout')
     view = View()
 
+    def plot(self, fig):
+        ax = fig.add_subplot(1, 1, 1)
+        self.cs_state.plot_geometry(ax)
+
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
     def _get_tree_node_list(self):
@@ -73,7 +69,7 @@ reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
                                      children='tree_node_list',
                                      label='node_name',
                                      view=View(),
-                                     menu=Menu(NewAction),
+                                     menu=Menu(NewAction, plot_self),
                                      add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
                                      )
 
@@ -100,6 +96,7 @@ reinf_layout_node_tex_uniform = TreeNode(node_for=[RLCTexUniform],
 
 tree_editor = TreeEditor(
                     nodes=[tree_node,
+                           leaf_node,
                            reinf_layout_node,
                            reinf_layout_node_steel,
                            reinf_layout_node_tex_layer,
@@ -112,7 +109,7 @@ class CrossSectionView(HasStrictTraits):
     '''View object for a cross section state.
     '''
     cs = Instance(CrossSection)
-    selected_node = Instance(MxNTreeNode)
+    selected_node = Instance(HasStrictTraits)
 
     root = Property(depends_on='cs')
     @cached_property

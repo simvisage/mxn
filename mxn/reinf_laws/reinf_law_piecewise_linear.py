@@ -20,9 +20,9 @@ class ReinfLawPiecewiseLinear(ReinfLawBase):
         E_eff = self.sig_tex_u / self.eps_u
         return E_eff * self.eps_arr
 
-    sig_tex_u = Float(800.0, input = True)
-    eps_u = Float(0.01, input = True)
-    n_eps = Int(2, input = True)
+    sig_tex_u = Float(800.0, enter_set = True, auto_set = False, input = True)
+    eps_u = Float(0.01, enter_set = True, auto_set = False, input = True)
+    n_eps = Int(2, enter_set = True, auto_set = False, input = True)
 
     eps_fraction_arr = Property(depends_on = 'n_eps')
     @cached_property

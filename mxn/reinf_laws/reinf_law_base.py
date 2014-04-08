@@ -10,9 +10,9 @@ from etsproxy.traits.api import \
 from constitutive_law import CLBase
 
 from mxn.view import \
-    MxNTreeNode
+    MxNLeafNode
 
-class ReinfLawBase(CLBase, MxNTreeNode):
+class ReinfLawBase(CLBase, MxNLeafNode):
     '''Base class for Effective Crack Bridge Laws.'''
 
     u0 = List([0.0, 0.0])

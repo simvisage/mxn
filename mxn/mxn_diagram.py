@@ -19,9 +19,6 @@ from cross_section import \
 from reinf_layout import \
     RLCTexUniform
 
-from matrix_cross_section import \
-    MatrixCrossSection, MCSGeoRect
-
 import numpy as np
 
 from view import \
@@ -44,13 +41,15 @@ class MxNDiagram(MxNTreeNode):
     cs = Instance(CrossSection)
     def _cs_default(self):
         return CrossSection()
-            
+
     eps_cu = Property()
     def _get_eps_cu(self):
         return -self.cs.matrix_cs_with_state.cc_law.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
+        if len(self.cs.reinf_components_with_state) == 1 and self.cs.reinf_components_with_state[0].__class__ == RLCTexUniform:
+            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law.eps_u)
         eps = 0
         for r in self.cs.reinf_components_with_state:
             if eps < r.ecb_law.eps_u:
@@ -93,7 +92,7 @@ class MxNDiagram(MxNTreeNode):
                     eps_up=eps_up)
         return (self.cs.M, self.cs.N)
 
-    MN_vct = Property(depends_on='modified')
+    MN_vct = Property()
     def _get_MN_vct(self):
         return np.vectorize(self._get_MN_fn)
 
@@ -147,7 +146,7 @@ class MxNDiagram(MxNTreeNode):
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
                 
-    def plot_MN_custom(self, ax, color, linestyle, linewidth,label):
+    def plot_MN_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
         ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls = linestyle, label=label)
 
         ax.spines['left'].set_position('zero')
@@ -180,7 +179,7 @@ class MxNDiagram(MxNTreeNode):
         else:
             return [self.cs]
 
-    view = View(HSplit(Group(
+    traits_view = View(HSplit(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
                       label='Discretization',
@@ -211,7 +210,7 @@ class MxNDiagram(MxNTreeNode):
                 resizable=True,
                 buttons=['OK', 'Cancel'])
 
-    traits_view = View(Group(
+    tree_view = View(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
                       Item('current_eps_idx', editor=RangeEditor(low=0,
@@ -236,14 +235,4 @@ class MxNDiagram(MxNTreeNode):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    rf = RLCTexUniform(n_layers=12,ecb_law_type='fbm')
-    mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20, cc_law_type='quadratic')    
-    cs1 = CrossSection(reinf = [rf], matrix_cs = mx)
-    
-    c = ECBCalib(Mu=3.49, cs = cs1)
-
-    mn = MxNDiagram(calib=c, n_eps=5)
-
-    print mn.MN_arr
-    mn.configure_traits()
-
+    pass

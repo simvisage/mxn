@@ -10,7 +10,8 @@ from etsproxy.traits.api import \
     on_trait_change
 
 from etsproxy.traits.ui.api import \
-    TreeEditor, TreeNode, View, Item
+    TreeEditor, TreeNode, View, Item, Group, \
+    InstanceEditor, VGroup
 
 import numpy as np
 import pylab as p
@@ -22,6 +23,9 @@ from cross_section import \
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
+    
+from reinf_laws import \
+    ReinfLawBase
 
 from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
@@ -47,9 +51,10 @@ class ECBCalib(MxNTreeNode):
     cs = Instance(CrossSection)
     def _cs_default(self):
         return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
-                               matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2, height=0.06), n_cj=20))
+                               matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
+                                                            height=0.06), n_cj=20))
 
-    notify_change = Callable(None)
+    notify_change = Callable(None, transient=True)
 
     modified = Event
     @on_trait_change('cs.changed,+calib_input')
@@ -94,9 +99,6 @@ class ECBCalib(MxNTreeNode):
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])
 
-        for layer in self.cs.reinf_components_with_state[0].layer_lst:
-            layer.ecb_law.set_cparams(eps_tex_u, u[1])
-
         N_internal = self.cs.N
         M_internal = self.cs.M
 
@@ -126,16 +128,23 @@ class ECBCalib(MxNTreeNode):
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
 
-    calibrated_ecb_law = Property(depends_on='cs.changed,+calib_input')
+    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input')
     '''Calibrated ecbl_mfn
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(*self.u_sol)
+        eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
+        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
         return self.cs.reinf_components_with_state[0].ecb_law
 
+    ecb_law = Property(Instance(ReinfLawBase))
+    '''Not calibrated law
+    '''
+    def _get_ecb_law(self):
+        return self.cs.reinf_components_with_state[0].ecb_law
+    
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
@@ -149,10 +158,26 @@ class ECBCalib(MxNTreeNode):
     @cached_property
     def _get_tree_node_list(self):
         return [self.cs]
-
-    view = View(Item('Mu'),
+    
+    traits_view = View(Item('Mu'),
                 Item('Nu'),
-                buttons=['OK', 'Cancel']
+                buttons=['OK', 'Cancel'],
+                )
+
+    tree_view = View(VGroup(
+                Group(
+                Item('Mu'),
+                Item('Nu'),
+                ),
+                Group(
+                Item('ecb_law',
+                     editor=InstanceEditor(editable=True),
+                     style='custom',
+                     show_label=False),
+                label='Effective crack bridge law'
+                ),
+                ),
+                buttons=['OK', 'Cancel'],
                 )
 
 if __name__ == '__main__':

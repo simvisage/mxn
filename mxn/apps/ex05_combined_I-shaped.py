@@ -34,10 +34,10 @@ mcs = MatrixCrossSection(geo=ge, n_cj=20)
 '''Cross section geometry + matrix
 '''
 
-bar1 = RLCSteelBar(position=[0.025, 0.375], area=0.00005)
-bar2 = RLCSteelBar(position=[0.125, 0.375], area=0.00005)
-bar3 = RLCSteelBar(position=[0.225, 0.375], area=0.00005)
-bar4 = RLCSteelBar(position=[0.325, 0.375], area=0.00005)
+bar1 = RLCSteelBar(x=0.025,z=0.375, area=0.00005)
+bar2 = RLCSteelBar(x=0.125,z=0.375, area=0.00005)
+bar3 = RLCSteelBar(x=0.225,z=0.375, area=0.00005)
+bar4 = RLCSteelBar(x=0.325,z=0.375, area=0.00005)
 '''Four steel reinforcement bars in lower flange
 '''
 

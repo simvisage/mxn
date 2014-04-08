@@ -20,7 +20,7 @@ def test03_cross_section_mn():
     Rectangular cross section with steel reinforcement.
     '''
     
-    bar = RLCSteelBar(position=[0.1, 0.45], area=0.0002)
+    bar = RLCSteelBar(x=0.1,z=0.45, area=0.0002)
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,
@@ -30,7 +30,8 @@ def test03_cross_section_mn():
                          )
     
     assert np.allclose([cs.M, cs.N], [605.63085424909093, -4763.6924315440474])
-    bar.position = [0.15, 0.35]
+    bar.x = 0.15
+    bar.z = 0.35
     assert np.allclose([cs.M, cs.N], [595.51085561046102, -4806.0924290168105])
     cs.eps_lo = 0.010
     assert np.allclose([cs.M, cs.N], [393.29047407596528, -1821.7451022853184])

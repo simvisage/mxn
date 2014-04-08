@@ -32,7 +32,7 @@ class MatrixLawLinear(MatrixLawBase):
         #(for high strength concrete)
         else :
             eps_c3 = (1.75 + 0.55 * (f_ck - 50.) / 40.) / 1000.
-            eps_cu3 = (2.6 + 35 * (90 - f_ck) ** 4.) / 1000.
+            eps_cu3 = self.eps_c_u
         # concrete law with limit for eps_c
 
         xdata = np.hstack([0., eps_c3, eps_cu3])

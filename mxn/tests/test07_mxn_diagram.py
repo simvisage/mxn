@@ -25,8 +25,7 @@ def test_mxn_diagram():
     
     c = ECBCalib(Mu=3.49, cs = cs1)
 
-    mn = MxNDiagram(calib=c, n_eps=5,)
-    print mn.MN_arr
+    mn = MxNDiagram(calib=c, n_eps=5)
     assert np.allclose(mn.MN_arr, [[  8.46833921e-01,  -8.36958790e-02,   4.99124621e-01,
          1.83590489e+00,   3.59406948e+00,   3.59406948e+00,
          5.43778524e+00,   4.74839855e+00,   4.06147227e+00,

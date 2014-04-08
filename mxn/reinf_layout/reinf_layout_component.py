@@ -8,14 +8,12 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    Property, cached_property, \
-    Trait, Instance, Button, WeakRef, Str
+    Property, cached_property, HasStrictTraits, \
+    Trait, Instance, WeakRef
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
-
-from constitutive_law import \
-    ConstitutiveLawModelView
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
+    ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -24,13 +22,25 @@ from mxn import \
     CrossSectionComponent
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
-    matrix_cs = WeakRef(MatrixCrossSection)
+    matrix_cs = WeakRef(MatrixCrossSection, transient=True)
+
+    def __getstate__ ( self ):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super( HasStrictTraits, self ).__getstate__()
+        
+        for key in [ 'state', 'state_', 'plot_state', 
+                    'plot_state_', 'matrix_cs', 'matrix_cs_' ]:
+            if state.has_key( key ):
+                del state[ key ]
+                
+        return state    
 
     #===========================================================================
     # Effective crack bridge law
@@ -48,15 +58,32 @@ class ReinfLayoutComponent(CrossSectionComponent):
     '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(cs=self.state)
-
-    show_ecb_law = Button
-    '''Button launching a separate view of the effective crack bridge law.
-    '''
-    def _show_ecb_law_fired(self):
-        ecb_law_mw = ConstitutiveLawModelView(model=self.ecb_law)
-        ecb_law_mw.edit_traits(kind='live')
+        return self.ecb_law_type_(cs=self)
+    
+    #===============================================================================
+    # Plotting functions
+    #===============================================================================
+    
+    def plot_geometry(self, ax, clr):
+        '''Plot geometry'''
         return
+
+    def plot_eps(self, ax):
+        return
+    
+    def plot_sig(self, ax):
+        return
+    
+    def plot(self, fig):
+        '''Plots the cross section - particular reinforcement component 
+        plotted with distinctive color to others 
+        '''
+        ax1 = fig.add_subplot(1,2,1)
+        self.state.plot_geometry(ax1)
+        self.plot_geometry(ax1, clr='red')
+        ax2 = fig.add_subplot(1,2,2)
+        self.ecb_law.plot_ax(ax2)
+
 
     #===========================================================================
     # Auxiliary methods for tree editor

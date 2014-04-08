@@ -11,13 +11,10 @@ from etsproxy.traits.api import \
     Float, Property, cached_property, Int, Instance, Trait, on_trait_change
 
 from etsproxy.traits.ui.api import \
-    View, Item, VGroup
+    View, Item, VGroup, Group
     
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
-
-from constitutive_law import \
-    ConstitutiveLawModelView
 
 from reinf_layout_component import \
     ReinfLayoutComponent, \
@@ -82,9 +79,9 @@ class RLCTexUniform(ReinfLayoutComponent):
     @cached_property
     def _get_ecb_law(self):
         if self.ecb_law_type == 'linear':
-            return self.ecb_law_type_(cs=self.state)
+            return self.ecb_law_type_(cs=self)
         else:
-            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self.state)
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
 
     #===========================================================================
     # Distribution of reinforcement
@@ -96,8 +93,6 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _get_s_tex_z(self):
         return self.matrix_cs.geo.height / (self.n_layers + 1)
         
-
-
     z_ti_arr = Property(depends_on='+geo_input,matrix_cs.geo.changed')
     '''property: distance of each reinforcement layer from the top [m]:
     '''
@@ -127,15 +122,16 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
-                                     z_coord=self.z_ti_arr[i], sig_tex_u=self.sig_tex_u,
-                                     ecb_law_type=self.ecb_law_type))
+                                     z_coord=self.z_ti_arr[i],
+                                     adapted_ecb_law=self.ecb_law
+                                     ))
         return lst
     
     @on_trait_change('eps_changed')
     def notify_eps_change(self):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
-        
+
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''
@@ -156,10 +152,10 @@ class RLCTexUniform(ReinfLayoutComponent):
             M += self.layer_lst[i].M
         return M
 
-    def plot_geometry(self, ax):
+    def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
         for i in range(self.n_layers):
-            self.layer_lst[i].plot_geometry(ax)
+            self.layer_lst[i].plot_geometry(ax, clr=clr)
             
     def plot_eps(self, ax):
         '''Plot strains'''
@@ -171,21 +167,18 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
         
-    def plot(self, fig):
-        '''Plots the cross section - particular reinforcement component 
-        plotted with distinctive color to others 
-        '''
-        ax = fig.add_subplot(1,1,1)
-        self.state.plot_geometry(ax)
-        for i in range(self.n_layers):
-            self.layer_lst[i].plot_geometry(ax, clr='red')
-
-    view = View(VGroup(
+    tree_view = View(VGroup(
+                      Group(
                       Item('n_rovings'),
                       Item('A_roving'),
                       Item('n_layers'),
+                      label='Geometry'
+                      ),
+                      Group(
+                      Item('sig_tex_u'),
                       Item('ecb_law_type'),
-                      label='Uniformly distributed textile layers',
+                      label='Reinforcement law',
+                      ),
                       springy=True,
                       ),
                 resizable=True,

@@ -13,11 +13,11 @@ from reinf_law_base import \
     ReinfLawBase
     
 class ReinfLawSteel(ReinfLawBase):
-    f_yk = Float(500, enter_set = True, auto_set = False, input = True)
-    E_s = Float(200000, enter_set = True, auto_set = False, input = True)
+    f_yk = Float(500., enter_set = True, auto_set = False, input = True)
+    E_s = Float(200000., enter_set = True, auto_set = False, input = True)
     eps_u = Float(0.025, enter_set = True, auto_set = False, input = True)
 
-    eps_y = Property(depends_on = '+input')
+    eps_y = Property(Float, depends_on = '+input')
     @cached_property
     def _get_eps_y(self):
         return self.f_yk / self.E_s
@@ -30,6 +30,4 @@ class ReinfLawSteel(ReinfLawBase):
     sig_arr = Property(depends_on = '+input')
     @cached_property
     def _get_sig_arr(self):
-        # with limit for eps_tex
-        #
         return np.array([-self.f_yk, -self.f_yk, 0., self.f_yk, self.f_yk])

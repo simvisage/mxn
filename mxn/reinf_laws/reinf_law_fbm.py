@@ -17,9 +17,9 @@ from reinf_law_base import \
 class ReinfLawFBM(ReinfLawBase):
     '''Effective crack bridge Law based on fiber-bundle-model.'''
 
-    sig_tex_u = Float(1216, input = True)
-    eps_u = Float(0.014, input = True)
-    m = Float(0.5, input = True)
+    sig_tex_u = Float(1216., enter_set = True, auto_set = False, input = True)
+    eps_u = Float(0.014, enter_set = True, auto_set = False, input = True)
+    m = Float(0.5, enter_set = True, auto_set = False, input = True)
 
     cnames = ['eps_u', 'm']
 

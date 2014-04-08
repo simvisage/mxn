@@ -8,7 +8,7 @@ Created on Sep 4, 2012
 '''
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
-    Event, on_trait_change, Callable, Instance, WeakRef, Trait, \
+    Event, on_trait_change, Callable, Instance, Trait, \
     Button, List
 
 from matrix_cross_section_geo import \
@@ -29,9 +29,6 @@ from matplotlib.figure import \
 from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
-from constitutive_law import \
-    ConstitutiveLawModelView
-
 from mxn.matrix_laws import \
     MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
 
@@ -41,7 +38,7 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -118,6 +115,8 @@ class MatrixCrossSection(CrossSectionComponent):
     geo = Instance(MCSGeo)
     '''Geometry of the cross section
     '''
+    def _geo_default(self):
+        return MCSGeoRect(height=0.06, width=0.2)
 
     geo_lst = Property()
     @cached_property
@@ -152,17 +151,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Compressive concrete law corresponding to cc_law_type'''
     @cached_property
     def _get_cc_law(self):
-        return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self.state)
-
-    show_cc_law = Button
-    '''Button launching a separate view of the compression law.
-    '''
-    def _show_cc_law_fired(self):
-        cc_law_mw = ConstitutiveLawModelView(model=self.cc_law)
-        cc_law_mw.edit_traits(kind='live')
-        return
-
-    cc_modified = Event
+        return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self)
 
     #===========================================================================
     # Calculation of compressive stresses and forces
@@ -195,7 +184,11 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
-
+    
+    #===============================================================================
+    # Plotting functions
+    #===============================================================================
+    
     def plot_eps(self, ax):
         h = self.geo.height
 
@@ -213,8 +206,13 @@ class MatrixCrossSection(CrossSectionComponent):
         ax.fill(-ec, zz, color='DodgerBlue')
 
     def plot(self, fig):
-        ax = fig.add_subplot(1,1,1)
-        self.geo.plot_geometry(ax)
+        '''Plots the geometry + concrete law
+        '''
+        ax1 = fig.add_subplot(1,2,1)
+        self.geo.plot_geometry(ax1)
+        ax2 = fig.add_subplot(1,2,2)
+        self.cc_law.plot_ax(ax2)
+
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
@@ -225,14 +223,18 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_tree_node_list(self):
         return [ self.cc_law ]
 
-    view = View(HGroup(
+    tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
                       Item('f_ck'),
                       Item('eps_c_u'),
                       Item('cc_law_type'),
-                      Item('geo', label='Cross section geometry', show_label=True,
-                           editor=InstanceEditor(name='geo_lst', editable=True), style='custom'),
+                      Group(
+                      Item('geo', show_label=False,
+                           editor=InstanceEditor(name='geo_lst', 
+                           editable=True), style='custom'),
+                      label='Geometry'
+                      ),
                       label='Matrix',
                       springy=True
                       ),

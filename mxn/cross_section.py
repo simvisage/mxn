@@ -11,7 +11,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Trait, Event, on_trait_change, Instance, Button, Callable, \
-    DelegatesTo, Constant, List, WeakRef, Str
+    DelegatesTo, Constant, List
 
 from matplotlib.figure import \
     Figure
@@ -26,7 +26,7 @@ from matrix_cross_section import \
     MatrixCrossSection
 
 from reinf_layout import \
-    ReinfLayoutComponent
+    ReinfLayoutComponent, RLCTexUniform
 
 from view import \
     MxNTreeNode
@@ -70,7 +70,7 @@ class CrossSection(CrossSectionState):
     # State management
     #===========================================================================
     changed = Event
-    '''Notifier of a changed in some component of a cross section
+    '''Notifier of a change in some component of a cross section
     '''
 
     @on_trait_change('+eps_input')
@@ -152,9 +152,10 @@ class CrossSection(CrossSectionState):
     def _get_tree_node_list(self):
         return [self.matrix_cs_with_state, 
                 MxNTreeNode(tree_node_list=self.reinf_components_with_state,
-                            node_name='Reinforcement layout')]
+                            node_name='Reinforcement layout',
+                            plot_state=self)]
 
-    traits_view = View(VGroup(Item('eps_up'),
+    tree_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        label='Cross section'
                       ),
@@ -162,7 +163,7 @@ class CrossSection(CrossSectionState):
                 buttons=['OK', 'Cancel']
                 )
 
-    view = View(VGroup(Item('eps_up'),
+    traits_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),
                        Item('matrix_cs'),
                        label='Cross section'
