@@ -17,7 +17,7 @@ from reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
-    
+
 import numpy as np
 
 class RLCBar(ReinfLayoutComponent):
@@ -25,33 +25,33 @@ class RLCBar(ReinfLayoutComponent):
     '''
 
     position = List(Float, [0.1, 0.05], auto_set=False, enter_set=True, geo_input=True)
-    '''position of the bar with respect to upper left 
+    '''position of the bar with respect to upper left
     corner of reinforced cross section
     '''
-    
+
     area = Float(0.0002, auto_set=False, enter_set=True, geo_input=True)
     '''area of the bar
     '''
-    
+
     bar_coord_arr = Property(depends_on='position')
     def _get_bar_coord_arr(self):
         return np.array(self.position, dtype='f')
-    
+
     z_up = Property(depends_on='position')
     '''vertical distance from upper rim of cross section
     '''
     @cached_property
     def _get_z_up(self):
         return self.bar_coord_arr[1]
-    
+
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar
     '''
     @cached_property
     def _get_eps(self):
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         # geometric params independent from the value for 'eps_t'
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         height = self.matrix_cs.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
@@ -95,30 +95,32 @@ class RLCBar(ReinfLayoutComponent):
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z_up], [0], [-self.eps], lw=4, color='DarkOrange')
+        ax.hlines([h - self.z_up], [0], [-self.eps], lw=4, color='DarkOrange')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z_up], [0], [-self.f], lw=4, color='DarkOrange')
-        
+        ax.hlines([h - self.z_up], [0], [-self.f], lw=4, color='DarkOrange')
+
     def plot(self, fig):
-        '''Plots the cross section - particular reinforcement component 
-        plotted with distinctive color to others 
+        '''Plots the cross section - particular reinforcement component
+        plotted with distinctive color to others
         '''
-        ax = fig.add_subplot(1,1,1)
+        ax = fig.add_subplot(1, 1, 1)
         self.state.plot_geometry(ax)
         ax.plot(self.bar_coord_arr[0], self.matrix_cs.geo.height - self.bar_coord_arr[1], 'o', color='red')
 
     view = View(VGroup(
                        Item('area'),
-                       Item('position', style = 'readonly'),
+                       VGroup(
+                       Item('position', show_label=False, style='readonly'),
+                       label='position'
+                       ),
                        Item('ecb_law_type'),
                        label='Reinforcement Bar',
-                       springy=True
                        ),
                        resizable=True,
                        buttons=['OK', 'Cancel']
                        )
-    
+
 if __name__ == '__main__':
     pass

@@ -32,7 +32,7 @@ from util.traits.editors.mpl_figure_editor import \
 
 from matplotlib.figure import \
     Figure
-    
+
 from mxn.view import \
     tree_node, MxNTreeNode, plot_self, MxNTreeViewHandler
 
@@ -48,65 +48,25 @@ class CrossSectionTreeNode(MxNTreeNode):
     cs = WeakRef(CrossSection)
     node_name = 'Cross section'
     view = View(Item('cs@'))
-    
+
     def plot(self, fig):
         self.cs.plot(fig)
- 
+
     tree_node_list = Property
     def _get_tree_node_list(self):
         return [self.cs.matrix_cs_with_state, ReinfLayoutTreeNode(cs_state=self.cs)]
- 
+
 class ReinfLayoutTreeNode(HasStrictTraits):
     '''Method accommodating the list of all reinforcement components.
     '''
     cs_state = WeakRef(CrossSection)
     node_name = Str('Reinforcement layout')
     view = View()
- 
+
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
     def _get_tree_node_list(self):
         return self.cs_state.reinf_components_with_state
- 
- 
-# tree_editor = TreeEditor(
-#             nodes=[
-#                    TreeNode(node_for=[CrossSectionTreeNode ],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='=Cross section',
-#                              view=View()
-#                             ),
-#                    TreeNode(node_for=[ReinfLayoutTreeNode],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='=Reinforcement Layout',
-#                              view=View(),
-#                              add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
-#                             ),
-#                    TreeNode(node_for=[RLCTexUniform, RLCTexLayer, RLCSteelBar],
-#                              auto_open=True,
-#                              children='tree_node_list',
-#                              label='name'
-#                             ),
-#                    TreeNode(node_for=[MatrixCrossSection],
-#                               auto_open=True,
-#                               children='tree_node_list',
-#                               label='=Matrix',
-#                             ),
-#                    TreeNode(node_for=[ReinfLawBase],
-#                               auto_open=True,
-#                              children='',
-#                               label='=Constitutive law',
-#                             ),
-#                    TreeNode(node_for=[MatrixLawBase],
-#                               auto_open=True,
-#                               children='',
-#                               label='=Constitutive law',
-#                             ),
-#                    ],
-#                          orientation='vertical'
-#                          )
 
 reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
                                      auto_open=True,
@@ -139,8 +99,8 @@ reinf_layout_node_tex_uniform = TreeNode(node_for=[RLCTexUniform],
                                      )
 
 tree_editor = TreeEditor(
-                    nodes=[tree_node, 
-                           reinf_layout_node, 
+                    nodes=[tree_node,
+                           reinf_layout_node,
                            reinf_layout_node_steel,
                            reinf_layout_node_tex_layer,
                            reinf_layout_node_tex_uniform],
@@ -158,7 +118,7 @@ class CrossSectionView(HasStrictTraits):
     @cached_property
     def _get_root(self):
         return CrossSectionTreeNode(cs=self.cs)
-    
+
     figure = Instance(Figure)
     def _figure_default(self):
         figure = Figure(facecolor='white')
