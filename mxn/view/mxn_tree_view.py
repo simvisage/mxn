@@ -33,6 +33,14 @@ from traitsui.menu import \
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
+    
+from enthought.pyface.file_dialog import \
+    FileDialog
+    
+from traitsui.file_dialog import \
+    open_file, save_file
+    
+import pickle
 
 class MxNTreeNode(HasStrictTraits):
     '''Base class of all model classes that can appear in a tree node.
@@ -75,6 +83,13 @@ class MxNLeafNode(HasStrictTraits):
 plot_self = Action(name='Plot', action='plot_node')
 '''Menu action for plotting tree nodes
 '''
+menu_save = Action(name='Save', action='menu_save')
+'''Menubar action for saving the root node to file
+'''
+menu_open = Action(name='Open', action='menu_open')
+'''Menubar action for loading root node from file
+'''
+
 
 tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=True,
@@ -107,7 +122,15 @@ class MxNTreeViewHandler(Handler):
         info.object.figure.clear()
         node.plot(info.object.figure)
         info.object.data_changed = True
-
+    
+    def menu_save(self, info):
+        file_name = save_file()
+        pickle.dump(info.object.root, open(file_name, 'wb'), 1)
+        
+    def menu_open(self, info):
+        file_name = open_file()
+        info.object.root = pickle.load(open(file_name, 'rb'))
+    
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''

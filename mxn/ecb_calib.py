@@ -7,7 +7,7 @@ Created on Jun 23, 2010
 from etsproxy.traits.api import \
     Float, Instance, Array, Property, cached_property, \
     HasStrictTraits, Int, Event, Callable, Button, \
-    on_trait_change
+    on_trait_change, Bool
 
 from etsproxy.traits.ui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
@@ -127,17 +127,24 @@ class ECBCalib(MxNTreeNode):
         #   'maxiter' - maximum numbers of iterations used
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
+    
+    calibration_lock = Bool(False)
+    '''If true, requesting calibrated ecb law never causes new calibration
+    '''
 
-    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input')
+    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input,calibration_lock')
     '''Calibrated ecbl_mfn
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
-        print 'NEW CALIBRATION'
-        eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
-        self.n = 0
-        return self.cs.reinf_components_with_state[0].ecb_law
+        if self.calibration_lock == True:
+            return self.cs.reinf_components_with_state[0].ecb_law
+        else:
+            print 'NEW CALIBRATION'
+            eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
+            self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
+            self.n = 0
+            return self.cs.reinf_components_with_state[0].ecb_law
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law
@@ -159,13 +166,15 @@ class ECBCalib(MxNTreeNode):
     def _get_tree_node_list(self):
         return [self.cs]
     
-    traits_view = View(Item('Mu'),
+    traits_view = View(
+                Item('Mu'),
                 Item('Nu'),
                 buttons=['OK', 'Cancel'],
                 )
 
     tree_view = View(VGroup(
                 Group(
+                Item('calibration_lock'),
                 Item('Mu'),
                 Item('Nu'),
                 ),

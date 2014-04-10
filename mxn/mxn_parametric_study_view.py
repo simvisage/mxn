@@ -27,19 +27,21 @@ from mxn_parametric_study import \
     
 from mxn.view import \
     tree_node, MxNTreeNode, plot_self, \
-    MxNTreeViewHandler, leaf_node
+    MxNTreeViewHandler, leaf_node, \
+    menu_save, menu_open
 
 from traitsui.menu import \
-    Menu, Action, Separator
+    Menu, Action, Separator, MenuBar
 
 from traitsui.wx.tree_editor import \
-    NewAction, DeleteAction
+    NewAction, DeleteAction, RenameAction, \
+    CopyAction, PasteAction
  
 mxn_ps_node = TreeNode(node_for=[MxNParametricStudy],
                                      auto_open=False,
                                      children='description_lst',
                                      label='node_name',
-                                     menu=Menu(NewAction, DeleteAction, plot_self),
+                                     menu=Menu(NewAction, DeleteAction, plot_self, PasteAction),
                                      add=[MxNDescription]
                                      )
 
@@ -47,7 +49,7 @@ mxn_description_node = TreeNode(node_for=[MxNDescription],
                                      auto_open=False,
                                      children='tree_node_list',
                                      label='node_name',
-                                     menu=Menu(DeleteAction, plot_self),
+                                     menu=Menu(RenameAction, DeleteAction, plot_self, CopyAction),
                                      )
 
 tree_editor = TreeEditor(
@@ -102,4 +104,7 @@ class MxNPSView(HasStrictTraits):
                     height=0.4,
                     buttons=['OK', 'Cancel'],
                     resizable=True,
-                    handler=MxNTreeViewHandler())
+                    handler=MxNTreeViewHandler(),
+                    menubar=MenuBar(Menu(menu_save, menu_open,
+                                    name = 'File'))
+                )

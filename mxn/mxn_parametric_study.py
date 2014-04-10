@@ -26,7 +26,7 @@ class MxNDescription(HasStrictTraits):
     '''Class controlling plotting options 
     for an instance of MxNDiagram
     '''
-    node_name = Str('MxN Description')
+    node_name = Str('<unnamed>')
     
     mxn = Instance(MxNDiagram)
     def _mxn_default(self):
@@ -35,8 +35,6 @@ class MxNDescription(HasStrictTraits):
     tree_node_list = Property(depends_on = 'mxn')
     def _get_tree_node_list(self):
         return [self.mxn]
-    
-    label = Str('<unnamed>')
     
     color = Trait('black', dict(black='k',
                                 cyan='c',
@@ -53,17 +51,17 @@ class MxNDescription(HasStrictTraits):
                                     dotted=':')
                       )
     
-    view = View(VGroup(Item('label'),
+    view = View(VGroup(Item('node_name',label='label'),
                        Item('linestyle'),
                        Item('color'),
                        label='Plotting options'))
     
     def plot(self, fig):
         ax = fig.add_subplot(1,1,1)
-        self.mxn.plot_MN_custom(ax=ax, color = self.color_, linestyle = self.linestyle_, label = self.label)
+        self.mxn.plot_MN_custom(ax=ax, color = self.color_, linestyle = self.linestyle_, label = self.node_name)
     
     def plot_ax(self, ax):
-        self.mxn.plot_MN_custom(ax=ax, color = self.color_, linestyle = self.linestyle_, label = self.label)
+        self.mxn.plot_MN_custom(ax=ax, color = self.color_, linestyle = self.linestyle_, label = self.node_name)
 
   
 class MxNParametricStudy(HasStrictTraits):
@@ -72,7 +70,7 @@ class MxNParametricStudy(HasStrictTraits):
     that can added/removed or modified ,e.g. via tree editor.
     '''
     
-    node_name = 'Parametric study'
+    node_name = Str('Parametric study')
     view=View()
     
     description_lst = List(MxNDescription)
