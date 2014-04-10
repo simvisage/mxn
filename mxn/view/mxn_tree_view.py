@@ -1,7 +1,7 @@
 '''
 Created on 28. 3. 2014
 
-The module defines the framework for tree visualizatoin of the model
+The module defines the framework for tree visualization of the model
 in a ModelView window. The components of the model classes should
 inherit from the MxNTreeNode and supply the attributes
 
@@ -16,11 +16,11 @@ inherit from the MxNTreeNode and supply the attributes
 
 from traits.api import \
     HasStrictTraits, Instance, Button, Event, \
-    Property, cached_property, Str, List, WeakRef
+    Str, List, WeakRef
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, VGroup, Handler
+    HSplit, HGroup, Handler
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -29,7 +29,7 @@ from matplotlib.figure import \
     Figure
 
 from traitsui.menu import \
-    Menu, Action, Separator
+    Menu, Action
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
@@ -48,27 +48,27 @@ class MxNTreeNode(HasStrictTraits):
     node_name = Str('<unnamed>')
 
     tree_node_list = List([])
-    
+
     view = View()
-    
+
     plot_state = WeakRef(transient=True)
     '''Allows for passing a reference to cross section
     to reinforcement layout node for purposes of plotting
     '''
-    def __getstate__ ( self ):
+    def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
-        state = super( HasStrictTraits, self ).__getstate__()
-        
+        state = super(HasStrictTraits, self).__getstate__()
+
         for key in [ 'plot_state', 'plot_state_' ]:
-            if state.has_key( key ):
+            if state.has_key(key):
                 del state[ key ]
-                
-        return state    
+
+        return state
 
     def plot(self, fig):
         if self.plot_state:
-            ax = fig.add_subplot(1,1,1)
+            ax = fig.add_subplot(1, 1, 1)
             self.plot_state.plot_geometry(ax)
         return
 

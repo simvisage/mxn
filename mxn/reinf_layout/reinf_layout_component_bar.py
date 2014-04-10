@@ -6,7 +6,7 @@ Created on 31. 1. 2014
 
 from etsproxy.traits.api import \
     Float, Property, cached_property, \
-    List, Str, Trait
+    Trait
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
@@ -15,22 +15,20 @@ from reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
-    
+
 from mxn.reinf_laws import \
     ReinfLawSteel
-
-import numpy as np
 
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
     '''
-    
-    x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)    
-    z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)    
-    '''position of the bar with respect to upper left 
+
+    x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)
+    z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)
+    '''position of the bar with respect to upper left
     corner of reinforced cross section
     '''
-    
+
     area = Float(0.0002, auto_set=False, enter_set=True, geo_input=True)
     '''area of the bar
     '''
@@ -39,15 +37,15 @@ class RLCBar(ReinfLayoutComponent):
                       law_input=True)
     '''Selector of the effective crack bridge law type,
     does not include textile laws'''
-    
+
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar
     '''
     @cached_property
     def _get_eps(self):
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         # geometric params independent from the value for 'eps_t'
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         height = self.matrix_cs.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
@@ -91,12 +89,12 @@ class RLCBar(ReinfLayoutComponent):
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z], [0], [-self.eps], lw=4, color='DarkOrange')
+        ax.hlines([h - self.z], [0], [-self.eps], lw=4, color='DarkOrange')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h-self.z], [0], [-self.f], lw=4, color='DarkOrange')
-        
+        ax.hlines([h - self.z], [0], [-self.f], lw=4, color='DarkOrange')
+
     tree_view = View(VGroup(
                        Item('area'),
                        Group(
@@ -113,6 +111,6 @@ class RLCBar(ReinfLayoutComponent):
                        resizable=True,
                        buttons=['OK', 'Cancel']
                        )
-    
+
 if __name__ == '__main__':
     pass
