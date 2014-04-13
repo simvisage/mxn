@@ -50,7 +50,7 @@ def test05_cross_section_mn():
     
     cs = CrossSection(reinf=[tl1, tl2] + bar_lst,
                              matrix_cs=MatrixCrossSection(geo=ge,
-                                                             n_cj=20),
+                                         n_cj=20, cc_law_key = 'constant'),
                              eps_lo=0.002,
                              eps_up= -0.0033,
                              )

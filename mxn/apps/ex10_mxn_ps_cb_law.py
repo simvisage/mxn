@@ -28,7 +28,7 @@ from mxn.utils import \
     get_outfile
 
 ge = MCSGeoRect(height=0.06,width=0.14)
-mcs = MatrixCrossSection(geo=ge,n_cj=20,f_ck=55.0,cc_law_type='constant')
+mcs = MatrixCrossSection(geo=ge,n_cj=20,f_ck=55.0,cc_law_key='constant')
 uni_layers = RLCTexUniform(n_layers=12, n_rovings=16, A_roving=0.447,
                            sig_tex_u = 1200.13, ecb_law_type='fbm')
 '''

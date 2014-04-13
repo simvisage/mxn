@@ -34,7 +34,7 @@ def test_ecb_law_calib():
     Mu = 3.50
     
     ge = MCSGeoRect(height=0.06, width=0.2)
-    mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_type='constant', f_ck=55.7, eps_c_u=0.0033)
+    mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_key='constant', f_ck=55.7, eps_c_u=0.0033)
     uni_layers = RLCTexUniform(n_layers=12,
                                n_rovings=n_rovings,
                                A_roving=A_rov,
@@ -84,7 +84,7 @@ def test_ecb_law_calib():
                                  948.28863708, 963.3346701,  978.38070312],
                                 dtype=float))
     
-    mcs.cc_law_type = 'quadratic'
+    mcs.cc_law_key = 'quadratic'
     uni_layers.ecb_law_type = 'fbm'
     calib.Mu = 3.49
     

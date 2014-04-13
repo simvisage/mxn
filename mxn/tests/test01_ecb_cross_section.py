@@ -20,7 +20,7 @@ def test_ecb_cross_section_mn():
     '''
     cp = CrossSection(reinf=[RLCTexUniform(n_layers=3)],
                          matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.1, height=0.05),
-                                                         n_cj=20),
+                                                         n_cj=20, cc_law_key='constant'),
                          eps_lo=0.014,
                          eps_up= -0.0033,
                          )

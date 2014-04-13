@@ -20,7 +20,7 @@ def test_mxn_diagram():
     '''
     rf = RLCTexUniform(n_layers=12,ecb_law_type='fbm')
     mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, \
-            height=0.06), n_cj=20, cc_law_type='quadratic')    
+            height=0.06), n_cj=20, cc_law_key='quadratic')    
     cs1 = CrossSection(reinf = [rf], matrix_cs = mx)
     
     c = ECBCalib(Mu=3.49, cs = cs1)
