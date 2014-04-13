@@ -39,7 +39,6 @@ ReinfLawBase.db = SimDBClassExt(
                          }
             )
 
-
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
@@ -55,8 +54,8 @@ class ReinfLayoutComponent(CrossSectionComponent):
                     'plot_state_', 'matrix_cs', 'matrix_cs_' ]:
             if state.has_key( key ):
                 del state[ key ]
-                
-        return state    
+
+        return state
 
     #===========================================================================
     # Effective crack bridge law

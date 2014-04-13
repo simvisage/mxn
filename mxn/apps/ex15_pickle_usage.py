@@ -42,6 +42,7 @@ cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)
 calib_w = MxNTreeView(root=calib)
 calib_w.configure_traits()
+#calib.cs.reinf_components_with_state[0].ecb_law.save()
 
 calib_file = get_outfile(folder_name='.mxn',
                           file_name='ex15_calib.pkl')

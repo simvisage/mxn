@@ -145,6 +145,8 @@ class MxNDiagram(MxNTreeNode):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
+        x1, x2, z1, z2 = ax.axis()
+        ax.axis([0, x2, z1, z2])
                 
     def plot_MN_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
         ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls = linestyle, label=label)
@@ -158,6 +160,8 @@ class MxNDiagram(MxNTreeNode):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
+        x1, x2, z1, z2 = ax.axis()
+        ax.axis([0, x2, z1, z2])
 
     #===========================================================================
     # Visualisation related attributes

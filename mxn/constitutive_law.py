@@ -19,6 +19,17 @@ class CLBase(HasStrictTraits):
     '''Base class for Effective Crack Bridge Laws.'''
 
     cs = WeakRef(transient=True)
+    
+    def __getstate__ ( self ):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super( HasStrictTraits, self ).__getstate__()
+        
+        for key in [ 'cs', 'cs_', ]:
+            if state.has_key( key ):
+                del state[ key ]
+
+        return state
 
     def __init__(self, *args, **kw):
         super(HasStrictTraits, self).__init__(*args, **kw)
