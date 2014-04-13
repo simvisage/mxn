@@ -161,7 +161,11 @@ class MatrixCrossSection(CrossSectionComponent):
     cc_law = Property(Instance(SimDBClass), depends_on = 'cc_law_key')
     @cached_property
     def _get_cc_law(self):
-        return MatrixLawBase.db[ self.cc_law_key ]
+        law = MatrixLawBase.db[ self.cc_law_key ]
+        law.cs = self
+        law.f_ck = self.f_ck
+        law.eps_c_u = self.eps_c_u
+        return law
     
     #===========================================================================
     # Calculation of compressive stresses and forces

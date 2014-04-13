@@ -18,7 +18,7 @@ class RLCSteelBar(RLCBar):
     '''Steel reinforcement bar
     '''
     node_name = 'Steel bar'
-    ecb_law_type = 'steel'
+    ecb_law_key = 'steel'
 
 if __name__ == '__main__':
     bar = RLCSteelBar()

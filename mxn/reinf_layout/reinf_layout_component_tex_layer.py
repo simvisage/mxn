@@ -40,34 +40,6 @@ class RLCTexLayer(ReinfLayoutComponent):
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    sig_tex_u = Float(1216., auto_set=False, enter_set=True,
-                      law_input=True)
-    '''Ultimate textile stress measured in the tensile test [MPa]
-    '''
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
-                                  cubic=ReinfLawCubic,
-                                  linear=ReinfLawLinear,
-                                  bilinear=ReinfLawBilinear),
-                      law_input=True)
-    '''Selector of the effective crack bridge law type
-    ['fbm', 'cubic', 'linear', 'bilinear']'''
-    
-    adapted_ecb_law = Instance(ReinfLawBase)
-
-    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_type'''
-    @cached_property
-    def _get_ecb_law(self):
-        if self.adapted_ecb_law:
-            return self.adapted_ecb_law
-        if self.ecb_law_type == 'linear':
-            return self.ecb_law_type_(cs=self)
-        else:
-            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
-
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
@@ -165,8 +137,7 @@ class RLCTexLayer(ReinfLayoutComponent):
                       label='Geometry'
                       ),
                       Group(
-                      Item('sig_tex_u'),
-                      Item('ecb_law_type'),
+                      Item('ecb_law_key'),
                       label='Reinforcement law',
                       ),
                       springy=True,

@@ -19,7 +19,7 @@ from reinf_law_base import \
 class ReinfLawBilinear(ReinfLawBase):
     '''Effective crack bridge Law using a cubic polynomial.'''
 
-    sig_tex_u = Float(1250, enter_set = True, auto_set = False, input = True)
+    sig_tex_u = Float(1216., enter_set = True, auto_set = False, input = True)
     eps_u = Float(0.014, enter_set = True, auto_set = False, input = True)
     var_a = Float(0.8, enter_set = True, auto_set = False, input = True)
     eps_el_fraction = Float(0.0001, enter_set = True, auto_set = False, input = True)

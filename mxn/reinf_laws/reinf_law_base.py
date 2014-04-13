@@ -11,16 +11,20 @@ from constitutive_law import CLBase
 
 from mxn.view import \
     MxNLeafNode
+    
+from matresdev.db.simdb import \
+    SimDBClass, SimDBClassExt
 
-class ReinfLawBase(CLBase, MxNLeafNode):
+class ReinfLawBase(CLBase, MxNLeafNode, SimDBClass):
     '''Base class for Effective Crack Bridge Laws.'''
 
     u0 = List([0.0, 0.0])
     node_name = 'Constitutive law'
 
+ReinfLawBase.db = SimDBClassExt(
+            klass = ReinfLawBase,
+            verbose = 'io',
+            )
+
 if __name__ == '__main__':
-    from constitutive_law import ConstitutiveLawModelView
-    #ecbl = ECBLFBM()
-    ecbl = ECBLPiecewiseLinear()
-    ew = ConstitutiveLawModelView(model = ecbl)
-    ew.configure_traits()
+    ReinfLawBase.db.configure_traits()

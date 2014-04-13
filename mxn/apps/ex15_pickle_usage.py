@@ -36,7 +36,7 @@ mcs = MatrixCrossSection(geo=ge, n_cj=20,
                          cc_law_key='constant', f_ck=55.0)
 uni_layers = RLCTexUniform(n_layers=12,
                            n_rovings=n_rovings_pm,
-                           ecb_law_type='fbm')
+                           ecb_law_key='fbm')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)

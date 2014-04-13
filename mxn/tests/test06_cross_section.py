@@ -32,8 +32,8 @@ def test06_cross_section_mn():
     '''Four steel reinforcement bars in lower flange
     '''
     
-    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39)
-    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01)
+    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39, ecb_law_key = 'fbm')
+    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01, ecb_law_key = 'fbm')
     '''Two layers of textile reinforcement
     '''
     

@@ -21,8 +21,24 @@ from mxn.matrix_cross_section import \
 from mxn import \
     CrossSectionComponent
 
+from matresdev.db.simdb import \
+    SimDBClassExt, SimDBClass
+
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
+
+ReinfLawBase.db = SimDBClassExt(
+            klass = ReinfLawBase,
+            verbose = 'io',
+            constants = {
+                'fbm' : ReinfLawFBM(),
+                'cubic' : ReinfLawCubic(),
+                'linear' : ReinfLawLinear(),
+                'bilinear' : ReinfLawBilinear(),
+                'steel' : ReinfLawSteel(),
+                         }
+            )
+
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
@@ -45,20 +61,16 @@ class ReinfLayoutComponent(CrossSectionComponent):
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================
-    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
-                                  cubic=ReinfLawCubic,
-                                  linear=ReinfLawLinear,
-                                  bilinear=ReinfLawBilinear,
-                                  steel=ReinfLawSteel),
-                      law_input=True)
-    '''Selector of the effective crack bridge law type
-    ['fbm', 'cubic', 'linear', 'bilinear','steel']'''
 
-    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_type'''
+    ecb_law_key = Trait(ReinfLawBase.db.keys(), law_input = True)
+
+    ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
+    '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
-        return self.ecb_law_type_(cs=self)
+        law = ReinfLawBase.db[ self.ecb_law_key ]
+        law.cs = self
+        return law
     
     #===============================================================================
     # Plotting functions
@@ -88,8 +100,11 @@ class ReinfLayoutComponent(CrossSectionComponent):
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
-    tree_node_list = Property(depends_on='ecb_law_type')
+    tree_node_list = Property(depends_on='ecb_law_key')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.ecb_law ]
 
+if __name__ == '__main__':
+    ReinfLawBase.db.configure_traits()
+    print ReinfLawBase.db.keys()

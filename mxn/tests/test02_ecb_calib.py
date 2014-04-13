@@ -38,7 +38,7 @@ def test_ecb_law_calib():
     uni_layers = RLCTexUniform(n_layers=12,
                                n_rovings=n_rovings,
                                A_roving=A_rov,
-                               ecb_law_type='fbm')
+                               ecb_law_key='fbm')
     
     cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 
@@ -46,13 +46,13 @@ def test_ecb_law_calib():
     test_eps_arr = np.linspace(0.0, 0.005, 10)
     calib_file = get_outfile(folder_name='.mxn',
                              file_name='test02_calib.pkl')
-
+ 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 169.56745719, 308.0713995, 426.15150252, 
                                  528.22368093, 617.57902395, 696.18106351, 
                                  765.44225452, 826.76851637, 881.07603382],
                                 dtype=float))
-
+ 
     assert np.allclose(cs.reinf_components_with_state[0].layer_lst[0].ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 169.56745719, 308.0713995, 426.15150252, 
                                  528.22368093, 617.57902395, 696.18106351, 
@@ -60,7 +60,7 @@ def test_ecb_law_calib():
                                 dtype=float))
     pickle.dump(calib, open(calib_file,'wb'), 1)
     
-    uni_layers.ecb_law_type = 'cubic'
+    uni_layers.ecb_law_key = 'cubic'
     
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 128.33734405, 247.41169038, 357.44885771, 
@@ -68,7 +68,7 @@ def test_ecb_law_calib():
                                  714.45215726, 784.72942118, 848.06386907],
                                 dtype=float))
 
-    uni_layers.ecb_law_type = 'linear'
+    uni_layers.ecb_law_key = 'linear'
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 51.40222925, 102.8044585, 154.20668775,
@@ -76,7 +76,7 @@ def test_ecb_law_calib():
                                  359.81560476, 411.21783401, 462.62006326],
                                 dtype=float))
 
-    uni_layers.ecb_law_type = 'bilinear'
+    uni_layers.ecb_law_key = 'bilinear'
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 858.01243898, 873.058472, 888.10450501, 
@@ -85,7 +85,7 @@ def test_ecb_law_calib():
                                 dtype=float))
     
     mcs.cc_law_key = 'quadratic'
-    uni_layers.ecb_law_type = 'fbm'
+    uni_layers.ecb_law_key = 'fbm'
     calib.Mu = 3.49
     
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),

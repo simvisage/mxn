@@ -15,7 +15,7 @@ from reinf_law_base import \
 class ReinfLawCubic(ReinfLawBase):
     '''Effective crack bridge Law using a cubic polynomial.'''
 
-    sig_tex_u = Float(1250, enter_set = True, auto_set = False, input = True)
+    sig_tex_u = Float(1216., enter_set = True, auto_set = False, input = True)
     eps_u = Float(0.016, enter_set = True, auto_set = False, input = True)
     var_a = Float(-5e+6, enter_set = True, auto_set = False, input = True)
 
