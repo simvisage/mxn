@@ -103,7 +103,7 @@ class RLCBar(ReinfLayoutComponent):
                        label='Position'
                        ),
                        Group(
-                       Item('ecb_law_type', show_label=False),
+                       Item('ecb_law_key', show_label=False),
                        label='Reinforcement law'
                        ),
                        springy=True

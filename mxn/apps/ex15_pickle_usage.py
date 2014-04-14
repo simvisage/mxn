@@ -33,15 +33,16 @@ Mu_pm = 3.11 / 0.20
 
 ge = MCSGeoRect(height=0.06, width=1.0)
 mcs = MatrixCrossSection(geo=ge, n_cj=20, 
-                         cc_law_type='constant', f_ck=55.0)
+                         cc_law_key='constant', f_ck=55.0)
 uni_layers = RLCTexUniform(n_layers=12,
                            n_rovings=n_rovings_pm,
-                           ecb_law_type='fbm')
+                           ecb_law_key='fbm')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)
 calib_w = MxNTreeView(root=calib)
 calib_w.configure_traits()
+#calib.cs.reinf_components_with_state[0].ecb_law.save()
 
 calib_file = get_outfile(folder_name='.mxn',
                           file_name='ex15_calib.pkl')

@@ -23,6 +23,9 @@ from reinf_layout_component import \
 from reinf_layout_component_tex_layer import \
     RLCTexLayer
 
+from matresdev.db.simdb import \
+    SimDBClassExt, SimDBClass
+
 import numpy as np
 
 class RLCTexUniform(ReinfLayoutComponent):
@@ -56,34 +59,6 @@ class RLCTexUniform(ReinfLayoutComponent):
         return (eps_up + (eps_lo - eps_up) / height * self.z_ti_arr[0])
     
     #===========================================================================
-    # material properties 
-    #===========================================================================
-
-    sig_tex_u = Float(1216., auto_set=False, enter_set=True,
-                      law_input=True)
-    '''Ultimate textile stress measured in the tensile test [MPa]
-    '''
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
-                                  cubic=ReinfLawCubic,
-                                  linear=ReinfLawLinear,
-                                  bilinear=ReinfLawBilinear),
-                      law_input=True)
-    '''Selector of the effective crack bridge law type
-    ['fbm', 'cubic', 'linear', 'bilinear']'''
-
-    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_type'''
-    @cached_property
-    def _get_ecb_law(self):
-        if self.ecb_law_type == 'linear':
-            return self.ecb_law_type_(cs=self)
-        else:
-            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
-
-    #===========================================================================
     # Distribution of reinforcement
     #===========================================================================
 
@@ -108,7 +83,6 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _get_zz_ti_arr(self):
         return self.matrix_cs.geo.height - self.z_ti_arr
         
-
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
@@ -123,7 +97,7 @@ class RLCTexUniform(ReinfLayoutComponent):
             lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
                                      state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
-                                     adapted_ecb_law=self.ecb_law
+                                     ecb_law_key = self.ecb_law_key
                                      ))
         return lst
     
@@ -175,8 +149,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                       label='Geometry'
                       ),
                       Group(
-                      Item('sig_tex_u'),
-                      Item('ecb_law_type'),
+                      Item('ecb_law_key'),
                       label='Reinforcement law',
                       ),
                       springy=True,

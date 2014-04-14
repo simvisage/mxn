@@ -14,7 +14,7 @@ from constitutive_law import CLBase
 from mxn.view import \
     MxNLeafNode
 
-from matresdev.db import \
+from matresdev.db.simdb import \
     SimDBClass, SimDBClassExt
 
 class MatrixLawBase(CLBase, MxNLeafNode, SimDBClass):
@@ -38,4 +38,10 @@ class MatrixLawBase(CLBase, MxNLeafNode, SimDBClass):
     def _get_sig_arr(self):
         return self.mfn.ydata
 
-MatrixLawBase.db = SimDBClassExt(klass=MatrixLawBase)
+MatrixLawBase.db = SimDBClassExt(
+            klass=MatrixLawBase,
+            verbose='io',
+            )
+
+if __name__ == '__main__':
+    MatrixLawBase.db.configure_traits()

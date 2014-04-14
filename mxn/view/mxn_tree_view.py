@@ -96,7 +96,9 @@ tree_node = TreeNode(node_for=[MxNTreeNode],
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(NewAction, DeleteAction, plot_self)
+                                     menu=Menu(NewAction, DeleteAction, plot_self),
+                                     move=[MxNTreeNode, MxNLeafNode],
+                                     add=[MxNTreeNode, MxNLeafNode]
                                      )
 
 leaf_node = TreeNode(node_for=[MxNLeafNode],

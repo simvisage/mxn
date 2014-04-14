@@ -28,9 +28,11 @@ from mxn.utils import \
     get_outfile
 
 ge = MCSGeoRect(height=0.06,width=0.14)
-mcs = MatrixCrossSection(geo=ge,n_cj=20,f_ck=55.0,cc_law_type='constant')
+mcs = MatrixCrossSection(geo=ge,n_cj=20,f_ck=55.0,cc_law_key='constant')
 uni_layers = RLCTexUniform(n_layers=12, n_rovings=16, A_roving=0.447,
-                           sig_tex_u = 1200.13, ecb_law_type='fbm')
+                           ecb_law_key='fbm')
+
+uni_layers.ecb_law.sig_tex_u = 1200.13 
 '''
 N = 103 kN
 sig_tex_u = N / A_tex_tot = 103000 / (12 * 16 * 0.447) = 1200.13 N/mm2
@@ -46,11 +48,11 @@ canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1, 1, 1)
 
 mxn.plot_MN_custom(ax,color='black',linestyle='-',linewidth=2.0,label='fbm')
-uni_layers.ecb_law_type = 'bilinear'
+uni_layers.ecb_law_key = 'bilinear'
 mxn.plot_MN_custom(ax,color='black',linestyle='--',linewidth=2.0,label='bilinear')
-uni_layers.ecb_law_type = 'linear'
+uni_layers.ecb_law_key = 'linear'
 mxn.plot_MN_custom(ax,color='black',linestyle='-.',linewidth=2.0,label='linear')
-uni_layers.ecb_law_type = 'cubic'
+uni_layers.ecb_law_key = 'cubic'
 mxn.plot_MN_custom(ax,color='black',linestyle=':',linewidth=2.0,label='cubic')
 
 ax.legend()

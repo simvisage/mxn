@@ -70,7 +70,7 @@ class ECBCalib(MxNTreeNode):
     def _get_u0(self):
         u0 = self.cs.reinf_components_with_state[0].ecb_law.u0
 
-        eps_up = -self.cs.matrix_cs.eps_c_u
+        eps_up = -self.cs.matrix_cs.cc_law.eps_c_u
         eps_lo = self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(u0[0])
 
         print 'eps_up', eps_up
