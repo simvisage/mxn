@@ -20,6 +20,9 @@ from mxn.matrix_cross_section import \
 
 from mxn import \
     CrossSectionComponent
+    
+from mxn.view import \
+    MxNClassExt
 
 from matresdev.db.simdb import \
     SimDBClassExt, SimDBClass
@@ -27,7 +30,7 @@ from matresdev.db.simdb import \
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
 
-ReinfLawBase.db = SimDBClassExt(
+ReinfLawBase.db = MxNClassExt(
             klass = ReinfLawBase,
             verbose = 'io',
             constants = {
@@ -36,7 +39,8 @@ ReinfLawBase.db = SimDBClassExt(
                 'linear' : ReinfLawLinear(),
                 'bilinear' : ReinfLawBilinear(),
                 'steel' : ReinfLawSteel(),
-                         }
+                         },
+            node_name = 'Reinforcement law database'
             )
 
 class ReinfLayoutComponent(CrossSectionComponent):
