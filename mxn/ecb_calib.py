@@ -23,7 +23,7 @@ from cross_section import \
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
-    
+
 from reinf_laws import \
     ReinfLawBase
 
@@ -127,7 +127,7 @@ class ECBCalib(MxNTreeNode):
         #   'maxiter' - maximum numbers of iterations used
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
-    
+
     calibration_lock = Bool(False)
     '''If true, requesting calibrated ecb law never causes new calibration
     '''
@@ -151,21 +151,22 @@ class ECBCalib(MxNTreeNode):
     '''
     def _get_ecb_law(self):
         return self.cs.reinf_components_with_state[0].ecb_law
-    
+
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
-    
-    def plot(self,fig):
+
+    def plot(self, fig):
+        # ax = fig.add_subplot(111)
         self.calibrated_ecb_law.plot(fig)
-        
+
     node_name = 'ECB law calibration'
-    
+
     tree_node_list = Property
     @cached_property
     def _get_tree_node_list(self):
         return [self.cs]
-    
+
     traits_view = View(
                 Item('Mu'),
                 Item('Nu'),

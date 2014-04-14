@@ -143,9 +143,9 @@ class MatrixCrossSection(CrossSectionComponent):
                                          quadratic=MatrixLawQuadratic,
                                          quad=MatrixLawQuad),
                         law_input=True)
-
     '''Selector of the concrete compression law type
-    ['constant', 'linear', 'quadratic', 'quad']'''
+    ['constant', 'linear', 'quadratic', 'quad']
+    '''
 
     cc_law = Property(Instance(MatrixLawBase), depends_on='+law_input')
     '''Compressive concrete law corresponding to cc_law_type'''
@@ -184,11 +184,11 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
-    
+
     #===============================================================================
     # Plotting functions
     #===============================================================================
-    
+
     def plot_eps(self, ax):
         h = self.geo.height
 
@@ -208,16 +208,16 @@ class MatrixCrossSection(CrossSectionComponent):
     def plot(self, fig):
         '''Plots the geometry + concrete law
         '''
-        ax1 = fig.add_subplot(1,2,1)
+        ax1 = fig.add_subplot(1, 2, 1)
         self.geo.plot_geometry(ax1)
-        ax2 = fig.add_subplot(1,2,2)
+        ax2 = fig.add_subplot(1, 2, 2)
         self.cc_law.plot_ax(ax2)
 
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
     node_name = 'Matrix cross section'
-    
+
     tree_node_list = Property(depends_on='cc_law_type')
     @cached_property
     def _get_tree_node_list(self):
@@ -231,7 +231,7 @@ class MatrixCrossSection(CrossSectionComponent):
                       Item('cc_law_type'),
                       Group(
                       Item('geo', show_label=False,
-                           editor=InstanceEditor(name='geo_lst', 
+                           editor=InstanceEditor(name='geo_lst',
                            editable=True), style='custom'),
                       label='Geometry'
                       ),

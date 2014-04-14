@@ -41,25 +41,25 @@ class CLBase(HasStrictTraits):
 
     mfn = Property()
     def _get_mfn(self):
-        return MFnLineArray(xdata = self.eps_arr,
-                            ydata = self.sig_arr)
+        return MFnLineArray(xdata=self.eps_arr,
+                            ydata=self.sig_arr)
 
     mfn_vct = Property()
     def _get_mfn_vct(self):
-        return np.vectorize(self.mfn.get_value, otypes = [np.float])
+        return np.vectorize(self.mfn.get_value, otypes=[np.float])
 
     def plot(self, fig):
-        ax = fig.add_subplot(1,1,1)
+        ax = fig.add_subplot(1, 1, 1)
         self.plot_ax(ax)
-        
+
     def plot_ax(self, ax):
         ax.plot(*self.arr)
 
     def default_traits_view(self):
 
-        input_traits = self.traits(input = lambda x: x != None)
+        input_traits = self.traits(input=lambda x: x != None)
 
         citems = [Item(name) for name in input_traits ]
         return View(*citems,
-                    buttons = ['OK', 'Cancel']
+                    buttons=['OK', 'Cancel']
                     )

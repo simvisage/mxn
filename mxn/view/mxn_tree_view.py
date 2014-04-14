@@ -33,13 +33,13 @@ from traitsui.menu import \
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
-    
-from enthought.pyface.file_dialog import \
+
+from pyface.file_dialog import \
     FileDialog
-    
+
 from traitsui.file_dialog import \
     open_file, save_file
-    
+
 import pickle
 
 class MxNTreeNode(HasStrictTraits):
@@ -122,15 +122,15 @@ class MxNTreeViewHandler(Handler):
         info.object.figure.clear()
         node.plot(info.object.figure)
         info.object.data_changed = True
-    
+
     def menu_save(self, info):
         file_name = save_file()
         pickle.dump(info.object.root, open(file_name, 'wb'), 1)
-        
+
     def menu_open(self, info):
         file_name = open_file()
         info.object.root = pickle.load(open(file_name, 'rb'))
-    
+
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''
