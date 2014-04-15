@@ -20,6 +20,9 @@ def test04_cross_section_mn():
     Rectangular cross section with spread textile reinforcement.
     '''
 
+    from mxn import ReinfLawBase
+    print ReinfLawBase.db['fbm-default'].eps_u
+
     tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4, ecb_law_key='fbm-default')
     tl2 = RLCTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45, ecb_law_key='fbm-default')
     ge = MCSGeoRect(height=0.5, width=0.3)

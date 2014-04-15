@@ -21,10 +21,6 @@ class ReinfLawFBM(ReinfLawBase):
     eps_u = Float(0.014, enter_set=True, auto_set=False, input=True)
     m = Float(0.5, enter_set=True, auto_set=False, input=True)
 
-    @on_trait_change('eps_u')
-    def report_change(self):
-        print 'here - changing eps_u'
-
     cnames = ['eps_u', 'm']
 
     u0 = List([0.014, 0.5 ])
