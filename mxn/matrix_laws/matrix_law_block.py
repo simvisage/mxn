@@ -20,7 +20,7 @@ class MatrixLawBlock(MatrixLawBase):
     '''Effective crack bridge Law with linear elastic response.'''
 
     #-----------------------------
-    # 
+    #
     # for simplified constant stress-strain-diagram of the concrete (EC2)
     #-----------------------------
     mfn = Property(depends_on='+input')
@@ -28,7 +28,7 @@ class MatrixLawBlock(MatrixLawBase):
     def _get_mfn(self):
         '''simplified constant stress-strain-diagram of the concrete (EC2)
         '''
-        #(for standard concrete)
+        # (for standard concrete)
         f_ck = self.f_ck + 8.
         if f_ck <= 50:
             lamda = 0.8
@@ -38,7 +38,7 @@ class MatrixLawBlock(MatrixLawBase):
         #
         else:
             eta = 1.0 - (f_ck / 50.) / 200.
-        # factor [-] to calculate the height of the compressive zone  
+        # factor [-] to calculate the height of the compressive zone
             lamda = 0.8 - (f_ck - 50.) / 400.
             eps_cu3 = (2.6 + 35. * ((90. - f_ck) / 100) ** 4.) / 1000.
 
@@ -47,3 +47,5 @@ class MatrixLawBlock(MatrixLawBase):
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
 
+MatrixLawBase.db.constants['constant-55.7, 0.0033'] = MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
+                                                           high_strength_level=50.0, E_c=28e+3)

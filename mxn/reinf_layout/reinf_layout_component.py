@@ -27,32 +27,20 @@ from matresdev.db.simdb import \
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
 
-ReinfLawBase.db = SimDBClassExt(
-            klass = ReinfLawBase,
-            verbose = 'io',
-            constants = {
-                'fbm' : ReinfLawFBM(),
-                'cubic' : ReinfLawCubic(),
-                'linear' : ReinfLawLinear(),
-                'bilinear' : ReinfLawBilinear(),
-                'steel' : ReinfLawSteel(),
-                         }
-            )
-
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
     '''
 
     matrix_cs = WeakRef(MatrixCrossSection, transient=True)
 
-    def __getstate__ ( self ):
+    def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
-        state = super( HasStrictTraits, self ).__getstate__()
-        
-        for key in [ 'state', 'state_', 'plot_state', 
+        state = super(HasStrictTraits, self).__getstate__()
+
+        for key in [ 'state', 'state_', 'plot_state',
                     'plot_state_', 'matrix_cs', 'matrix_cs_' ]:
-            if state.has_key( key ):
+            if state.has_key(key):
                 del state[ key ]
 
         return state
@@ -61,7 +49,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    ecb_law_key = Trait(ReinfLawBase.db.keys(), law_input = True)
+    ecb_law_key = Trait(ReinfLawBase.db.keys(), law_input=True)
 
     ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''
@@ -70,29 +58,29 @@ class ReinfLayoutComponent(CrossSectionComponent):
         law = ReinfLawBase.db[ self.ecb_law_key ]
         law.cs = self
         return law
-    
+
     #===============================================================================
     # Plotting functions
     #===============================================================================
-    
+
     def plot_geometry(self, ax, clr):
         '''Plot geometry'''
         return
 
     def plot_eps(self, ax):
         return
-    
+
     def plot_sig(self, ax):
         return
-    
+
     def plot(self, fig):
-        '''Plots the cross section - particular reinforcement component 
-        plotted with distinctive color to others 
+        '''Plots the cross section - particular reinforcement component
+        plotted with distinctive color to others
         '''
-        ax1 = fig.add_subplot(1,2,1)
+        ax1 = fig.add_subplot(1, 2, 1)
         self.state.plot_geometry(ax1)
         self.plot_geometry(ax1, clr='red')
-        ax2 = fig.add_subplot(1,2,2)
+        ax2 = fig.add_subplot(1, 2, 2)
         self.ecb_law.plot_ax(ax2)
 
 

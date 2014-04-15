@@ -26,7 +26,7 @@ class MatrixLawQuadratic(MatrixLawBase):
         # (for all concretes up to f_cm=88 N/mm2) #max epislon_c1u
         f_cm = self.f_ck + 8
         E_tan = 22. * (f_cm / 10) ** 0.3 * 1000.
-        eps_c1 = min(0.7 * f_cm ** 0.31, 2.8) / 1000. #EC2
+        eps_c1 = min(0.7 * f_cm ** 0.31, 2.8) / 1000.  # EC2
         # @todo: with constant value this yields negative values for strains close to 'eps_c1u'
 #        eps_c1 = 0.0022 #Brockmann
         E_sec = f_cm / eps_c1
@@ -46,3 +46,9 @@ class MatrixLawQuadratic(MatrixLawBase):
         ydata = sig_c_arr
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
+
+MatrixLawBase.db.constants['quadratic-55.7, 0.0033'] = MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
+                                                               high_strength_level=50.0, E_c=28e+3)
+
+
+

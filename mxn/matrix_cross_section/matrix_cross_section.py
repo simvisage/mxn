@@ -43,21 +43,6 @@ import numpy as np
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
 
-MatrixLawBase.db = SimDBClassExt(
-            klass=MatrixLawBase,
-            verbose='io',
-            constants={
-                'constant' : MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
-                                high_strength_level=50.0, E_c=28e+3),
-                'linear' : MatrixLawLinear(f_ck=55.7, eps_c_u=0.0033,
-                                high_strength_level=50.0, E_c=28e+3),
-                'quad' : MatrixLawQuad(f_ck=55.7, eps_c_u=0.0033,
-                                high_strength_level=50.0, E_c=28e+3),
-                'quadratic' : MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
-                                high_strength_level=50.0, E_c=28e+3),
-                         }
-            )
-
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
     '''

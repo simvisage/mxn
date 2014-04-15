@@ -34,11 +34,11 @@ from traitsui.menu import \
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
 
-from pyface.file_dialog import \
-    FileDialog
-
 from traitsui.file_dialog import \
     open_file, save_file
+
+from matresdev.db import \
+    SimDBClassExt
 
 import pickle
 
@@ -109,8 +109,14 @@ leaf_node = TreeNode(node_for=[MxNLeafNode],
                                      menu=Menu(plot_self)
                                      )
 
+db_node = TreeNode(node_for=[SimDBClassExt],
+                    auto_open=False,
+                    children='inst_list',
+                    label='classname',
+                    )
+
 tree_editor = TreeEditor(
-                    nodes=[ tree_node, leaf_node ],
+                    nodes=[ tree_node, leaf_node, db_node ],
                     selected='selected_node',
                     orientation='vertical'
                              )
@@ -136,7 +142,7 @@ class MxNTreeViewHandler(Handler):
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''
-    root = Instance(MxNTreeNode)
+    root = Instance(HasStrictTraits)
 
     selected_node = Instance(HasStrictTraits)
 
