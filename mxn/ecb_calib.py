@@ -91,7 +91,7 @@ class ECBCalib(MxNTreeNode):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.cs.matrix_cs.eps_c_u
+        eps_up = -self.cs.matrix_cs.mm.eps_c_u
         eps_lo = u[0]
 
         self.cs.set(eps_lo=eps_lo, eps_up=eps_up)

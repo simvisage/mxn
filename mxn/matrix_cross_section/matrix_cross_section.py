@@ -30,21 +30,18 @@ from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
 from mxn.matrix_laws import \
-    MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
+    MatrixMixture
 
 from matresdev.db.simdb import \
-    SimDBClassExt, SimDBClass
+    SimDBClass
 
 from mxn import \
     CrossSectionComponent
 
-from mxn.view import \
-    MxNClassExt
-
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,law_changed'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -52,16 +49,6 @@ class MatrixCrossSection(CrossSectionComponent):
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
-    '''
-
-    f_ck = Float(55.7, auto_set=False, enter_set=True,
-                 law_input=True)
-    '''Ultimate compression stress  [MPa]
-    '''
-
-    eps_c_u = Float(0.0033, auto_set=False, enter_set=True,
-                    law_input=True)
-    '''Strain at failure of the matrix in compression [-]
     '''
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
@@ -144,17 +131,27 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    cc_law_key = Trait(MatrixLawBase.db.keys(), law_input=True, auto_set=False, enter_set=True)
+    mm_key = Trait(MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
 
-    cc_law = Property(Instance(SimDBClass), depends_on='cc_law_key')
+    mm = Property(Instance(MatrixMixture), depends_on='mm_key')
+    @cached_property
+    def _get_mm(self):
+        mm = MatrixMixture.db[ self.mm_key ]
+        # @todo: this side effect is questionable
+        mm.cs = self  # give the mixture the hint that it is used by this cross section noow
+        return mm
+
+    cc_law_types = Property(depends_on='mm_key')
+    @cached_property
+    def _get_cc_law_types(self):
+        return self.mm.mtrl_laws.keys()
+
+    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'block'])
+
+    cc_law = Property(depends_on='cc_law_type')
     @cached_property
     def _get_cc_law(self):
-        law = MatrixLawBase.db[ self.cc_law_key ]
-        law.cs = self
-        law.f_ck = self.f_ck
-        law.eps_c_u = self.eps_c_u
-        return law
-
+        return self.mm.get_mtrl_law(self.cc_law_type)
     #===========================================================================
     # Calculation of compressive stresses and forces
     #===========================================================================
@@ -220,7 +217,7 @@ class MatrixCrossSection(CrossSectionComponent):
     #===========================================================================
     node_name = 'Matrix cross section'
 
-    tree_node_list = Property(depends_on='cc_law_key')
+    tree_node_list = Property(depends_on='mm_key')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.cc_law ]
@@ -228,9 +225,8 @@ class MatrixCrossSection(CrossSectionComponent):
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
-                      Item('f_ck'),
-                      Item('eps_c_u'),
-                      Item('cc_law_key'),
+                      Item('mm_key'),
+                      Item('cc_law_type'),
                       Group(
                       Item('geo', show_label=False,
                            editor=InstanceEditor(name='geo_lst',
@@ -248,5 +244,5 @@ class MatrixCrossSection(CrossSectionComponent):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    MatrixLawBase.db.configure_traits()
-    print MatrixLawBase.db.keys()
+    mcs = MatrixCrossSection()
+    mcs.configure_traits()

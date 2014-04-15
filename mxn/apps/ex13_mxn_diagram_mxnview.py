@@ -5,7 +5,8 @@ Created on 2. 4. 2014
 '''
 
 from mxn import \
-    CrossSection, MxNDiagram, ECBCalib
+    CrossSection, MxNDiagram, \
+    MatrixLawBase, ReinfLawBase
 
 from mxn.view import \
     MxNTreeView, MxNTreeNode
@@ -15,12 +16,6 @@ from mxn.matrix_cross_section import \
 
 from mxn.reinf_layout import \
     RLCTexUniform
-
-from mxn.matrix_laws import \
-    MatrixLawBase
-
-from mxn.reinf_laws import \
-    ReinfLawBase
 
 ge = MCSGeoRect(height=0.06, width=0.2)
 mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_key='quadratic-55.7, 0.0033')

@@ -40,4 +40,3 @@ class MatrixLawLinear(MatrixLawBase):
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
 
-MatrixLawLinear.db.constants['linear-default'] = MatrixLawLinear()

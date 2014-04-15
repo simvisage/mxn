@@ -31,8 +31,5 @@ class MatrixLawBilinear(MatrixLawBase):
         ydata = np.array([0.0, self.f_ck, self.f_ck])
         return MFnLineArray(xdata=xdata, ydata=ydata, extrapolate='zero')
 
-MatrixLawBase.db.constants['bilinear-55.7, 0.0033'] = MatrixLawBilinear(f_ck=55.7, eps_c_u=0.0033,
-                                                            high_strength_level=50.0, E_c=28e+3)
-
 if __name__ == '__main__':
     MatrixLawBase.db.configure_traits()

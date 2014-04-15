@@ -16,3 +16,5 @@ from matrix_law_quadratic import \
 from matrix_law_quad import \
     MatrixLawQuad
 
+from matrix_mixture import \
+    MatrixMixture

@@ -47,5 +47,3 @@ class MatrixLawBlock(MatrixLawBase):
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
 
-MatrixLawBase.db.constants['constant-55.7, 0.0033'] = MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
-                                                           high_strength_level=50.0, E_c=28e+3)

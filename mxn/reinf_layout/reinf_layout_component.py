@@ -12,8 +12,7 @@ from etsproxy.traits.api import \
     Trait, Instance, WeakRef
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
-    ReinfLawCubic, ReinfLawBilinear, ReinfLawSteel
+    ReinfLawBase
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -21,11 +20,8 @@ from mxn.matrix_cross_section import \
 from mxn import \
     CrossSectionComponent
 
-from mxn.view import \
-    MxNClassExt
-
 from matresdev.db.simdb import \
-    SimDBClassExt, SimDBClass
+    SimDBClass
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'

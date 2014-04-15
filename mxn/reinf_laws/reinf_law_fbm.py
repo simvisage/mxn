@@ -5,7 +5,7 @@ Created on 26. 2. 2014
 '''
 
 from etsproxy.traits.api import \
-    Float, Property, cached_property, List
+    Float, Property, cached_property, List, on_trait_change
 
 import numpy as np
 
@@ -21,11 +21,15 @@ class ReinfLawFBM(ReinfLawBase):
     eps_u = Float(0.014, enter_set=True, auto_set=False, input=True)
     m = Float(0.5, enter_set=True, auto_set=False, input=True)
 
+    @on_trait_change('eps_u')
+    def report_change(self):
+        print 'here - changing eps_u'
+
     cnames = ['eps_u', 'm']
 
     u0 = List([0.014, 0.5 ])
 
-    eps_arr = Property(depends_on='+input')
+    eps_arr = Property(depends_on='eps_u')
     @cached_property
     def _get_eps_arr(self):
         return np.linspace(0, self.eps_u, num=100)
@@ -41,4 +45,4 @@ class ReinfLawFBM(ReinfLawBase):
                 exp(-pow(exp(-log(m) / m), 1.0 * m)) *
                 eps_arr * np.exp(-np.power(eps_arr / eps_u * exp(-log(m) / m), 1.0 * m)))
 
-ReinfLawBase.db.constants['fbm-default'] = ReinfLawFBM()
+ReinfLawBase.db.constants['fbm-default'] = ReinfLawFBM(eps_u=0.014)
