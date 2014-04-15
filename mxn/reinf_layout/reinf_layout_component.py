@@ -21,6 +21,9 @@ from mxn.matrix_cross_section import \
 from mxn import \
     CrossSectionComponent
 
+from mxn.view import \
+    MxNClassExt
+
 from matresdev.db.simdb import \
     SimDBClassExt, SimDBClass
 

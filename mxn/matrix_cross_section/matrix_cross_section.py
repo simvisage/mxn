@@ -38,6 +38,9 @@ from matresdev.db.simdb import \
 from mxn import \
     CrossSectionComponent
 
+from mxn.view import \
+    MxNClassExt
+
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
