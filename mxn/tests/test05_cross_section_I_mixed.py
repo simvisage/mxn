@@ -15,7 +15,7 @@ from mxn.reinf_layout import \
 
 import numpy as np
 
-def test06_cross_section_mn():
+def test_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     I - shaped cross section with mixed reinforcement. Change of geometry
     to rectangular also tested.
@@ -55,4 +55,4 @@ def test06_cross_section_mn():
     assert np.allclose([cs.M, cs.N], [521.93902914533874, -3448.901578806112])
 
 if __name__ == '__main__':
-    test06_cross_section_mn()
+    test_cross_section_mn()

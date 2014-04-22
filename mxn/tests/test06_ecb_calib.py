@@ -23,7 +23,7 @@ import pickle
 from mxn.utils import \
     get_outfile
 
-def xtest_ecb_law_calib():
+def test_ecb_law_calib():
     '''Test the calibrated crack bridge law.
     '''
     #===============================================================================
@@ -39,16 +39,10 @@ def xtest_ecb_law_calib():
     ge = MCSGeoRect(height=0.06, width=0.2)
     mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type='constant')
 
-    # prepare a new law to be calibrated - this will disapear
-    # once the laws are embedded in the reinforcement component
-    if ReinfLawBase.db.get('new_fbm_law', None):
-        del ReinfLawBase.db['new_fbm_law']
-    ReinfLawBase.db['new_fbm_law'] = ReinfLawFBM()
-
     uni_layers = RLCTexUniform(n_layers=12,
                                n_rovings=n_rovings,
                                A_roving=A_rov,
-                               ecb_law_key='new_fbm_law')
+                               ecb_law_key='fbm-default')
 
     cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 

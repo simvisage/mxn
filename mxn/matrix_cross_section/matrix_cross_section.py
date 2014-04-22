@@ -41,7 +41,7 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,law_changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,law_changed,+law_input'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -146,9 +146,10 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_cc_law_types(self):
         return self.mm.mtrl_laws.keys()
 
-    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'block'])
+    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad', 
+                                      'linear', 'bilinear'],law_input=True)
 
-    cc_law = Property(depends_on='cc_law_type')
+    cc_law = Property(depends_on='+law_input')
     @cached_property
     def _get_cc_law(self):
         return self.mm.get_mtrl_law(self.cc_law_type)
@@ -217,7 +218,7 @@ class MatrixCrossSection(CrossSectionComponent):
     #===========================================================================
     node_name = 'Matrix cross section'
 
-    tree_node_list = Property(depends_on='mm_key')
+    tree_node_list = Property(depends_on='mm_key,+law_input')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.cc_law ]

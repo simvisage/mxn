@@ -106,6 +106,11 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
 
+    @on_trait_change('law_changed')
+    def notify_law_change(self):
+        for i in range(self.n_layers):
+            self.layer_lst[i].law_changed = True
+
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''

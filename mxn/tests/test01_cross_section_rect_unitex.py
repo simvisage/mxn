@@ -15,7 +15,7 @@ from mxn.reinf_layout import \
 
 import numpy as np
 
-def test_ecb_cross_section_mn():
+def test_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     '''
     cp = CrossSection(reinf=[RLCTexUniform(n_layers=3, ecb_law_key='fbm-default')],
@@ -34,4 +34,4 @@ def test_ecb_cross_section_mn():
     assert np.allclose([cp.M, cp.N], [1.52939155655, -28.4691640432])
 
 if __name__ == '__main__':
-    test_ecb_cross_section_mn()
+    test_cross_section_mn()

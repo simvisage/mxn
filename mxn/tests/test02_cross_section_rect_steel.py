@@ -20,7 +20,7 @@ import pickle
 from mxn.utils import \
     get_outfile
 
-def test03_cross_section_mn():
+def test_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     Rectangular cross section with steel reinforcement.
     '''
@@ -50,4 +50,4 @@ def test03_cross_section_mn():
     assert np.allclose([loaded_cs.M, loaded_cs.N], [605.63085424909093, -4763.6924315440474])
 
 if __name__ == '__main__':
-    test03_cross_section_mn()
+    test_cross_section_mn()

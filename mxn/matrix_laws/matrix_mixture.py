@@ -69,6 +69,7 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
         law = self.named_mtrl_laws[key]
         law.f_ck = self.f_ck
         law.eps_c_u = self.eps_c_u
+        law.cs = self.cs
         return law
 
     tree_node_list = Property(depends_on='mtrl_laws')
