@@ -32,3 +32,6 @@ root_node = MxNTreeNode(tree_node_list=[MatrixLawBase.db,
 
 mxn_view = MxNTreeView(root=root_node)
 mxn_view.configure_traits()
+
+print ReinfLawBase.db.constants.keys()
+print ReinfLawBase.db.instances.keys()

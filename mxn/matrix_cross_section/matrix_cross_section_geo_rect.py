@@ -17,7 +17,6 @@ import numpy as np
 class MCSGeoRect(MCSGeo):
     '''Rectangular cross section
     '''
-
     height = Float(0.3, auto_set=False, enter_set=True, geo_input=True)
     '''total height of cross section
     '''

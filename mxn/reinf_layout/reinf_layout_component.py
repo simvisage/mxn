@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 '''
 from etsproxy.traits.api import \
     Property, cached_property, HasStrictTraits, \
-    Trait, Instance, WeakRef
+    Trait, Instance, WeakRef, Str
 
 from mxn.reinf_laws import \
     ReinfLawBase
