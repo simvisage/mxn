@@ -97,12 +97,12 @@ class MxNDiagram(MxNTreeNode):
     # f_eps Diagram
     #===========================================================================
 
-    current_eps_idx = Int(0)  # , auto_set = False, enter_set = True)
+    current_eps_idx = Int(1)  # , auto_set = False, enter_set = True)
 
     current_eps = Property(depends_on='current_eps_idx')
     @cached_property
     def _get_current_eps(self):
-        return self.eps_range[(0, 1), self.current_eps_idx]
+        return self.eps_range[(0, 1), self.current_eps_idx-1]
 
     current_MN = Property(depends_on='current_eps_idx')
     @cached_property
@@ -200,7 +200,7 @@ class MxNDiagram(MxNTreeNode):
     tree_view = View(Group(
                 HGroup(
                 Group(Item('n_eps', springy=True),
-                      Item('current_eps_idx', editor=RangeEditor(low=0,
+                      Item('current_eps_idx', editor=RangeEditor(low=1,
                                    high_name='n_eps_range',
                                    format='(%s)',
                                    mode='slider',
