@@ -18,7 +18,7 @@ from mxn.reinf_layout import \
     RLCTexUniform
 
 ge = MCSGeoRect(height=0.06, width=0.2)
-mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_key='quadratic-55.7, 0.0033')
+mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type='quadratic')
 uni_layers = RLCTexUniform(n_layers=12, ecb_law_key='fbm-default')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])

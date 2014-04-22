@@ -30,7 +30,9 @@ class MxNDiagram(MxNTreeNode):
     # cross section
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection()
+        return CrossSection(notify_change_ext = self.set_modified)
+    def _cs_changed(self):
+        self.cs.notify_change_ext = self.set_modified
 
     eps_cu = Property()
     def _get_eps_cu(self):

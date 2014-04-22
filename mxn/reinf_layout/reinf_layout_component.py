@@ -48,7 +48,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    ecb_law_key = Trait(ReinfLawBase.db.keys(), law_input=True)
+    ecb_law_key = Trait('fbm-default', ReinfLawBase.db.keys(), law_input=True)
 
     ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''

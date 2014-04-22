@@ -69,6 +69,11 @@ class CrossSection(CrossSectionState):
     #===========================================================================
     # State management
     #===========================================================================
+    
+    notify_change_ext = Callable(None)
+    '''Notifier of component changes for external clients
+    '''
+    
     changed = Event
     '''Notifier of a change in some component of a cross section
     '''
@@ -79,6 +84,11 @@ class CrossSection(CrossSectionState):
         for c in self.reinf:
             c.eps_changed = True
 
+    @on_trait_change('changed')
+    def _notify_component_change(self):
+        if self.notify_change_ext != None:
+            self.notify_change_ext()
+    
     #===========================================================================
     # Cross-sectional stress resultants
     #===========================================================================
