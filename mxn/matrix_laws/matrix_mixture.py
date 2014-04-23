@@ -38,14 +38,6 @@ STATE_LAW_CHANGE = '+law_input'
 class MatrixMixture(MxNTreeNode, SimDBClass):
     '''Base class for concrete constitutive laws.'''
 
-    cs = WeakRef
-    '''Backward link to the cross section to propagate the changes
-    '''
-
-    @on_trait_change(STATE_LAW_CHANGE)
-    def _notify_change(self):
-        self.cs.law_changed = True
-
     f_ck = Float(55.7, auto_set=False, enter_set=True,
                  law_input=True)
     '''Ultimate compression stress  [MPa]
@@ -69,7 +61,6 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
         law = self.named_mtrl_laws[key]
         law.f_ck = self.f_ck
         law.eps_c_u = self.eps_c_u
-        law.cs = self.cs
         return law
 
     tree_node_list = Property(depends_on='mtrl_laws')

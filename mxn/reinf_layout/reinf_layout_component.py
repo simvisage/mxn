@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 '''
 from etsproxy.traits.api import \
     Property, cached_property, HasStrictTraits, \
-    Trait, Instance, WeakRef, Str
+    Trait, Instance, WeakRef, Str, on_trait_change
 
 from mxn.reinf_laws import \
     ReinfLawBase
@@ -24,7 +24,7 @@ from matresdev.db.simdb import \
     SimDBClass
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,+law_input,law_changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,+law_input,ecb_law.+input'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
@@ -44,6 +44,11 @@ class ReinfLayoutComponent(CrossSectionComponent):
 
         return state
 
+    @on_trait_change('ecb_law.+input')
+    def notify_law_change(self):
+        #print 'law internal change - object:', self
+        self.law_changed = True
+
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================
@@ -55,7 +60,6 @@ class ReinfLayoutComponent(CrossSectionComponent):
     @cached_property
     def _get_ecb_law(self):
         law = ReinfLawBase.db[ self.ecb_law_key ]
-        law.cs = self
         return law
 
     #===============================================================================

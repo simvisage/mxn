@@ -41,7 +41,7 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,law_changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mm.+law_input'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -131,14 +131,13 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    mm_key = Trait(MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
+    mm_key = Trait('default_mixture', MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
 
     mm = Property(Instance(MatrixMixture), depends_on='mm_key')
     @cached_property
     def _get_mm(self):
         mm = MatrixMixture.db[ self.mm_key ]
         # @todo: this side effect is questionable
-        mm.cs = self  # give the mixture the hint that it is used by this cross section noow
         return mm
 
     cc_law_types = Property(depends_on='mm_key')
@@ -149,10 +148,15 @@ class MatrixCrossSection(CrossSectionComponent):
     cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad', 
                                       'linear', 'bilinear'],law_input=True)
 
-    cc_law = Property(depends_on='+law_input')
+    cc_law = Property(depends_on='+law_input,mm.+law_input')
     @cached_property
     def _get_cc_law(self):
         return self.mm.get_mtrl_law(self.cc_law_type)
+    
+    @on_trait_change('cc_law.+input,mm.+law_input')
+    def notify_law_change(self):
+        self.law_changed = True
+
     #===========================================================================
     # Calculation of compressive stresses and forces
     #===========================================================================
