@@ -12,82 +12,76 @@
 #
 # Created on Aug 7, 2009 by: rchx
 
-from etsproxy.traits.api import TraitType, HasTraits, TraitError, Bool
-from etsproxy.traits.ui.api import View, Item, InstanceEditor
-from etsproxy.traits.trait_base import ClassTypes
-from etsproxy.traits.ui.instance_choice import \
+from traits.api import TraitType, HasTraits, TraitError, Bool, Property, Instance
+from traitsui.api import View, Item, InstanceEditor, EnumEditor
+from traits.trait_base import ClassTypes
+from traitsui.instance_choice import \
     InstanceFactoryChoice
+from mxn.reinf_laws import ReinfLawBase, ReinfLawFBM
 
-class EitherType(TraitType):
+class KeyRef(TraitType):
 
-    def __init__(self, names=None, klasses=None, **metadata):
-        # validate that these are trait types
-        self._klasses = klasses
-        self._names = names
-        super(EitherType, self).__init__(**metadata)
+    def __init__(self, default=None, db=None, **metadata):
+        self._database = db
+        self._default = default
+        super(KeyRef, self).__init__(**metadata)
 
     def validate(self, object, name, value):
         ''' Set the trait value '''
-        # first check if the value is a class
-        if isinstance(value, ClassTypes):
-            klass = value
-            if not klass in self._klasses:
-                raise TraitError, 'type %s not in the type scope' % klass
-            # check if the last instance of the klass has been
-            # registered earlier in the trait history
-            new_value = klass()
+        if value in self._database.keys():
+            new_value = value
         else:
-            # the value must be one of those in _klasses
-            if isinstance(value, tuple(self._klasses)):
-                new_value = value
-            else:
-                raise TraitError, 'value of type %s out of the scope: %s' % \
-                (value.__class__, self._klasses)
+            raise TraitError, 'assigned value must be one of %s but a value of %s was provided' % \
+                (self._database.keys(), value)
         return new_value
 
     def get_default_value(self):
-        '''Take the first class to construct the value'''
-        klass = self._klasses[0]
-        value = klass()
+        '''Take the default value'''
+        if self._default in self._database.keys() > 0:
+            value = self._default
+        else:
+            raise TraitError, 'assigned default value must be one of %s but a value of %s was provided' % \
+                (self._database.keys(), self._default)
         return (0, value)
 
+    def get_editor (self, trait=None):
+#        print 'getting editor'
+        return self.create_editor()
+
     def create_editor(self):
-
-        if self._names:
-            choice_list = [ InstanceFactoryChoice(name=n, klass=k)
-                           for n, k in zip(self._names, self._klasses) ]
-        else:
-            choice_list = [ InstanceFactoryChoice(klass=k)
-                            for k in self._klasses ]
-
-        return InstanceEditor(values=choice_list, kind='live')
+#        print 'creating editor - ', self._database.keys()
+        return EnumEditor(values=self._database.keys())
 
 if __name__ == '__main__':
-
-    from types  import StringType, IntType
-
-    class UseEitherType(HasTraits):
-        int_or_string = EitherType(klasses=[ IntType, StringType ])
-
-        trait_vie = View(Item('int_or_string', style='custom'),
+    class UseKeyRef(HasTraits):
+        '''Testclass containing attribute of type KeyRef
+        '''
+        ref = KeyRef(default='fbm-default', db=ReinfLawBase.db)
+        traits_view = View(Item('ref', style='simple'),
                           resizable=True)
 
-    uet = UseEitherType()
+    ukr = UseKeyRef()
 
-    print 'default value', uet.int_or_string
+    ukr.configure_traits()
+    '''View the testclass - the default database keys
+    are available in the dropdown list.
+    '''
 
-    uet.int_or_string = 4
+    ReinfLawBase.db['FBM_keyref_test'] = ReinfLawFBM()
+    '''Adding a new item to database.
+    '''
 
-    print 'value', uet.int_or_string
+    ukr.ref = 'FBM_keyref_test'
+    '''Attribute of the testclass set to the new value.
+    '''
 
-    uet.configure_traits()
+    ukr.configure_traits()
+    '''View the testclass - dropdown list should include
+    the new database item.
+    '''
 
-    uet.int_or_string = StringType
-
-    print 'value after type reset', uet.int_or_string
-
-    uet.int_or_string = 'is now the string'
-
-    print 'value', uet.int_or_string
-
-    uet.int_or_string = 8.9  # exception
+    del ReinfLawBase.db['FBM_keyref_test']
+    ukr.ref = 'fbm_keyref_test'
+    '''New item got deleted - further attempt at
+    referencing it raises an error.
+    '''

@@ -7,7 +7,7 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     Property, cached_property, HasStrictTraits, \
     Trait, Instance, WeakRef, Str, on_trait_change
 
@@ -46,7 +46,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
 
     @on_trait_change('ecb_law.+input')
     def notify_law_change(self):
-        #print 'law internal change - object:', self
+        # print 'law internal change - object:', self
         self.law_changed = True
 
     #===========================================================================
