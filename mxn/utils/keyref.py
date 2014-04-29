@@ -49,7 +49,7 @@ class KeyRef(TraitType):
         return self.create_editor()
 
     def create_editor(self):
-#        print 'creating editor - ', self._database.keys()
+        print 'creating editor - ', self._database.keys()
         return EnumEditor(values=self._database.keys())
 
 if __name__ == '__main__':

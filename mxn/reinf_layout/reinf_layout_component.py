@@ -12,7 +12,7 @@ from traits.api import \
     Trait, Instance, WeakRef, Str, on_trait_change
 
 from mxn.reinf_laws import \
-    ReinfLawBase
+    ReinfLawBase, ReinfFabric
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -53,7 +53,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    ecb_law_key = Trait('fbm-default', ReinfLawBase.db.keys(), law_input=True)
+    ecb_law_key = Trait('fbm', ReinfLawBase.db.keys(), law_input=True)
 
     ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''

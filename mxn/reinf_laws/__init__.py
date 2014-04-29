@@ -19,3 +19,6 @@ from reinf_law_linear import \
 from reinf_law_steel import \
     ReinfLawSteel
 
+from reinf_fabric import \
+    ReinfFabric
+

@@ -125,21 +125,12 @@ class ECBCalib(MxNTreeNode):
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
-        new_key = self.cs.reinf_components_with_state[0].ecb_law.key + '-calibrated'
-        if ReinfLawBase.db.get(new_key, None):
-            del ReinfLawBase.db[new_key]
-        ReinfLawBase.db[new_key] = copy.copy(self.cs.reinf_components_with_state[0].ecb_law)
-        ReinfLawBase.db[new_key].key = new_key
-        self.cs.reinf_components_with_state[0].ecb_law_key = new_key
-        '''Creating new database item to store the calibrated law
-        '''
-        
         print 'NEW CALIBRATION'
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
         self.cs.reinf_components_with_state[0].ecb_law.save()
-        return self.cs.reinf_components_with_state[0].ecb_law
+        return self.cs.reinf_components_with_state[0].fabric.save()
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law

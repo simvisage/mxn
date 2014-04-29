@@ -12,13 +12,13 @@ from etsproxy.traits.api import \
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
-    
+
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
+    ReinfLawCubic, ReinfLawBilinear, ReinfFabric
 
 from reinf_layout_component import \
-    ReinfLayoutComponent, \
-    STATE_LAW_AND_GEOMETRY_CHANGE
+    ReinfLayoutComponent
 
 from reinf_layout_component_tex_layer import \
     RLCTexLayer
@@ -28,6 +28,9 @@ from matresdev.db.simdb import \
 
 import numpy as np
 
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
+
 class RLCTexUniform(ReinfLayoutComponent):
 
     node_name = 'Uniform textile layers'
@@ -36,14 +39,6 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''total number of reinforcement layers [-]
     '''
 
-    n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
-    '''number of rovings in 0-direction of one composite layer of the
-    bending test [-]:
-    '''
-
-    A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
-    '''cross section of one roving [mm**2]'''
-    
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure
         to the strain at the bottom of the cross section'''
@@ -57,7 +52,26 @@ class RLCTexUniform(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         height = self.matrix_cs.geo.height
         return (eps_up + (eps_lo - eps_up) / height * self.z_ti_arr[0])
-    
+
+    #===========================================================================
+    # Effective crack bridge law
+    #===========================================================================
+
+    fabric_key = Trait('default_fabric', ReinfFabric.db.keys(), law_input=True)
+    fabric = Property(depends_on='fabric_key')
+    @cached_property
+    def _get_fabric(self):
+        return ReinfFabric.db[ self.fabric_key ]
+
+    ecb_law_key = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
+
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
+    '''Effective crack bridge law corresponding to ecb_law_key'''
+    @cached_property
+    def _get_ecb_law(self):
+        law = self.fabric.get_mtrl_law(self.ecb_law_key)
+        return law
+
     #===========================================================================
     # Distribution of reinforcement
     #===========================================================================
@@ -67,7 +81,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     @cached_property
     def _get_s_tex_z(self):
         return self.matrix_cs.geo.height / (self.n_layers + 1)
-        
+
     z_ti_arr = Property(depends_on='+geo_input,matrix_cs.geo.changed')
     '''property: distance of each reinforcement layer from the top [m]:
     '''
@@ -82,7 +96,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''
     def _get_zz_ti_arr(self):
         return self.matrix_cs.geo.height - self.z_ti_arr
-        
+
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
@@ -94,13 +108,13 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _get_layer_lst(self):
         lst = []
         for i in range(self.n_layers):
-            lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
-                                     state=self.state, matrix_cs=self.matrix_cs,
+            lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
-                                     ecb_law_key = self.ecb_law_key
+                                     ecb_law_key=self.ecb_law_key,
+                                     fabric_key=self.fabric_key
                                      ))
         return lst
-    
+
     @on_trait_change('eps_changed')
     def notify_eps_change(self):
         for i in range(self.n_layers):
@@ -130,17 +144,17 @@ class RLCTexUniform(ReinfLayoutComponent):
         '''Plot geometry'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_geometry(ax, clr=clr)
-            
+
     def plot_eps(self, ax):
         '''Plot strains'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_eps(ax)
-    
+
     def plot_sig(self, ax):
         '''Plot stresses'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
-        
+
     tree_view = View(VGroup(
                       Group(
                       Item('n_rovings'),

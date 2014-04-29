@@ -7,51 +7,69 @@ Created on 31. 1. 2014
 from traits.api import \
     Float, Property, cached_property, \
     Int, Instance, Trait
-    
+
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
-    ReinfLawCubic, ReinfLawBilinear
+    ReinfLawCubic, ReinfLawBilinear, ReinfFabric
 
 from traitsui.api import \
     View, Item, VGroup, Group
 
 from reinf_layout_component import \
-    ReinfLayoutComponent, \
-    STATE_LAW_AND_GEOMETRY_CHANGE, \
-    STATE_AND_GEOMETRY_CHANGE
+    ReinfLayoutComponent
 
 import numpy as np
 
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
 
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
     node_name = 'Textile layer'
-    
-    n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
-    '''number of rovings in 0-direction of one composite layer of the
-    bending test [-]:
-    '''
 
-    A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
-    '''cross section of one roving [mm**2]'''
-    
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
     #===========================================================================
+    # Effective crack bridge law
+    #===========================================================================
+
+    fabric_key = Trait('default_fabric', ReinfFabric.db.keys(), law_input=True)
+    fabric = Property(depends_on='fabric_key')
+    @cached_property
+    def _get_fabric(self):
+        return ReinfFabric.db[ self.fabric_key ]
+
+    ecb_law_key = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
+
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
+    '''Effective crack bridge law corresponding to ecb_law_key'''
+    @cached_property
+    def _get_ecb_law(self):
+        law = self.fabric.get_mtrl_law(self.ecb_law_key)
+        return law
+
+    #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
+
+    n_rovings = Property(depends_on='fabric.s_0,matrix_cs.geo.changed')
+    '''Number of rovings in the textile layer
+    '''
+    @cached_property
+    def _get_n_rovings(self):
+        return int(self.matrix_cs.geo.get_width(self.z_coord) / self.fabric.s_0)
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain at the level of the reinforcement layer
     '''
     @cached_property
     def _get_eps(self):
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         # geometric params independent from the value for 'eps_t'
-        # ------------------------------------------------------------------------                
+        # ------------------------------------------------------------------------
         height = self.matrix_cs.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
@@ -87,16 +105,16 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _get_f_t(self):
         sig_t = self.sig_t
         n_rovings = self.n_rovings
-        A_roving = self.A_roving
+        A_roving = self.fabric.A_roving
         return sig_t * n_rovings * A_roving / self.unit_conversion_factor
-    
+
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''
     @cached_property
     def _get_N(self):
         return self.f_t
-    
+
     M = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting moment.
     '''
@@ -108,27 +126,27 @@ class RLCTexLayer(ReinfLayoutComponent):
         '''Plot geometry'''
         width = self.matrix_cs.geo.get_width(self.z_coord)
         w_max = self.matrix_cs.geo.width
-        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2, 
+        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2,
                   (w_max + width) / 2, lw=2, color=clr, linestyle='dashed')
 
     def plot_eps(self, ax):
         h = self.matrix_cs.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
-        
+
         # eps t
-        ax.hlines([h-self.z_coord], [0], [-self.eps_t], lw=4, color='DarkOrange')
+        ax.hlines([h - self.z_coord], [0], [-self.eps_t], lw=4, color='DarkOrange')
 
         # reinforcement layer
-        ax.hlines([h-self.z_coord], [min(0.0, -eps_lo, -eps_up)], 
+        ax.hlines([h - self.z_coord], [min(0.0, -eps_lo, -eps_up)],
                   [max(0.0, -eps_lo, -eps_up)], lw=1, color='black', linestyle='--')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        
+
         # sig t
-        ax.hlines([h-self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
-        
+        ax.hlines([h - self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
+
     tree_view = View(VGroup(
                       Group(
                       Item('n_rovings'),
@@ -145,7 +163,7 @@ class RLCTexLayer(ReinfLayoutComponent):
                 resizable=True,
                 buttons=['OK', 'Cancel']
                 )
-    
+
 if __name__ == '__main__':
     Layer = RLCTexLayer()
     Layer.configure_traits()
