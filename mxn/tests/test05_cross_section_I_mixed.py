@@ -33,8 +33,8 @@ def test_cross_section_mn():
     '''Four steel reinforcement bars in lower flange
     '''
 
-    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39, ecb_law_key='fbm-default')
-    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01, ecb_law_key='fbm-default')
+    tl1 = RLCTexLayer(z_coord=0.39, ecb_law_type='fbm')
+    tl2 = RLCTexLayer(z_coord=0.01, ecb_law_type='fbm')
     '''Two layers of textile reinforcement
     '''
 
@@ -44,15 +44,18 @@ def test_cross_section_mn():
                              eps_up=-0.0033,
                              )
 
-    assert np.allclose([cs.M, cs.N], [201.85966110328661, -1149.8070885108996])
+    tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    tl1.fabric.set(s_0=0.02, A_roving=0.461)
+
+    assert np.allclose([cs.M, cs.N], [201.35521782599423, -1152.7647363907902])
     bar1.area = 0.0004
-    assert np.allclose([cs.M, cs.N], [220.03049443661996, -1032.9945885108996])
+    assert np.allclose([cs.M, cs.N], [219.52605115932755, -1035.9522363907902])
     ge.height_lo = 0.06
-    assert np.allclose([cs.M, cs.N], [228.13663252701798, -1032.9945885108996])
+    assert np.allclose([cs.M, cs.N], [227.65539856989415, -1035.9522363907902])
     cs.eps_lo = 0.004
-    assert np.allclose([cs.M, cs.N], [247.49122203, -843.661746225])
+    assert np.allclose([cs.M, cs.N], [246.77239163193633, -848.07965392270125])
     mcs.geo = MCSGeoRect(height=0.4, width=0.4)
-    assert np.allclose([cs.M, cs.N], [521.93902914533874, -3448.901578806112])
+    assert np.allclose([cs.M, cs.N], [521.32618671511852, -3452.1270652809549])
 
 if __name__ == '__main__':
     test_cross_section_mn()

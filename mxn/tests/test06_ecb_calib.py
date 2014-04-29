@@ -40,9 +40,9 @@ def test_ecb_law_calib():
     mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type='constant')
 
     uni_layers = RLCTexUniform(n_layers=12,
-                               n_rovings=n_rovings,
-                               A_roving=A_rov,
-                               ecb_law_key='fbm-default')
+                               ecb_law_type='fbm')
+
+    uni_layers.fabric.set(s_0=0.0083, A_roving=0.461)
 
     cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 
@@ -64,7 +64,7 @@ def test_ecb_law_calib():
                                 dtype=float))
     pickle.dump(calib, open(calib_file, 'wb'), 1)
 
-    uni_layers.ecb_law_key = 'cubic-default'
+    uni_layers.ecb_law_type = 'cubic'
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 128.33734405, 247.41169038, 357.44885771,
@@ -72,7 +72,7 @@ def test_ecb_law_calib():
                                  714.45215726, 784.72942118, 848.06386907],
                                 dtype=float))
 
-    uni_layers.ecb_law_key = 'linear-default'
+    uni_layers.ecb_law_type = 'linear'
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 51.40222925, 102.8044585, 154.20668775,
@@ -80,7 +80,7 @@ def test_ecb_law_calib():
                                  359.81560476, 411.21783401, 462.62006326],
                                 dtype=float))
 
-    uni_layers.ecb_law_key = 'bilinear-default'
+    uni_layers.ecb_law_type = 'bilinear'
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 858.01243898, 873.058472, 888.10450501,
@@ -89,7 +89,7 @@ def test_ecb_law_calib():
                                 dtype=float))
 
     mcs.cc_law_type = 'quadratic'
-    uni_layers.ecb_law_key = 'fbm-default'
+    uni_layers.ecb_law_type = 'fbm'
     calib.Mu = 3.49
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),

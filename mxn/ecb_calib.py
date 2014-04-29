@@ -129,8 +129,8 @@ class ECBCalib(MxNTreeNode):
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
-        self.cs.reinf_components_with_state[0].ecb_law.save()
-        return self.cs.reinf_components_with_state[0].fabric.save()
+        self.cs.reinf_components_with_state[0].fabric.save()
+        return self.cs.reinf_components_with_state[0].ecb_law
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law
@@ -143,7 +143,6 @@ class ECBCalib(MxNTreeNode):
     #===========================================================================
 
     def plot(self, fig):
-        # ax = fig.add_subplot(111)
         self.calibrated_ecb_law.plot(fig)
 
     node_name = 'ECB law calibration'

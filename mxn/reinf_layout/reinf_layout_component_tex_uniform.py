@@ -58,18 +58,18 @@ class RLCTexUniform(ReinfLayoutComponent):
     #===========================================================================
 
     fabric_key = Trait('default_fabric', ReinfFabric.db.keys(), law_input=True)
-    fabric = Property(depends_on='fabric_key')
+    fabric = Property(Instance(ReinfFabric), depends_on='fabric_key')
     @cached_property
     def _get_fabric(self):
         return ReinfFabric.db[ self.fabric_key ]
 
-    ecb_law_key = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
+    ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
     ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
-        law = self.fabric.get_mtrl_law(self.ecb_law_key)
+        law = self.fabric.get_mtrl_law(self.ecb_law_type)
         return law
 
     #===========================================================================
@@ -110,7 +110,7 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
-                                     ecb_law_key=self.ecb_law_key,
+                                     ecb_law_type=self.ecb_law_type,
                                      fabric_key=self.fabric_key
                                      ))
         return lst
@@ -157,14 +157,14 @@ class RLCTexUniform(ReinfLayoutComponent):
 
     tree_view = View(VGroup(
                       Group(
-                      Item('n_rovings'),
-                      Item('A_roving'),
                       Item('n_layers'),
                       label='Geometry'
                       ),
                       Group(
-                      Item('ecb_law_key'),
-                      label='Reinforcement law',
+                      Item('fabric_key'),
+                      Item('fabric@'),
+                      Item('ecb_law_type'),
+                      label='Fabric material',
                       ),
                       springy=True,
                       ),

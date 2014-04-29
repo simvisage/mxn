@@ -21,10 +21,9 @@ def test_cross_section_mn():
     '''
 
     from mxn import ReinfLawBase
-    print ReinfLawBase.db['fbm-default'].eps_u
 
-    tl1 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.4, ecb_law_key='fbm-default')
-    tl2 = RLCTexLayer(n_rovings=30, A_roving=0.5, z_coord=0.45, ecb_law_key='fbm-default')
+    tl1 = RLCTexLayer(z_coord=0.4, ecb_law_type='fbm')
+    tl2 = RLCTexLayer(z_coord=0.45, ecb_law_type='fbm')
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,
@@ -34,22 +33,16 @@ def test_cross_section_mn():
                          eps_up=-0.0033,
                          )
 
-    print 'eps_u', tl1.ecb_law.eps_u
+    tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    tl1.fabric.set(s_0=0.018, A_roving=0.461)
 
-    print cs.matrix_cs_with_state.mm_key
-    print cs.reinf_components_with_state[0].ecb_law_key
-    print cs.reinf_components_with_state[0].ecb_law.eps_u
-    print 'MN', cs.M, cs.N
-    assert np.allclose([cs.M, cs.N], [435.68614056664501, -2235.3491995963072])
+    assert np.allclose([cs.M, cs.N], [433.45620169134492, -2247.2883277004325])
     tl1.z_coord = 0.1
-    print 'MN', cs.M, cs.N
-    assert np.allclose([cs.M, cs.N], [434.15077513204272, -2245.584969160323])
+    assert np.allclose([cs.M, cs.N], [432.39449649331749, -2254.3663623539496])
     ge.width = 0.15
-    print 'MN', cs.M, cs.N
-    assert np.allclose([cs.M, cs.N], [218.70458852958842, -1114.6464797623262])
+    assert np.allclose([cs.M, cs.N], [216.14717747037844, -1127.4335350583763])
     cs.eps_lo = 0.014
-    print 'MN', cs.M, cs.N
-    assert np.allclose([cs.M, cs.N], [159.47707057379949, -719.71876106187221])
+    assert np.allclose([cs.M, cs.N], [156.7097970367976, -734.53214309844532])
 
 if __name__ == '__main__':
     test_cross_section_mn()

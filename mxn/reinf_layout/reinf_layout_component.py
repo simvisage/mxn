@@ -49,19 +49,6 @@ class ReinfLayoutComponent(CrossSectionComponent):
         # print 'law internal change - object:', self
         self.law_changed = True
 
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-
-    ecb_law_key = Trait('fbm', ReinfLawBase.db.keys(), law_input=True)
-
-    ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_key'''
-    @cached_property
-    def _get_ecb_law(self):
-        law = ReinfLawBase.db[ self.ecb_law_key ]
-        return law
-
     #===============================================================================
     # Plotting functions
     #===============================================================================

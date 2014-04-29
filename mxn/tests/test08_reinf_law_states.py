@@ -30,7 +30,7 @@ ReinfLawBase.db['fbm-test'] = ReinfLawFBM(sig_tex_u=1216.,
                                             m=0.5)
 ReinfLawBase.db['fbm-test'].key = 'fbm-test'
 
-def test_reinf_law_states():
+def xtest_reinf_law_states():
     '''Test the moment and normal force calculated for a cross section
     with changing reinforcement law.
     '''

@@ -5,7 +5,7 @@ Created on 23. 4. 2014
 '''
 
 from traits.api import \
-    Property, cached_property, Dict, Str, Float, WeakRef, on_trait_change
+    Property, cached_property, Dict, Str, Float
 
 from traitsui.api import \
     View, Item
@@ -81,6 +81,8 @@ dflt_fabric = ReinfFabric(mtrl_laws={'bilinear':
 ReinfFabric.db = MxNClassExt(
             klass=ReinfFabric,
             verbose='io',
-            node_name='Matrix mixtures',
-            constants=dict(default_fabric=dflt_fabric)
+            node_name='Matrix mixtures'
             )
+
+if not ReinfFabric.db.get('default_fabric', None):
+    ReinfFabric.db['default_fabric'] = dflt_fabric
