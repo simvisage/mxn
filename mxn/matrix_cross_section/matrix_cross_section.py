@@ -145,14 +145,14 @@ class MatrixCrossSection(CrossSectionComponent):
     def _get_cc_law_types(self):
         return self.mm.mtrl_laws.keys()
 
-    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad', 
-                                      'linear', 'bilinear'],law_input=True)
+    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad',
+                                      'linear', 'bilinear'], law_input=True)
 
     cc_law = Property(depends_on='+law_input,mm.+law_input')
     @cached_property
     def _get_cc_law(self):
         return self.mm.get_mtrl_law(self.cc_law_type)
-    
+
     @on_trait_change('cc_law.+input,mm.+law_input')
     def notify_law_change(self):
         self.law_changed = True

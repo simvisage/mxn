@@ -8,7 +8,8 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    Float, Property, cached_property, Int, Instance, Trait, on_trait_change
+    Float, Property, cached_property, Int, \
+    Instance, Trait, on_trait_change, Button
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
@@ -120,6 +121,10 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
 
+    @on_trait_change('fabric.+geo_input,ecb_law.+input')
+    def notify_mat_change(self):
+        self.law_changed = True
+
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
     '''
@@ -155,6 +160,10 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
 
+    save_fabric = Button(label='Save current fabric')
+    def _save_fabric_fired(self):
+        self.fabric.save()
+
     tree_view = View(VGroup(
                       Group(
                       Item('n_layers'),
@@ -162,8 +171,9 @@ class RLCTexUniform(ReinfLayoutComponent):
                       ),
                       Group(
                       Item('fabric_key'),
-                      Item('fabric@'),
+                      Item('fabric@', show_label=False),
                       Item('ecb_law_type'),
+                      Item('save_fabric', show_label=False),
                       label='Fabric material',
                       ),
                       springy=True,

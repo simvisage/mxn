@@ -77,7 +77,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
-    tree_node_list = Property(depends_on='ecb_law_key')
+    tree_node_list = Property(depends_on='ecb_law_key, ecb_law_type')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.ecb_law ]

@@ -6,7 +6,7 @@ Created on 31. 1. 2014
 
 from traits.api import \
     Float, Property, cached_property, \
-    Int, Instance, Trait
+    Int, Instance, Trait, on_trait_change
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
@@ -50,6 +50,10 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _get_ecb_law(self):
         law = self.fabric.get_mtrl_law(self.ecb_law_type)
         return law
+
+    @on_trait_change('fabric.+geo_input,ecb_law.+input')
+    def notify_mat_change(self):
+        self.law_changed = True
 
     #===========================================================================
     # Discretization conform to the tex layers
@@ -154,7 +158,7 @@ class RLCTexLayer(ReinfLayoutComponent):
                       ),
                       Group(
                       Item('fabric_key'),
-                      Item('fabric@'),
+                      Item('fabric@', show_label=False),
                       Item('ecb_law_type'),
                       label='Fabric material',
                       ),

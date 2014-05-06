@@ -6,7 +6,7 @@ Created on Aug 23, 2012
 
 from etsproxy.traits.api import \
     HasStrictTraits, Property, WeakRef, \
-    cached_property, on_trait_change
+    cached_property, on_trait_change, Event
 
 from etsproxy.traits.ui.api import \
     View, Item

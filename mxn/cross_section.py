@@ -30,7 +30,7 @@ from reinf_layout import \
 
 from view import \
     MxNTreeNode
-    
+
 import numpy as np
 
 
@@ -69,11 +69,11 @@ class CrossSection(CrossSectionState):
     #===========================================================================
     # State management
     #===========================================================================
-    
+
     notify_change_ext = Callable(None)
     '''Notifier of component changes for external clients
     '''
-    
+
     changed = Event
     '''Notifier of a change in some component of a cross section
     '''
@@ -88,7 +88,7 @@ class CrossSection(CrossSectionState):
     def _notify_component_change(self):
         if self.notify_change_ext != None:
             self.notify_change_ext()
-    
+
     #===========================================================================
     # Cross-sectional stress resultants
     #===========================================================================
@@ -142,25 +142,25 @@ class CrossSection(CrossSectionState):
         ax.spines['bottom'].set_smart_bounds(True)
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
-        
+
     def plot(self, fig):
-        ax1 = fig.add_subplot(1,3,1)
-        ax2 = fig.add_subplot(1,3,2)
-        ax3 = fig.add_subplot(1,3,3)
+        ax1 = fig.add_subplot(1, 3, 1)
+        ax2 = fig.add_subplot(1, 3, 2)
+        ax3 = fig.add_subplot(1, 3, 3)
         self.plot_geometry(ax1)
         self.plot_eps(ax2)
         self.plot_sig(ax3)
-    
+
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
-    
+
     node_name = 'Cross section'
-    
+
     tree_node_list = Property
     @cached_property
     def _get_tree_node_list(self):
-        return [self.matrix_cs_with_state, 
+        return [self.matrix_cs_with_state,
                 MxNTreeNode(tree_node_list=self.reinf_components_with_state,
                             node_name='Reinforcement layout',
                             plot_state=self)]

@@ -24,21 +24,21 @@ class CrossSectionComponent(MxNTreeNode):
     state = WeakRef(CrossSectionState, transient=True)
     '''Strain state of a cross section
     '''
-    
-    def __getstate__ ( self ):
+
+    def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
-        state = super( HasStrictTraits, self ).__getstate__()
-        
+        state = super(HasStrictTraits, self).__getstate__()
+
         for key in [ 'state', 'state_', 'plot_state', 'plot_state_' ]:
-            if state.has_key( key ):
+            if state.has_key(key):
                 del state[ key ]
-                
-        return state    
+
+        return state
 
 
     unit_conversion_factor = Constant(1000.0)
-    
+
     law_changed = Event
     '''Notifier set to True when internal values of a constitutive law change
     '''
@@ -50,7 +50,7 @@ class CrossSectionComponent(MxNTreeNode):
 
     @on_trait_change(COMPONENT_CHANGE)
     def notify_change(self):
-        '''Propagate the change of the component geometry or stress-strain 
+        '''Propagate the change of the component geometry or stress-strain
         law to the cross section state.
         '''
         if self.state:

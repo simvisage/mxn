@@ -5,7 +5,8 @@ Created on Aug 23, 2012
 '''
 
 from traits.api import \
-    Property, cached_property, Dict, Str, Float, WeakRef, on_trait_change
+    Property, cached_property, Dict, Str, Float, \
+    WeakRef, on_trait_change, Event
 
 from traitsui.api import \
     View, Item

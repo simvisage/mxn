@@ -5,7 +5,8 @@ Created on 23. 4. 2014
 '''
 
 from traits.api import \
-    Property, cached_property, Dict, Str, Float
+    Property, cached_property, Dict, Str, \
+    Float, on_trait_change
 
 from traitsui.api import \
     View, Item
@@ -31,6 +32,19 @@ from reinf_law_fbm import \
 from reinf_law_linear import \
     ReinfLawLinear
 
+basic_laws = {'bilinear':
+               ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
+                                var_a=0.8, eps_el_fraction=0.0001),
+              'cubic':
+               ReinfLawCubic(sig_tex_u=1216., eps_u=0.016,
+                                var_a=-5e+6),
+              'fbm':
+               ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
+                           m=0.5),
+              'linear':
+               ReinfLawLinear(eps_u=0.014, E_tex=80000.),
+               }
+
 class ReinfFabric(MxNTreeNode, SimDBClass):
 
     A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
@@ -43,6 +57,8 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     '''Distance between rovings oriented in 90-direction [m]'''
 
     mtrl_laws = Dict((Str, ReinfLawBase))
+    def _mtrl_laws_default(self):
+        return basic_laws
 
     named_mtrl_laws = Property(depends_on='mtrl_laws')
     @cached_property
@@ -65,24 +81,11 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
                       Item('s_90'),
                       )
 
-dflt_fabric = ReinfFabric(mtrl_laws={'bilinear':
-                                     ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
-                                                      var_a=0.8, eps_el_fraction=0.0001),
-                                     'cubic':
-                                     ReinfLawCubic(sig_tex_u=1216., eps_u=0.016,
-                                                      var_a=-5e+6),
-                                     'fbm':
-                                     ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
-                                                      m=0.5),
-                                     'linear':
-                                     ReinfLawLinear(eps_u=0.014, E_tex=80000.),
-                                     })
-
 ReinfFabric.db = MxNClassExt(
             klass=ReinfFabric,
             verbose='io',
-            node_name='Matrix mixtures'
+            node_name='Reinforcement fabrics'
             )
 
 if not ReinfFabric.db.get('default_fabric', None):
-    ReinfFabric.db['default_fabric'] = dflt_fabric
+    ReinfFabric.db['default_fabric'] = ReinfFabric()
