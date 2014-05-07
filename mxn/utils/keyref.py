@@ -12,11 +12,8 @@
 #
 # Created on Aug 7, 2009 by: rchx
 
-from traits.api import TraitType, HasTraits, TraitError, Bool, Property, Instance
-from traitsui.api import View, Item, InstanceEditor, EnumEditor
-from traits.trait_base import ClassTypes
-from traitsui.instance_choice import \
-    InstanceFactoryChoice
+from traits.api import TraitType, HasTraits, TraitError, Property
+from traitsui.api import View, Item, EnumEditor
 from mxn.reinf_laws import ReinfLawBase, ReinfLawFBM
 
 class KeyRef(TraitType):
