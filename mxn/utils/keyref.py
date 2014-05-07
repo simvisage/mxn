@@ -21,9 +21,10 @@ from mxn.reinf_laws import ReinfLawBase, ReinfLawFBM
 
 class KeyRef(TraitType):
 
-    def __init__(self, default=None, db=None, **metadata):
+    def __init__(self, default=None, db=None, keys=None, **metadata):
         self._database = db
         self._default = default
+        self._keys = keys
         super(KeyRef, self).__init__(**metadata)
 
     def validate(self, object, name, value):
@@ -50,13 +51,20 @@ class KeyRef(TraitType):
 
     def create_editor(self):
         print 'creating editor - ', self._database.keys()
+        return EnumEditor(name=self._keys)  # ## added by RCH
         return EnumEditor(values=self._database.keys())
 
 if __name__ == '__main__':
+
     class UseKeyRef(HasTraits):
         '''Testclass containing attribute of type KeyRef
         '''
-        ref = KeyRef(default='fbm-default', db=ReinfLawBase.db)
+
+        reinf_law_keys = Property
+        def _get_reinf_law_keys(self):
+            return ReinfLawBase.db.keys()
+
+        ref = KeyRef(default='fbm-default', db=ReinfLawBase.db, keys='reinf_law_keys')
         traits_view = View(Item('ref', style='simple'),
                           resizable=True)
 
