@@ -12,12 +12,15 @@
 #
 # Created on Aug 7, 2009 by: rchx
 
-from traits.api import TraitType, HasTraits, TraitError, Bool, Property, Instance
-from traitsui.api import View, Item, InstanceEditor, EnumEditor
-from traits.trait_base import ClassTypes
-from traitsui.instance_choice import \
-    InstanceFactoryChoice
-from mxn.reinf_laws import ReinfLawBase, ReinfLawFBM
+from traits.api import \
+    TraitType, HasTraits, TraitError, \
+    Bool, Property, Button
+
+from traitsui.api import \
+     View, Item, InstanceEditor, EnumEditor
+
+from mxn.reinf_laws import \
+     ReinfLawBase, ReinfLawFBM
 
 class KeyRef(TraitType):
 
@@ -34,11 +37,12 @@ class KeyRef(TraitType):
         else:
             raise TraitError, 'assigned value must be one of %s but a value of %s was provided' % \
                 (self._database.keys(), value)
+        print self.editor
         return new_value
 
     def get_default_value(self):
         '''Take the default value'''
-        if self._default in self._database.keys() > 0:
+        if self._default in self._database.keys():
             value = self._default
         else:
             raise TraitError, 'assigned default value must be one of %s but a value of %s was provided' % \
@@ -46,11 +50,9 @@ class KeyRef(TraitType):
         return (0, value)
 
     def get_editor (self, trait=None):
-#        print 'getting editor'
         return self.create_editor()
 
     def create_editor(self):
-        print 'creating editor - ', self._database.keys()
         return EnumEditor(name=self._keys)  # ## added by RCH
         return EnumEditor(values=self._database.keys())
 
@@ -59,6 +61,36 @@ if __name__ == '__main__':
     class UseKeyRef(HasTraits):
         '''Testclass containing attribute of type KeyRef
         '''
+        new_law = Button
+        def _new_law_fired(self):
+            '''Adds a new fbm law to database and sets it as
+            value of the ref attribute
+            '''
+            law_name = 'new_fbm_law_1'
+            count = 1
+            while ReinfLawBase.db.get(law_name, None):
+                count += 1
+                law_name = 'new_fbm_law_' + str(count)
+            ReinfLawBase.db[law_name] = ReinfLawFBM()
+            self.ref = law_name
+
+            v = self.trait_view()
+            v.updated = True
+            '''View gets updated to acknowledge the change in database
+            '''
+
+        del_law = Button
+        def _del_law_fired(self):
+            '''Deletes currently selected law from database
+            '''
+            law_name = self.ref
+            self.ref = 'fbm-default'
+            ReinfLawBase.db.__delitem__(key=law_name)
+
+            v = self.trait_view()
+            v.updated = True
+            '''View gets updated to acknowledge the change in database
+            '''
 
         reinf_law_keys = Property
         def _get_reinf_law_keys(self):
@@ -66,6 +98,8 @@ if __name__ == '__main__':
 
         ref = KeyRef(default='fbm-default', db=ReinfLawBase.db, keys='reinf_law_keys')
         traits_view = View(Item('ref', style='simple'),
+                           Item('new_law'),
+                           Item('del_law'),
                           resizable=True)
 
     ukr = UseKeyRef()
