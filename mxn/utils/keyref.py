@@ -14,10 +14,10 @@
 
 from traits.api import \
     TraitType, HasTraits, TraitError, \
-    Bool, Property, Button
+    Property, Button
 
 from traitsui.api import \
-     View, Item, InstanceEditor, EnumEditor
+     View, Item, EnumEditor
 
 from mxn.reinf_laws import \
      ReinfLawBase, ReinfLawFBM
