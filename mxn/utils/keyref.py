@@ -37,7 +37,6 @@ class KeyRef(TraitType):
         else:
             raise TraitError, 'assigned value must be one of %s but a value of %s was provided' % \
                 (self._database.keys(), value)
-        print self.editor
         return new_value
 
     def get_default_value(self):
@@ -48,6 +47,10 @@ class KeyRef(TraitType):
             raise TraitError, 'assigned default value must be one of %s but a value of %s was provided' % \
                 (self._database.keys(), self._default)
         return (0, value)
+
+    ref_keys = Property
+    def _get_ref_keys(self):
+        return self._database.keys()
 
     def get_editor (self, trait=None):
         return self.create_editor()
@@ -66,6 +69,7 @@ if __name__ == '__main__':
             '''Adds a new fbm law to database and sets it as
             value of the ref attribute
             '''
+            print self.ref.ref_keys
             law_name = 'new_fbm_law_1'
             count = 1
             while ReinfLawBase.db.get(law_name, None):
