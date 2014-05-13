@@ -6,7 +6,8 @@ Created on 31. 1. 2014
 
 from traits.api import \
     Float, Property, cached_property, \
-    Int, Instance, Trait, on_trait_change
+    Int, Instance, Trait, on_trait_change, \
+    Button
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
@@ -19,6 +20,9 @@ from reinf_layout_component import \
     ReinfLayoutComponent
 
 import numpy as np
+
+from reinf_fabric_handler import \
+    FabricHandler
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
@@ -151,6 +155,18 @@ class RLCTexLayer(ReinfLayoutComponent):
         # sig t
         ax.hlines([h - self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
 
+    save_fabric = Button(label='Save current fabric')
+    def _save_fabric_fired(self):
+        self.fabric.save()
+
+    new_fabric = Button(label='Make new fabric')
+    def _new_fabric_fired(self):
+        pass
+
+    del_fabric = Button(label='Delete current fabric')
+    def _del_fabric_fired(self):
+        pass
+
     tree_view = View(VGroup(
                       Group(
                       Item('z_coord'),
@@ -160,11 +176,15 @@ class RLCTexLayer(ReinfLayoutComponent):
                       Item('fabric_key'),
                       Item('fabric@', show_label=False),
                       Item('ecb_law_type'),
+                      Item('save_fabric', show_label=False),
+                      Item('new_fabric', show_label=False),
+                      Item('del_fabric', show_label=False),
                       label='Fabric material',
                       ),
                       springy=True,
                       ),
                 resizable=True,
+                handler=FabricHandler(),
                 buttons=['OK', 'Cancel']
                 )
 

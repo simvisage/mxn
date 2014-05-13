@@ -7,12 +7,14 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     Float, Property, cached_property, Int, \
-    Instance, Trait, on_trait_change, Button
+    Instance, Trait, on_trait_change, Button, \
+    Str
 
-from etsproxy.traits.ui.api import \
-    View, Item, VGroup, Group
+from traitsui.api import \
+    View, Item, VGroup, Group, HGroup, Handler, \
+    spring, UIInfo
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
@@ -26,6 +28,12 @@ from reinf_layout_component_tex_layer import \
 
 from matresdev.db.simdb import \
     SimDBClassExt, SimDBClass
+
+from reinf_fabric_handler import \
+    FabricHandler
+
+from mxn.utils import \
+    KeyRef
 
 import numpy as np
 
@@ -58,7 +66,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    fabric_key = Trait('default_fabric', ReinfFabric.db.keys(), law_input=True)
+    fabric_key = KeyRef(default='default_fabric', db=ReinfFabric.db, keys='fabric_keys', law_input=True)
     fabric = Property(Instance(ReinfFabric), depends_on='fabric_key')
     @cached_property
     def _get_fabric(self):
@@ -164,6 +172,18 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _save_fabric_fired(self):
         self.fabric.save()
 
+    new_fabric = Button(label='Make new fabric')
+    def _new_fabric_fired(self):
+        pass
+
+    del_fabric = Button(label='Delete current fabric')
+    def _del_fabric_fired(self):
+        pass
+
+    fabric_keys = Property
+    def _get_fabric_keys(self):
+        return ReinfFabric.db.keys()
+
     tree_view = View(VGroup(
                       Group(
                       Item('n_layers'),
@@ -174,13 +194,17 @@ class RLCTexUniform(ReinfLayoutComponent):
                       Item('fabric@', show_label=False),
                       Item('ecb_law_type'),
                       Item('save_fabric', show_label=False),
+                      Item('new_fabric', show_label=False),
+                      Item('del_fabric', show_label=False),
                       label='Fabric material',
                       ),
                       springy=True,
                       ),
                 resizable=True,
+                handler=FabricHandler(),
                 buttons=['OK', 'Cancel']
                 )
+
 
 if __name__ == '__main__':
     Layers = RLCTexUniform()
