@@ -68,17 +68,15 @@ class FabricHandler (Handler):
         else:
             ReinfFabric.db[self.fabric_name] = ReinfFabric()
             object.fabric_key = self.fabric_name
-            v = object.trait_view()
-            v.updated = True
             self._ui.dispose()
+            self.info.ui.parent.updated = True
 
     def _delete_fired (self):
         object = self.info.object
         ReinfFabric.db.__delitem__(key=object.fabric_key)
         object.fabric_key = ReinfFabric.db.inst_list[0].key
-        v = object.trait_view()
-        v.updated = True
         self._ui.dispose()
+        self.info.ui.parent.updated = True
 
     def _cancel_fired (self):
         self._ui.dispose()

@@ -104,6 +104,7 @@ class MxNTreeView(HasStrictTraits):
                              dock='tab',
                              )
                     ),
+                    id='mxntreeview_id',
                     width=0.7,
                     height=0.4,
                     buttons=['OK', 'Cancel'],

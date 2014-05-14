@@ -21,6 +21,9 @@ from reinf_layout_component import \
 
 import numpy as np
 
+from mxn.utils import \
+    KeyRef
+
 from reinf_fabric_handler import \
     FabricHandler
 
@@ -40,7 +43,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    fabric_key = Trait('default_fabric', ReinfFabric.db.keys(), law_input=True)
+    fabric_key = KeyRef(default='default_fabric', db=ReinfFabric.db, keys='fabric_keys', law_input=True)
     fabric = Property(Instance(ReinfFabric), depends_on='fabric_key')
     @cached_property
     def _get_fabric(self):
@@ -166,6 +169,10 @@ class RLCTexLayer(ReinfLayoutComponent):
     del_fabric = Button(label='Delete current fabric')
     def _del_fabric_fired(self):
         pass
+
+    fabric_keys = Property
+    def _get_fabric_keys(self):
+        return ReinfFabric.db.keys()
 
     tree_view = View(VGroup(
                       Group(

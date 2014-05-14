@@ -22,8 +22,6 @@ mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type=
 uni_layers = RLCTexUniform(n_layers=12, ecb_law_type='cubic')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
-# uni_layers.ecb_law_type = 'cubic'
-# uni_layers.ecb_law_type = 'fbm'
 mxn = MxNDiagram(cs=cs)
 
 mxn_view = MxNTreeView(root=mxn)

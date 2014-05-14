@@ -48,10 +48,6 @@ class KeyRef(TraitType):
                 (self._database.keys(), self._default)
         return (0, value)
 
-    ref_keys = Property
-    def _get_ref_keys(self):
-        return self._database.keys()
-
     def get_editor (self, trait=None):
         return self.create_editor()
 
