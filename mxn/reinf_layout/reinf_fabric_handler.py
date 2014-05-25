@@ -67,14 +67,14 @@ class FabricHandler (Handler):
             print 'Fabric name already occupied!'
         else:
             ReinfFabric.db[self.fabric_name] = ReinfFabric()
-            object.fabric_key = self.fabric_name
+            object.fabric = self.fabric_name
             self._ui.dispose()
             self.info.ui.parent.updated = True
 
     def _delete_fired (self):
         object = self.info.object
-        ReinfFabric.db.__delitem__(key=object.fabric_key)
-        object.fabric_key = ReinfFabric.db.inst_list[0].key
+        ReinfFabric.db.__delitem__(key=object.fabric)
+        object.fabric = ReinfFabric.db.inst_list[0].key
         self._ui.dispose()
         self.info.ui.parent.updated = True
 

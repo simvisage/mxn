@@ -66,11 +66,19 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    fabric_key = KeyRef(default='default_fabric', db=ReinfFabric.db, keys='fabric_keys', law_input=True)
-    fabric = Property(Instance(ReinfFabric), depends_on='fabric_key')
-    @cached_property
-    def _get_fabric(self):
-        return ReinfFabric.db[ self.fabric_key ]
+    save_fabric = Button(label='Save current fabric')
+    def _save_fabric_fired(self):
+        self.fabric.save()
+
+    new_fabric = Button(label='Make new fabric')
+    def _new_fabric_fired(self):
+        pass
+
+    del_fabric = Button(label='Delete current fabric')
+    def _del_fabric_fired(self):
+        pass
+
+    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
@@ -120,7 +128,7 @@ class RLCTexUniform(ReinfLayoutComponent):
             lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
                                      ecb_law_type=self.ecb_law_type,
-                                     fabric_key=self.fabric_key
+                                     fabric=self.fabric
                                      ))
         return lst
 
@@ -168,22 +176,6 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
 
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
-
-    fabric_keys = Property
-    def _get_fabric_keys(self):
-        return ReinfFabric.db.keys()
-
     tree_view = View(VGroup(
                       Group(
                       Item('n_layers'),
@@ -191,7 +183,6 @@ class RLCTexUniform(ReinfLayoutComponent):
                       ),
                       Group(
                       Item('fabric_key'),
-                      Item('fabric@', show_label=False),
                       Item('ecb_law_type'),
                       Item('save_fabric', show_label=False),
                       Item('new_fabric', show_label=False),

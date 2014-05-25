@@ -13,51 +13,77 @@
 # Created on Aug 7, 2009 by: rchx
 
 from traits.api import \
-    TraitType, HasTraits, TraitError, \
+    TraitType, HasStrictTraits, TraitError, \
     Property, Button
 
 from traitsui.api import \
-     View, Item, EnumEditor
+     View, Item, EnumEditor, CompoundEditor
 
 from mxn.reinf_laws import \
      ReinfLawBase, ReinfLawFBM
 
 class KeyRef(TraitType):
 
-    def __init__(self, default=None, db=None, keys=None, **metadata):
-        self._database = db
-        self._default = default
-        self._keys = keys
+    is_mapped = True
+
+    def __init__(self, *args, **metadata):
+        if len(args) == 1:
+            self._default_key = args[0]
+        else:
+            self._default_key = None
+        db = metadata.get('db', None)
+        if db:
+            self.map = db
+        else:
+            raise ValueError, 'db not defined'
+
         super(KeyRef, self).__init__(**metadata)
 
-    def validate(self, object, name, value):
+    def validate(self, obj, name, key):
         ''' Set the trait value '''
-        if value in self._database.keys():
-            new_value = value
+
+        self.keys_name = name + '_keys'
+        keys_prop = Property(fget=lambda: self.map.keys())
+        obj.add_trait(self.keys_name, keys_prop)
+
+        if key in self.map.keys():
+            return key
         else:
-            raise TraitError, 'assigned value must be one of %s but a value of %s was provided' % \
-                (self._database.keys(), value)
-        return new_value
+            self.error(object, name, key)
 
     def get_default_value(self):
         '''Take the default value'''
-        if self._default in self._database.keys():
-            value = self._default
-        else:
-            raise TraitError, 'assigned default value must be one of %s but a value of %s was provided' % \
-                (self._database.keys(), self._default)
-        return (0, value)
+
+        keys = self.map.keys()
+        if self._default_key == None:
+            if len(keys) > 1:
+                return (0, self.map.keys()[0])
+            else:
+                raise TraitError, 'invalid key, no entries in database extension %s' % \
+                    (self.map.klass,)
+        if self._default_key in keys:
+            return (0, self._default_key)
+
+        raise TraitError, 'assigned default value must be one of %s but a value of %s was received' % \
+            (self.map.keys(), self._default_key)
+
+    def mapped_value (self, key):
+        return self.map[ key ]
+
+    def info (self):
+        keys = [ repr(x) for x in self.map.keys() ]
+        keys.sort()
+        return ' or '.join(keys)
 
     def get_editor (self, trait=None):
         return self.create_editor()
 
     def create_editor(self):
-        return EnumEditor(name=self._keys)  # ## added by RCH
-        return EnumEditor(values=self._database.keys())
+        return EnumEditor(name=self.keys_name)
 
 if __name__ == '__main__':
 
-    class UseKeyRef(HasTraits):
+    class UseKeyRef(HasStrictTraits):
         '''Testclass containing attribute of type KeyRef
         '''
         new_law = Button
@@ -65,7 +91,6 @@ if __name__ == '__main__':
             '''Adds a new fbm law to database and sets it as
             value of the ref attribute
             '''
-            print self.ref.ref_keys
             law_name = 'new_fbm_law_1'
             count = 1
             while ReinfLawBase.db.get(law_name, None):
@@ -96,13 +121,32 @@ if __name__ == '__main__':
         def _get_reinf_law_keys(self):
             return ReinfLawBase.db.keys()
 
-        ref = KeyRef(default='fbm-default', db=ReinfLawBase.db, keys='reinf_law_keys')
-        traits_view = View(Item('ref', style='simple'),
+        ref = KeyRef(db=ReinfLawBase.db)
+
+        traits_view = View(Item('ref'),
                            Item('new_law'),
                            Item('del_law'),
                           resizable=True)
 
     ukr = UseKeyRef()
+
+    print 'value of key'
+    print ukr.ref
+    print 'value of ref'
+    print ukr.ref_
+#    print 'KE1', ukr.ref_keys
+
+    ukr.ref = 'steel-default'
+
+    ukr.add_trait('one', 1)
+    print ukr.one
+
+    print 'KEYS', ukr.ref_keys
+
+    print 'value of key'
+    print ukr.ref
+    print 'value of ref'
+    print ukr.ref_
 
     ukr.configure_traits()
     '''View the testclass - the default database keys
@@ -115,6 +159,16 @@ if __name__ == '__main__':
 
     ukr.ref = 'FBM_keyref_test'
     '''Attribute of the testclass set to the new value.
+    '''
+
+    print 'value of key'
+    print ukr.ref
+    print 'value of ref'
+    print ukr.ref_
+
+    ukr.configure_traits()
+    '''View the testclass - dropdown list should include
+    the new database item.
     '''
 
     ukr.configure_traits()
