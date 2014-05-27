@@ -7,38 +7,23 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from traits.api import \
-    Float, Property, cached_property, Int, \
-    Instance, Trait, on_trait_change, Button, \
-    Str
+from etsproxy.traits.api import \
+    Float, Property, cached_property, Int, Instance, Trait, on_trait_change
 
-from traitsui.api import \
-    View, Item, VGroup, Group, HGroup, Handler, \
-    spring, UIInfo
-
+from etsproxy.traits.ui.api import \
+    View, Item, VGroup, Group
+    
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
-    ReinfLawCubic, ReinfLawBilinear, ReinfFabric
+    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, ReinfLawCubic, ReinfLawBilinear
 
 from reinf_layout_component import \
-    ReinfLayoutComponent
+    ReinfLayoutComponent, \
+    STATE_LAW_AND_GEOMETRY_CHANGE
 
 from reinf_layout_component_tex_layer import \
     RLCTexLayer
 
-from matresdev.db.simdb import \
-    SimDBClassExt, SimDBClass
-
-from reinf_fabric_handler import \
-    FabricHandler
-
-from mxn.utils import \
-    KeyRef
-
 import numpy as np
-
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
 
 class RLCTexUniform(ReinfLayoutComponent):
 
@@ -48,6 +33,14 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''total number of reinforcement layers [-]
     '''
 
+    n_rovings = Int(23, auto_set=False, enter_set=True, geo_input=True)
+    '''number of rovings in 0-direction of one composite layer of the
+    bending test [-]:
+    '''
+
+    A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
+    '''cross section of one roving [mm**2]'''
+    
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure
         to the strain at the bottom of the cross section'''
@@ -61,33 +54,34 @@ class RLCTexUniform(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         height = self.matrix_cs.geo.height
         return (eps_up + (eps_lo - eps_up) / height * self.z_ti_arr[0])
+    
+    #===========================================================================
+    # material properties 
+    #===========================================================================
 
+    sig_tex_u = Float(1216., auto_set=False, enter_set=True,
+                      law_input=True)
+    '''Ultimate textile stress measured in the tensile test [MPa]
+    '''
     #===========================================================================
     # Effective crack bridge law
     #===========================================================================
-
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
-
-    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
-
-    ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
+    ecb_law_type = Trait('fbm', dict(fbm=ReinfLawFBM,
+                                  cubic=ReinfLawCubic,
+                                  linear=ReinfLawLinear,
+                                  bilinear=ReinfLawBilinear),
+                      law_input=True)
+    '''Selector of the effective crack bridge law type
+    ['fbm', 'cubic', 'linear', 'bilinear']'''
 
     ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_key'''
+    '''Effective crack bridge law corresponding to ecb_law_type'''
     @cached_property
     def _get_ecb_law(self):
-        law = self.fabric.get_mtrl_law(self.ecb_law_type)
-        return law
+        if self.ecb_law_type == 'linear':
+            return self.ecb_law_type_(cs=self)
+        else:
+            return self.ecb_law_type_(sig_tex_u=self.sig_tex_u, cs=self)
 
     #===========================================================================
     # Distribution of reinforcement
@@ -98,7 +92,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     @cached_property
     def _get_s_tex_z(self):
         return self.matrix_cs.geo.height / (self.n_layers + 1)
-
+        
     z_ti_arr = Property(depends_on='+geo_input,matrix_cs.geo.changed')
     '''property: distance of each reinforcement layer from the top [m]:
     '''
@@ -113,6 +107,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''
     def _get_zz_ti_arr(self):
         return self.matrix_cs.geo.height - self.z_ti_arr
+        
 
     #===========================================================================
     # Discretization conform to the tex layers
@@ -125,21 +120,17 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _get_layer_lst(self):
         lst = []
         for i in range(self.n_layers):
-            lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
+            lst.append(RLCTexLayer(n_rovings=self.n_rovings, A_roving=self.A_roving, 
+                                     state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
-                                     ecb_law_type=self.ecb_law_type,
-                                     fabric=self.fabric
+                                     adapted_ecb_law=self.ecb_law
                                      ))
         return lst
-
+    
     @on_trait_change('eps_changed')
     def notify_eps_change(self):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
-
-    @on_trait_change('fabric.+geo_input,ecb_law.+input')
-    def notify_mat_change(self):
-        self.law_changed = True
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
@@ -165,37 +156,34 @@ class RLCTexUniform(ReinfLayoutComponent):
         '''Plot geometry'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_geometry(ax, clr=clr)
-
+            
     def plot_eps(self, ax):
         '''Plot strains'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_eps(ax)
-
+    
     def plot_sig(self, ax):
         '''Plot stresses'''
         for i in range(self.n_layers):
             self.layer_lst[i].plot_sig(ax)
-
+        
     tree_view = View(VGroup(
                       Group(
+                      Item('n_rovings'),
+                      Item('A_roving'),
                       Item('n_layers'),
                       label='Geometry'
                       ),
                       Group(
-                      Item('fabric'),
+                      Item('sig_tex_u'),
                       Item('ecb_law_type'),
-                      Item('save_fabric', show_label=False),
-                      Item('new_fabric', show_label=False),
-                      Item('del_fabric', show_label=False),
-                      label='Fabric material',
+                      label='Reinforcement law',
                       ),
                       springy=True,
                       ),
                 resizable=True,
-                handler=FabricHandler(),
                 buttons=['OK', 'Cancel']
                 )
-
 
 if __name__ == '__main__':
     Layers = RLCTexUniform()

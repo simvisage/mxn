@@ -12,9 +12,6 @@ from traits.api import \
 from traitsui.api import \
     View, Item, VGroup
 
-from cross_section import \
-    CrossSection
-
 from ecb_calib import \
     ECBCalib
 
@@ -23,25 +20,17 @@ from mxn_diagram import \
     
 from view import \
     MxNTreeNode
-    
-from reinf_layout import \
-    RLCTexUniform
-    
-from matrix_cross_section import \
-    MatrixCrossSection, MCSGeoRect
 
+        
 class MxNDescription(HasStrictTraits):
     '''Class controlling plotting options 
     for an instance of MxNDiagram
     '''
-    node_name = Str('<unnamed mxn diagram>')
+    node_name = Str('<unnamed>')
     
     mxn = Instance(MxNDiagram)
     def _mxn_default(self):
-        cs = CrossSection(reinf=[RLCTexUniform(n_layers=12)],
-                          matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
-                                    height=0.06), n_cj=20, mm_key='default_mixture'))
-        return MxNDiagram(cs=cs, n_eps=20)
+        return MxNDiagram(calib=ECBCalib(), n_eps=20)
     
     tree_node_list = Property(depends_on = 'mxn')
     def _get_tree_node_list(self):
@@ -74,7 +63,7 @@ class MxNDescription(HasStrictTraits):
     def plot_ax(self, ax):
         self.mxn.plot_MN_custom(ax=ax, color = self.color_, linestyle = self.linestyle_, label = self.node_name)
 
-
+  
 class MxNParametricStudy(HasStrictTraits):
     '''Contains MxN diagrams wrapped in MxNDescription classes.
     MxNDescription controls plotting of particular MxNDiagram 
@@ -84,9 +73,9 @@ class MxNParametricStudy(HasStrictTraits):
     node_name = Str('Parametric study')
     view=View()
     
-    description_lst = List()
+    description_lst = List(MxNDescription)
     def _description_lst_default(self):
-        return [ECBCalib(), MxNDescription()]
+        return [MxNDescription()]
     
     def plot(self, fig):
         ax = fig.add_subplot(1,1,1)

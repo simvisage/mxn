@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Event, on_trait_change, Callable, Instance, Trait, \
-    Button, List, Str
+    Button, List
 
 from matrix_cross_section_geo import \
     MCSGeo
@@ -30,10 +30,7 @@ from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
 from mxn.matrix_laws import \
-    MatrixMixture
-
-from matresdev.db.simdb import \
-    SimDBClass
+    MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
 
 from mxn import \
     CrossSectionComponent
@@ -41,7 +38,7 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mm.+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -49,6 +46,16 @@ class MatrixCrossSection(CrossSectionComponent):
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
+    '''
+
+    f_ck = Float(55.7, auto_set=False, enter_set=True,
+                 law_input=True)
+    '''Ultimate compression stress  [MPa]
+    '''
+
+    eps_c_u = Float(0.0033, auto_set=False, enter_set=True,
+                    law_input=True)
+    '''Strain at failure of the matrix in compression [-]
     '''
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
@@ -131,31 +138,20 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    mm_key = Trait('default_mixture', MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
+    cc_law_type = Trait('constant', dict(constant=MatrixLawBlock,
+                                         linear=MatrixLawLinear,
+                                         quadratic=MatrixLawQuadratic,
+                                         quad=MatrixLawQuad),
+                        law_input=True)
 
-    mm = Property(Instance(MatrixMixture), depends_on='mm_key')
-    @cached_property
-    def _get_mm(self):
-        mm = MatrixMixture.db[ self.mm_key ]
-        # @todo: this side effect is questionable
-        return mm
+    '''Selector of the concrete compression law type
+    ['constant', 'linear', 'quadratic', 'quad']'''
 
-    cc_law_types = Property(depends_on='mm_key')
-    @cached_property
-    def _get_cc_law_types(self):
-        return self.mm.mtrl_laws.keys()
-
-    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad',
-                                      'linear', 'bilinear'], law_input=True)
-
-    cc_law = Property(depends_on='+law_input,mm.+law_input')
+    cc_law = Property(Instance(MatrixLawBase), depends_on='+law_input')
+    '''Compressive concrete law corresponding to cc_law_type'''
     @cached_property
     def _get_cc_law(self):
-        return self.mm.get_mtrl_law(self.cc_law_type)
-
-    @on_trait_change('cc_law.+input,mm.+law_input')
-    def notify_law_change(self):
-        self.law_changed = True
+        return self.cc_law_type_(f_ck=self.f_ck, eps_c_u=self.eps_c_u, cs=self)
 
     #===========================================================================
     # Calculation of compressive stresses and forces
@@ -188,11 +184,11 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
-
+    
     #===============================================================================
     # Plotting functions
     #===============================================================================
-
+    
     def plot_eps(self, ax):
         h = self.geo.height
 
@@ -212,17 +208,17 @@ class MatrixCrossSection(CrossSectionComponent):
     def plot(self, fig):
         '''Plots the geometry + concrete law
         '''
-        ax1 = fig.add_subplot(1, 2, 1)
+        ax1 = fig.add_subplot(1,2,1)
         self.geo.plot_geometry(ax1)
-        ax2 = fig.add_subplot(1, 2, 2)
+        ax2 = fig.add_subplot(1,2,2)
         self.cc_law.plot_ax(ax2)
 
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
     node_name = 'Matrix cross section'
-
-    tree_node_list = Property(depends_on='mm_key,+law_input')
+    
+    tree_node_list = Property(depends_on='cc_law_type')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.cc_law ]
@@ -230,11 +226,12 @@ class MatrixCrossSection(CrossSectionComponent):
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
-                      Item('mm_key'),
+                      Item('f_ck'),
+                      Item('eps_c_u'),
                       Item('cc_law_type'),
                       Group(
                       Item('geo', show_label=False,
-                           editor=InstanceEditor(name='geo_lst',
+                           editor=InstanceEditor(name='geo_lst', 
                            editable=True), style='custom'),
                       label='Geometry'
                       ),
@@ -249,5 +246,10 @@ class MatrixCrossSection(CrossSectionComponent):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    mcs = MatrixCrossSection()
-    mcs.configure_traits()
+
+    from mxn import CrossSection
+
+    state = CrossSection(eps_lo=0.02)
+    ecs = MatrixCrossSection(state=state, geo=MCSGeoRect())
+
+    ecs.configure_traits()

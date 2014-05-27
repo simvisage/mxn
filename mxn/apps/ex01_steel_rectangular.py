@@ -21,11 +21,11 @@ from matplotlib.figure import \
 
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
-
+    
 from mxn.utils import \
     get_outfile
 
-bar = RLCSteelBar(x=0.1, z=0.45, area=0.0002)
+bar = RLCSteelBar(x=0.1,z=0.45, area=0.0002)
 '''Single steel reinforcement bar
 '''
 
@@ -50,6 +50,6 @@ cs.plot_geometry(ax)
 
 canvas.print_figure(get_outfile(folder_name='.mxn',
                                 file_name='ex01.png'))
-'''Saves a picture of cross section to a directory .mxn
+'''Saves a picture of cross section to a directory .mxn 
 located in user's home directory
 '''

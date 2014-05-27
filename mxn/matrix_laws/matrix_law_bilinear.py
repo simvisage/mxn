@@ -25,11 +25,9 @@ class MatrixLawBilinear(MatrixLawBase):
     def _get_mfn(self):
         '''bilinear stress-strain-diagram of the concrete
         '''
-        # (for standard concrete)
+        #(for standard concrete)
         eps_c3 = self.f_ck / self.E_c
         xdata = np.array([0.0, eps_c3, self.eps_c_u])
         ydata = np.array([0.0, self.f_ck, self.f_ck])
         return MFnLineArray(xdata=xdata, ydata=ydata, extrapolate='zero')
 
-if __name__ == '__main__':
-    MatrixLawBase.db.configure_traits()

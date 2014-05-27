@@ -6,7 +6,7 @@ Created on 31. 1. 2014
 
 from etsproxy.traits.api import \
     Float, Property, cached_property, \
-    Trait, Instance
+    Trait
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
@@ -18,12 +18,6 @@ from reinf_layout_component import \
 
 from mxn.reinf_laws import \
     ReinfLawSteel
-
-from mxn.reinf_laws import \
-    ReinfLawBase
-
-from matresdev.db.simdb import \
-    SimDBClass
 
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
@@ -39,19 +33,10 @@ class RLCBar(ReinfLayoutComponent):
     '''area of the bar
     '''
 
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-
-    ecb_law_key = Trait('fbm', ReinfLawBase.db.keys(), law_input=True)
-
-    ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_key'''
-    @cached_property
-    def _get_ecb_law(self):
-        law = ReinfLawBase.db[ self.ecb_law_key ]
-        return law
-
+    ecb_law_type = Trait('steel', dict(steel=ReinfLawSteel),
+                      law_input=True)
+    '''Selector of the effective crack bridge law type,
+    does not include textile laws'''
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar
@@ -118,7 +103,7 @@ class RLCBar(ReinfLayoutComponent):
                        label='Position'
                        ),
                        Group(
-                       Item('ecb_law_key', show_label=False),
+                       Item('ecb_law_type', show_label=False),
                        label='Reinforcement law'
                        ),
                        springy=True

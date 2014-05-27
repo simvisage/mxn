@@ -51,7 +51,7 @@ class ECBCalibModelView(ModelView):
     replot = Button()
     def _replot_fired(self):
         ax = self.figure.add_subplot(1, 1, 1)
-        self.model.calibrated_ecb_law.plot_ax(ax)
+        self.model.calibrated_ecb_law.plot(ax)
         self.data_changed = True
 
     clear = Button()

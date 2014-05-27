@@ -21,7 +21,7 @@ def test06_cross_section_mn():
     to rectangular also tested.
     '''
     ge = MCSGeoI(height=0.4, height_up=0.05, width_up=0.25, height_lo=0.05, width_lo=0.35, width_st=0.05)
-    mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_key = 'constant')    
+    mcs = MatrixCrossSection(geo=ge, n_cj=20)    
     '''Cross section geometry + matrix
     '''
     
@@ -32,8 +32,8 @@ def test06_cross_section_mn():
     '''Four steel reinforcement bars in lower flange
     '''
     
-    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39, ecb_law_key = 'fbm')
-    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01, ecb_law_key = 'fbm')
+    tl1 = RLCTexLayer(n_rovings=25, A_roving=0.5, z_coord=0.39)
+    tl2 = RLCTexLayer(n_rovings=20, A_roving=0.5, z_coord=0.01)
     '''Two layers of textile reinforcement
     '''
     

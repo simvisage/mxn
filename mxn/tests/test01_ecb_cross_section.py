@@ -18,9 +18,9 @@ import numpy as np
 def test_ecb_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     '''
-    cp = CrossSection(reinf=[RLCTexUniform(n_layers=3, ecb_law_key = 'fbm')],
+    cp = CrossSection(reinf=[RLCTexUniform(n_layers=3)],
                          matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.1, height=0.05),
-                                                         n_cj=20, cc_law_key='constant'),
+                                                         n_cj=20),
                          eps_lo=0.014,
                          eps_up= -0.0033,
                          )
