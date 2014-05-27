@@ -182,7 +182,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                       label='Geometry'
                       ),
                       Group(
-                      Item('fabric_key'),
+                      Item('fabric'),
                       Item('ecb_law_type'),
                       Item('save_fabric', show_label=False),
                       Item('new_fabric', show_label=False),

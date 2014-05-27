@@ -55,7 +55,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _del_fabric_fired(self):
         pass
 
-    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
+    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
@@ -63,7 +63,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
-        law = self.fabric.get_mtrl_law(self.ecb_law_type)
+        law = self.fabric_.get_mtrl_law(self.ecb_law_type)
         return law
 
     @on_trait_change('fabric.+geo_input,ecb_law.+input')
@@ -79,7 +79,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_n_rovings(self):
-        return int(self.matrix_cs.geo.get_width(self.z_coord) / self.fabric.s_0) - 1
+        return int(self.matrix_cs.geo.get_width(self.z_coord) / self.fabric_.s_0) - 1
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain at the level of the reinforcement layer
@@ -124,7 +124,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _get_f_t(self):
         sig_t = self.sig_t
         n_rovings = self.n_rovings
-        A_roving = self.fabric.A_roving
+        A_roving = self.fabric_.A_roving
         return sig_t * n_rovings * A_roving / self.unit_conversion_factor
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
@@ -187,5 +187,6 @@ class RLCTexLayer(ReinfLayoutComponent):
                 )
 
 if __name__ == '__main__':
-    Layer = RLCTexLayer()
-    Layer.configure_traits()
+    layer = RLCTexLayer()
+    layer.fabric = 'default_fabric'
+    layer.configure_traits()
