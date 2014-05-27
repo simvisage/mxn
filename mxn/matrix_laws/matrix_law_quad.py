@@ -40,3 +40,4 @@ class MatrixLawQuad(MatrixLawBase):
         ydata = sig_eps_fn(eps_arr)
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
+

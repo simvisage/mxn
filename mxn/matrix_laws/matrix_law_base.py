@@ -12,8 +12,8 @@ import numpy as np
 from constitutive_law import CLBase
 
 from mxn.view import \
-    MxNLeafNode
-    
+    MxNLeafNode, MxNClassExt
+
 from matresdev.db.simdb import \
     SimDBClass, SimDBClassExt
 
@@ -21,12 +21,12 @@ class MatrixLawBase(CLBase, MxNLeafNode, SimDBClass):
     '''Base class for concrete constitutive laws.'''
     # characteristic compressive stress [MPa]
     #
-    f_ck = Float(60.0, simdb = True, enter_set = True, auto_set = False, input=True)
-    eps_c_u = Float(0.0033, simdb = True, enter_set = True, auto_set = False, input=True)
-    E_c = Float(28e+3, simdb = True, enter_set=True, auto_set=False, input=True)
+    f_ck = Float(60.0, simdb=True, enter_set=True, auto_set=False, input=True)
+    eps_c_u = Float(0.0033, simdb=True, enter_set=True, auto_set=False, input=True)
+    E_c = Float(28e+3, simdb=True, enter_set=True, auto_set=False, input=True)
     node_name = 'Constitutive law'
 
-    high_strength_level = Float(50.0, simdb = True, enter_set=True, auto_set=False, input=True)
+    high_strength_level = Float(50.0, simdb=True, enter_set=True, auto_set=False, input=True)
 
     eps_arr = Property(depends_on='+input')
     @cached_property
@@ -38,9 +38,10 @@ class MatrixLawBase(CLBase, MxNLeafNode, SimDBClass):
     def _get_sig_arr(self):
         return self.mfn.ydata
 
-MatrixLawBase.db = SimDBClassExt(
-            klass = MatrixLawBase,
-            verbose = 'io',
+MatrixLawBase.db = MxNClassExt(
+            klass=MatrixLawBase,
+            verbose='io',
+            node_name='Matrix law database'
             )
 
 if __name__ == '__main__':

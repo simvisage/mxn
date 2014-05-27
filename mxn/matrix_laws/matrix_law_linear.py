@@ -24,12 +24,12 @@ class MatrixLawLinear(MatrixLawBase):
     def _get_mfn(self):
         '''bilinear stress-strain-diagram of the concrete
         '''
-        #(for standard concrete)
+        # (for standard concrete)
         f_ck = self.f_ck + 8.
         if f_ck <= self.high_strength_level:
             eps_c3 = 0.00175
             eps_cu3 = self.eps_c_u
-        #(for high strength concrete)
+        # (for high strength concrete)
         else :
             eps_c3 = (1.75 + 0.55 * (f_ck - 50.) / 40.) / 1000.
             eps_cu3 = self.eps_c_u
