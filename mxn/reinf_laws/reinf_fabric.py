@@ -87,7 +87,5 @@ ReinfFabric.db = MxNClassExt(
             node_name='Reinforcement fabrics'
             )
 
-print 'XXXXX'
-if ReinfFabric.db.get('default_fabric', None):
-    del ReinfFabric.db['default_fabric']
-ReinfFabric.db['default_fabric'] = ReinfFabric()
+if not ReinfFabric.db.get('default_fabric', None):
+    ReinfFabric.db['default_fabric'] = ReinfFabric()

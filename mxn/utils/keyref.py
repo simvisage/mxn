@@ -59,7 +59,6 @@ class KeyRef(TraitType):
             if len(keys) > 1:
                 return (0, self.map.keys()[0])
             else:
-                return (0, None)
                 raise TraitError, 'invalid key, no entries in database extension %s' % \
                     (self.map.klass,)
         if self._default_key in keys:

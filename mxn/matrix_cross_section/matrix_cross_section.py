@@ -30,10 +30,10 @@ from traitsui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
 
 from mxn.matrix_laws import \
-    MatrixMixture
-
+    MatrixLawBase, MatrixLawBlock, MatrixLawLinear, MatrixLawQuadratic, MatrixLawQuad
+    
 from matresdev.db.simdb import \
-    SimDBClass
+    SimDBClassExt, SimDBClass
 
 from mxn import \
     CrossSectionComponent
@@ -41,7 +41,22 @@ from mxn import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mm.+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed'
+
+MatrixLawBase.db = SimDBClassExt(
+            klass = MatrixLawBase,
+            verbose = 'io',
+            constants = {
+                'constant' : MatrixLawBlock(f_ck=55.7, eps_c_u = 0.0033,
+                                high_strength_level = 50.0, E_c = 28e+3),
+                'linear' : MatrixLawLinear(f_ck=55.7, eps_c_u = 0.0033,
+                                high_strength_level = 50.0, E_c = 28e+3),
+                'quad' : MatrixLawQuad(f_ck=55.7, eps_c_u = 0.0033,
+                                high_strength_level = 50.0, E_c = 28e+3),
+                'quadratic' : MatrixLawQuadratic(f_ck=55.7, eps_c_u = 0.0033,
+                                high_strength_level = 50.0, E_c = 28e+3),             
+                         }
+            )
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -49,6 +64,16 @@ class MatrixCrossSection(CrossSectionComponent):
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
+    '''
+
+    f_ck = Float(55.7, auto_set=False, enter_set=True,
+                 law_input=True)
+    '''Ultimate compression stress  [MPa]
+    '''
+
+    eps_c_u = Float(0.0033, auto_set=False, enter_set=True,
+                    law_input=True)
+    '''Strain at failure of the matrix in compression [-]
     '''
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
@@ -131,32 +156,17 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    mm_key = Trait('default_mixture', MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
+    cc_law_key = Trait(MatrixLawBase.db.keys(), law_input = True, auto_set = False, enter_set = True)
 
-    mm = Property(Instance(MatrixMixture), depends_on='mm_key')
-    @cached_property
-    def _get_mm(self):
-        mm = MatrixMixture.db[ self.mm_key ]
-        # @todo: this side effect is questionable
-        return mm
-
-    cc_law_types = Property(depends_on='mm_key')
-    @cached_property
-    def _get_cc_law_types(self):
-        return self.mm.mtrl_laws.keys()
-
-    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad',
-                                      'linear', 'bilinear'], law_input=True)
-
-    cc_law = Property(depends_on='+law_input,mm.+law_input')
+    cc_law = Property(Instance(SimDBClass), depends_on = 'cc_law_key')
     @cached_property
     def _get_cc_law(self):
-        return self.mm.get_mtrl_law(self.cc_law_type)
-
-    @on_trait_change('cc_law.+input,mm.+law_input')
-    def notify_law_change(self):
-        self.law_changed = True
-
+        law = MatrixLawBase.db[ self.cc_law_key ]
+        law.cs = self
+        law.f_ck = self.f_ck
+        law.eps_c_u = self.eps_c_u
+        return law
+    
     #===========================================================================
     # Calculation of compressive stresses and forces
     #===========================================================================
@@ -188,11 +198,11 @@ class MatrixCrossSection(CrossSectionComponent):
     @cached_property
     def _get_M(self):
         return np.trapz(self.f_ti_arr * self.z_ti_arr, self.z_ti_arr)
-
+    
     #===============================================================================
     # Plotting functions
     #===============================================================================
-
+    
     def plot_eps(self, ax):
         h = self.geo.height
 
@@ -212,17 +222,17 @@ class MatrixCrossSection(CrossSectionComponent):
     def plot(self, fig):
         '''Plots the geometry + concrete law
         '''
-        ax1 = fig.add_subplot(1, 2, 1)
+        ax1 = fig.add_subplot(1,2,1)
         self.geo.plot_geometry(ax1)
-        ax2 = fig.add_subplot(1, 2, 2)
+        ax2 = fig.add_subplot(1,2,2)
         self.cc_law.plot_ax(ax2)
 
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
     node_name = 'Matrix cross section'
-
-    tree_node_list = Property(depends_on='mm_key,+law_input')
+    
+    tree_node_list = Property(depends_on='cc_law_key')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.cc_law ]
@@ -230,11 +240,12 @@ class MatrixCrossSection(CrossSectionComponent):
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
-                      Item('mm_key'),
-                      Item('cc_law_type'),
+                      Item('f_ck'),
+                      Item('eps_c_u'),
+                      Item('cc_law_key'),
                       Group(
                       Item('geo', show_label=False,
-                           editor=InstanceEditor(name='geo_lst',
+                           editor=InstanceEditor(name='geo_lst', 
                            editable=True), style='custom'),
                       label='Geometry'
                       ),
@@ -249,5 +260,5 @@ class MatrixCrossSection(CrossSectionComponent):
                 buttons=['OK', 'Cancel'])
 
 if __name__ == '__main__':
-    mcs = MatrixCrossSection()
-    mcs.configure_traits()
+    MatrixLawBase.db.configure_traits()
+    print MatrixLawBase.db.keys()

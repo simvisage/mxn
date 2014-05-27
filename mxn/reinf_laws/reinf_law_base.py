@@ -4,17 +4,14 @@ Created on Aug 23, 2012
 @author: rch
 '''
 
-from traits.api import \
+from etsproxy.traits.api import \
     List
 
 from constitutive_law import CLBase
 
 from mxn.view import \
     MxNLeafNode
-
-from mxn.view import \
-    MxNClassExt
-
+    
 from matresdev.db.simdb import \
     SimDBClass, SimDBClassExt
 
@@ -24,10 +21,9 @@ class ReinfLawBase(CLBase, MxNLeafNode, SimDBClass):
     u0 = List([0.0, 0.0])
     node_name = 'Constitutive law'
 
-ReinfLawBase.db = MxNClassExt(
-            klass=ReinfLawBase,
-            verbose='io',
-            node_name='Reinforcement law database'
+ReinfLawBase.db = SimDBClassExt(
+            klass = ReinfLawBase,
+            verbose = 'io',
             )
 
 if __name__ == '__main__':

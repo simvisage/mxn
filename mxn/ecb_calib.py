@@ -15,7 +15,6 @@ from etsproxy.traits.ui.api import \
 
 import numpy as np
 import pylab as p
-import copy
 
 from scipy.optimize import fsolve
 
@@ -24,7 +23,7 @@ from cross_section import \
 
 from reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
-
+    
 from reinf_laws import \
     ReinfLawBase
 
@@ -53,7 +52,16 @@ class ECBCalib(MxNTreeNode):
     def _cs_default(self):
         return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
                                matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
-                                        height=0.06), n_cj=20, mm_key='default_mixture'))
+                                                            height=0.06), n_cj=20))
+
+    notify_change = Callable(None, transient=True)
+
+    modified = Event
+    @on_trait_change('cs.changed,+calib_input')
+    def _set_modified(self):
+        self.modified = True
+        if self.notify_change != None:
+            self.notify_change()
 
     u0 = Property(Array(float), depends_on='cs.changed')
     '''Construct the initial vector.
@@ -83,7 +91,7 @@ class ECBCalib(MxNTreeNode):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.cs.matrix_cs.mm.eps_c_u
+        eps_up = -self.cs.matrix_cs.eps_c_u
         eps_lo = u[0]
 
         self.cs.set(eps_lo=eps_lo, eps_up=eps_up)
@@ -119,39 +127,45 @@ class ECBCalib(MxNTreeNode):
         #   'maxiter' - maximum numbers of iterations used
         #
         return fsolve(self.get_lack_of_fit, self.u0, xtol=1.0e-5)
+    
+    calibration_lock = Bool(False)
+    '''If true, requesting calibrated ecb law never causes new calibration
+    '''
 
-    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input')
+    calibrated_ecb_law = Property(Instance(ReinfLawBase), depends_on='cs.changed,+calib_input,calibration_lock')
     '''Calibrated ecbl_mfn
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
-        print 'NEW CALIBRATION'
-        eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
-        self.n = 0
-        self.cs.reinf_components_with_state[0].fabric.save()
-        return self.cs.reinf_components_with_state[0].ecb_law
+        if self.calibration_lock == True:
+            return self.cs.reinf_components_with_state[0].ecb_law
+        else:
+            print 'NEW CALIBRATION'
+            eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
+            self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
+            self.n = 0
+            return self.cs.reinf_components_with_state[0].ecb_law
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law
     '''
     def _get_ecb_law(self):
         return self.cs.reinf_components_with_state[0].ecb_law
-
+    
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
-
-    def plot(self, fig):
+    
+    def plot(self,fig):
         self.calibrated_ecb_law.plot(fig)
-
+        
     node_name = 'ECB law calibration'
-
+    
     tree_node_list = Property
     @cached_property
     def _get_tree_node_list(self):
         return [self.cs]
-
+    
     traits_view = View(
                 Item('Mu'),
                 Item('Nu'),
@@ -160,6 +174,7 @@ class ECBCalib(MxNTreeNode):
 
     tree_view = View(VGroup(
                 Group(
+                Item('calibration_lock'),
                 Item('Mu'),
                 Item('Nu'),
                 ),

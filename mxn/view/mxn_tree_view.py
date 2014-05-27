@@ -16,7 +16,7 @@ inherit from the MxNTreeNode and supply the attributes
 
 from traits.api import \
     HasStrictTraits, Instance, Button, Event, \
-    Str, List, WeakRef, Property, cached_property
+    Str, List, WeakRef
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
@@ -29,16 +29,67 @@ from matplotlib.figure import \
     Figure
 
 from traitsui.menu import \
-    Menu
+    Menu, Action
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
 
-from mxn_tree_node import \
-    MxNTreeNode, MxNLeafNode
+from pyface.file_dialog import \
+    FileDialog
 
-from mxn_tree_view_handler import \
-    MxNTreeViewHandler, plot_self, menu_save, menu_open
+from traitsui.file_dialog import \
+    open_file, save_file
+
+import pickle
+
+class MxNTreeNode(HasStrictTraits):
+    '''Base class of all model classes that can appear in a tree node.
+    '''
+    node_name = Str('<unnamed>')
+
+    tree_node_list = List([])
+
+    view = View()
+
+    plot_state = WeakRef(transient=True)
+    '''Allows for passing a reference to cross section
+    to reinforcement layout node for purposes of plotting
+    '''
+    def __getstate__ (self):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super(HasStrictTraits, self).__getstate__()
+
+        for key in [ 'plot_state', 'plot_state_' ]:
+            if state.has_key(key):
+                del state[ key ]
+
+        return state
+
+    def plot(self, fig):
+        if self.plot_state:
+            ax = fig.add_subplot(1, 1, 1)
+            self.plot_state.plot_geometry(ax)
+        return
+
+class MxNLeafNode(HasStrictTraits):
+    '''Base class of all model classes that can appear in a tree node.
+    '''
+    node_name = Str('<unnamed>')
+
+    def plot(self, fig):
+        return
+
+plot_self = Action(name='Plot', action='plot_node')
+'''Menu action for plotting tree nodes
+'''
+menu_save = Action(name='Save', action='menu_save')
+'''Menubar action for saving the root node to file
+'''
+menu_open = Action(name='Open', action='menu_open')
+'''Menubar action for loading root node from file
+'''
+
 
 tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=True,
@@ -64,10 +115,28 @@ tree_editor = TreeEditor(
                     orientation='vertical'
                              )
 
+class MxNTreeViewHandler(Handler):
+    '''Handler for MxNTreeView class
+    '''
+    def plot_node(self, info, node):
+        '''Handles context menu action Plot for tree nodes
+        '''
+        info.object.figure.clear()
+        node.plot(info.object.figure)
+        info.object.data_changed = True
+
+    def menu_save(self, info):
+        file_name = save_file()
+        pickle.dump(info.object.root, open(file_name, 'wb'), 1)
+
+    def menu_open(self, info):
+        file_name = open_file()
+        info.object.root = pickle.load(open(file_name, 'rb'))
+
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''
-    root = Instance(HasStrictTraits)
+    root = Instance(MxNTreeNode)
 
     selected_node = Instance(HasStrictTraits)
 
@@ -104,7 +173,6 @@ class MxNTreeView(HasStrictTraits):
                              dock='tab',
                              )
                     ),
-                    id='mxntreeview_id',
                     width=0.7,
                     height=0.4,
                     buttons=['OK', 'Cancel'],

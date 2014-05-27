@@ -30,12 +30,3 @@ from mxn_parametric_study import \
 
 from mxn_parametric_study_view import \
     MxNPSView
-
-from matrix_laws import \
-    MatrixLawBase, MatrixMixture
-
-from reinf_laws import \
-    ReinfLawBase, ReinfLawFBM
-
-from view import \
-    MxNTreeView, MxNTreeNode
