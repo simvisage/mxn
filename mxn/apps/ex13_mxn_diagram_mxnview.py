@@ -5,11 +5,10 @@ Created on 2. 4. 2014
 '''
 
 from mxn import \
-    CrossSection, MxNDiagram, \
-    MatrixLawBase, ReinfLawBase
+    CrossSection, MxNDiagram
 
 from mxn.view import \
-    MxNTreeView, MxNTreeNode
+    MxNTreeView
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
