@@ -32,7 +32,7 @@ class MxNDiagram(MxNTreeNode):
         self.cs = self.calib.cs
         self.calib.notify_change = self.set_modified
         self.set_modified
-            
+
     modified = Event
     def set_modified(self):
         self.modified = True
@@ -60,21 +60,25 @@ class MxNDiagram(MxNTreeNode):
     eps_range = Property(depends_on='n_eps,modified')
     @cached_property
     def _get_eps_range(self):
+
+        eps_ttu = self.cs.reinf_components_with_state[0].ecb_law.eps_u
         eps_c_space = np.linspace(self.eps_cu, 0, self.n_eps)
-        eps_t_space = np.linspace(0, self.eps_tu, self.n_eps)
+        eps_t_up_space = np.linspace(0, eps_ttu, self.n_eps)
+        eps_t_low_space = np.linspace(0, self.eps_tu, self.n_eps)
 
         eps_ccu = 0.8 * self.eps_cu
 
-        #eps_cc = self.eps_cu * np.ones_like(eps_c_space)
+        # eps_cc = self.eps_cu * np.ones_like(eps_c_space)
         eps_cc = np.linspace(eps_ccu, self.eps_cu, self.n_eps)
-        eps_ct = self.eps_cu * np.ones_like(eps_t_space)
+        eps_ct = self.eps_cu * np.ones_like(eps_t_up_space)
         eps_tc = self.eps_tu * np.ones_like(eps_c_space)
-        eps_tt = self.eps_tu * np.ones_like(eps_t_space)
+        # eps_tt = self.eps_tu * np.ones_like(eps_t_space)
+        eps_tt = np.linspace(self.eps_tu, eps_ttu, self.n_eps)
 
         eps1 = np.vstack([eps_c_space, eps_cc])
-        eps2 = np.vstack([eps_t_space, eps_ct])
+        eps2 = np.vstack([eps_t_low_space, eps_ct])
         eps3 = np.vstack([eps_tc, eps_c_space])
-        eps4 = np.vstack([eps_tt, eps_t_space])
+        eps4 = np.vstack([eps_tt, eps_t_up_space])
 
         return np.hstack([eps1, eps2, eps3, eps4])
 
@@ -82,7 +86,7 @@ class MxNDiagram(MxNTreeNode):
     @cached_property
     def _get_n_eps_range(self):
         return self.eps_range.shape[1]
-    
+
     #===========================================================================
     # MN Diagram
     #===========================================================================
@@ -108,7 +112,7 @@ class MxNDiagram(MxNTreeNode):
     # f_eps Diagram
     #===========================================================================
 
-    current_eps_idx = Int(0) # , auto_set = False, enter_set = True)
+    current_eps_idx = Int(0)  # , auto_set = False, enter_set = True)
 
     current_eps = Property(depends_on='current_eps_idx')
     @cached_property
@@ -145,9 +149,9 @@ class MxNDiagram(MxNTreeNode):
         ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
         ax.grid(b=None, which='major')
-                
+
     def plot_MN_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
-        ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls = linestyle, label=label)
+        ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls=linestyle, label=label)
 
         ax.spines['left'].set_position('zero')
         ax.spines['bottom'].set_position('zero')
@@ -162,15 +166,15 @@ class MxNDiagram(MxNTreeNode):
     #===========================================================================
     # Visualisation related attributes
     #===========================================================================
-    
-    def plot(self,fig):
-        ax1 = fig.add_subplot(1,2,1)
+
+    def plot(self, fig):
+        ax1 = fig.add_subplot(1, 2, 1)
         self.plot_eps(ax1)
-        ax2 = fig.add_subplot(1,2,2)
+        ax2 = fig.add_subplot(1, 2, 2)
         self.plot_MN(ax2)
-        
+
     node_name = 'MxN diagram'
-    
+
     tree_node_list = Property
     @cached_property
     def _get_tree_node_list(self):

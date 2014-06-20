@@ -20,7 +20,7 @@ class ReinfLawBase(CLBase, MxNLeafNode):
 
 if __name__ == '__main__':
     from constitutive_law import ConstitutiveLawModelView
-    #ecbl = ECBLFBM()
+    # ecbl = ECBLFBM()
     ecbl = ECBLPiecewiseLinear()
-    ew = ConstitutiveLawM odelView(model = ecbl)
+    ew = ConstitutiveLawModelView(model=ecbl)
     ew.configure_traits()
