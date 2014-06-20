@@ -71,6 +71,14 @@ class KeyRef(TraitType):
     def mapped_value (self, key):
         return self.map[ key ]
 
+    def post_setattr (self, object, name, value):
+        try:
+            setattr(object, name + '_', self.mapped_value(value))
+        except:
+            # We don't need a fancy error message, because this exception
+            # should always be caught by a TraitCompound handler:
+            raise TraitError, 'Unmappable'
+
     def info (self):
         keys = [ repr(x) for x in self.map.keys() ]
         keys.sort()
@@ -148,11 +156,11 @@ if __name__ == '__main__':
     print ukr.ref
     print 'value of ref'
     print ukr.ref_
-
-    ukr.configure_traits()
-    '''View the testclass - the default database keys
-    are available in the dropdown list.
-    '''
+#
+#     ukr.configure_traits()
+#     '''View the testclass - the default database keys
+#     are available in the dropdown list.
+#     '''
 
     ReinfLawBase.db['FBM_keyref_test'] = ReinfLawFBM()
     '''Adding a new item to database.
@@ -167,18 +175,18 @@ if __name__ == '__main__':
     print 'value of ref'
     print ukr.ref_
 
-    ukr.configure_traits()
-    '''View the testclass - dropdown list should include
-    the new database item.
-    '''
-
-    ukr.configure_traits()
-    '''View the testclass - dropdown list should include
-    the new database item.
-    '''
+#     ukr.configure_traits()
+#     '''View the testclass - dropdown list should include
+#     the new database item.
+#     '''
+#
+#     ukr.configure_traits()
+#     '''View the testclass - dropdown list should include
+#     the new database item.
+#     '''
 
     del ReinfLawBase.db['FBM_keyref_test']
-    ukr.ref = 'fbm_keyref_test'
-    '''New item got deleted - further attempt at
-    referencing it raises an error.
-    '''
+#     ukr.ref = 'fbm_keyref_test'
+#     '''New item got deleted - further attempt at
+#     referencing it raises an error.
+#     '''

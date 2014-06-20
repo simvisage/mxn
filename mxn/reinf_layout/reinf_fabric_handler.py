@@ -13,7 +13,7 @@ from traitsui.api import \
 from mxn.reinf_laws import \
     ReinfFabric
 
-class FabricHandler (Handler):
+class FabricHandler(Handler):
     '''Handles adding and removing of ReinfFabric database
     objects through user interface.
     '''
@@ -49,17 +49,17 @@ class FabricHandler (Handler):
     )
 
     # Event handlers:
-    def object_new_fabric_changed (self, info):
+    def xobject_new_fabric_changed (self, info):
         if info.initialized:
             self.info = info
             self._ui = self.edit_traits(parent=info.new_fabric.control, view='new_view')
 
-    def object_del_fabric_changed (self, info):
+    def xobject_del_fabric_changed (self, info):
         if info.initialized:
             self.info = info
             self._ui = self.edit_traits(parent=info.del_fabric.control, view='del_view')
 
-    def _ok_fired (self):
+    def x_ok_fired (self):
         object = self.info.object
         if self.fabric_name == '':
             print 'Please enter fabric name!'
@@ -71,12 +71,12 @@ class FabricHandler (Handler):
             self._ui.dispose()
             self.info.ui.parent.updated = True
 
-    def _delete_fired (self):
+    def x_delete_fired (self):
         object = self.info.object
         ReinfFabric.db.__delitem__(key=object.fabric)
         object.fabric = ReinfFabric.db.inst_list[0].key
         self._ui.dispose()
         self.info.ui.parent.updated = True
 
-    def _cancel_fired (self):
+    def x_cancel_fired (self):
         self._ui.dispose()

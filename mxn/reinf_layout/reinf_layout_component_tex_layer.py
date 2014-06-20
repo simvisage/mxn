@@ -27,8 +27,8 @@ from mxn.utils import \
 from reinf_fabric_handler import \
     FabricHandler
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
@@ -55,18 +55,18 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _del_fabric_fired(self):
         pass
 
-    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
+    fabric = KeyRef(db=ReinfFabric.db)
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
-    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
+    ecb_law = Property(Instance(ReinfLawBase))  # , depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
         law = self.fabric_.get_mtrl_law(self.ecb_law_type)
         return law
 
-    @on_trait_change('fabric.+geo_input,ecb_law.+input')
+    @on_trait_change('fabric_.+geo_input,ecb_law.+input')
     def notify_mat_change(self):
         self.law_changed = True
 
@@ -74,7 +74,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    n_rovings = Property(depends_on='fabric.s_0,matrix_cs.geo.changed')
+    n_rovings = Property(depends_on='fabric_.s_0,matrix_cs.geo.changed')
     '''Number of rovings in the textile layer
     '''
     @cached_property

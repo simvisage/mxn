@@ -25,8 +25,10 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-tl1 = RLCTexLayer(z_coord=0.4)
-tl2 = RLCTexLayer(z_coord=0.45)
+tl1 = RLCTexLayer(z_coord=0.4, fabric='default_fabric')
+print 'x', tl1.fabric_
+
+tl2 = RLCTexLayer(z_coord=0.45, fabric='default_fabric')
 '''Two layers of textile reinforcement
 '''
 
