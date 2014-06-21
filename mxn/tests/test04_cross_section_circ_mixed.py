@@ -57,7 +57,7 @@ def test_cross_section_mn():
                              )
 
     tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
-    tl1.fabric.set(s_0=0.0247, A_roving=0.5)
+    tl1.fabric_.set(s_0=0.0247, A_roving=0.5)
 
     assert np.allclose([cs.M, cs.N], [1236.3684520623658, -9300.9390846971837])
     bar_lst[3].area = 0.0004

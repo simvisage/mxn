@@ -34,7 +34,7 @@ def test_cross_section_mn():
                          )
 
     tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
-    tl1.fabric.set(s_0=0.018, A_roving=0.461)
+    tl1.fabric_.set(s_0=0.018, A_roving=0.461)
 
     assert np.allclose([cs.M, cs.N], [433.45620169134492, -2247.2883277004325])
     tl1.z_coord = 0.1
