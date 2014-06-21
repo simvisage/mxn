@@ -7,7 +7,7 @@ Created on 31. 1. 2014
 from traits.api import \
     Float, Property, cached_property, \
     Int, Instance, Trait, on_trait_change, \
-    Button
+    Button, Event
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
@@ -27,35 +27,19 @@ from mxn.utils import \
 from reinf_fabric_handler import \
     FabricHandler
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,+law_input,ecb_law.+input'
 
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
-    node_name = 'Textile layer'
-
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
+    fabric_changed = Event
 
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
-
-    fabric = KeyRef(db=ReinfFabric.db)
+    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
@@ -140,6 +124,24 @@ class RLCTexLayer(ReinfLayoutComponent):
     @cached_property
     def _get_M(self):
         return self.f_t * self.z_coord
+
+    #===========================================================================
+    # UI-related functionality
+    #===========================================================================
+
+    node_name = 'Textile layer'
+
+    save_fabric = Button(label='Save current fabric')
+    def _save_fabric_fired(self):
+        self.fabric.save()
+
+    new_fabric = Button(label='Make new fabric')
+    def _new_fabric_fired(self):
+        pass
+
+    del_fabric = Button(label='Delete current fabric')
+    def _del_fabric_fired(self):
+        pass
 
     def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''

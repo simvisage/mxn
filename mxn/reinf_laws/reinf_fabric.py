@@ -6,7 +6,7 @@ Created on 23. 4. 2014
 
 from traits.api import \
     Property, cached_property, Dict, Str, \
-    Float, on_trait_change
+    Float, on_trait_change, List, WeakRef
 
 from traitsui.api import \
     View, Item
@@ -31,6 +31,8 @@ from reinf_law_fbm import \
 
 from reinf_law_linear import \
     ReinfLawLinear
+
+import weakref
 
 basic_laws = {'bilinear':
                ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
@@ -70,6 +72,40 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     def get_mtrl_law(self, key):
         law = self.named_mtrl_laws[key]
         return law
+
+    #===========================================================================
+    # Management of backward links
+    #===========================================================================
+
+    state_link_lst = List()
+    '''List of backward links to objects using the fabric
+    '''
+    def _state_link_lst_default(self):
+        return []
+
+    @on_trait_change('+geo_input')
+    def notify_change(self):
+        for link in self.state_link_lst:
+            if link():
+                '''notifying change '''
+                link().fabric_changed = True
+
+    def add_link(self, link_to_add):
+        '''Adding a backward link to the list - to be called
+        from objects using the fabric
+        '''
+        if link_to_add not in self.state_link_lst:
+            self.state_link_lst.append(weakref.ref(link_to_add))
+
+    def del_link(self, link_to_del):
+        '''Removing a backward link from the list - to be called
+        from objects using the fabric
+        '''
+        self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
+
+    #===========================================================================
+    # UI-related functionality
+    #===========================================================================
 
     tree_node_list = Property(depends_on='mtrl_laws')
     @cached_property
