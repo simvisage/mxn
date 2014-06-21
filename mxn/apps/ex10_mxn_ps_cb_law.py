@@ -29,7 +29,7 @@ from mxn.utils import \
 
 ge = MCSGeoRect(height=0.06, width=0.14)
 mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_type='constant')
-uni_layers = RLCTexUniform(n_layers=12, ecb_law_key='fbm')
+uni_layers = RLCTexUniform(n_layers=12, ecb_law_type='fbm')
 
 uni_layers.ecb_law.sig_tex_u = 1200.13
 '''
@@ -46,11 +46,11 @@ canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1, 1, 1)
 
 mxn.plot_MN_custom(ax, color='black', linestyle='-', linewidth=2.0, label='fbm')
-uni_layers.ecb_law_key = 'bilinear'
+uni_layers.ecb_law_type = 'bilinear'
 mxn.plot_MN_custom(ax, color='black', linestyle='--', linewidth=2.0, label='bilinear')
-uni_layers.ecb_law_key = 'linear'
+uni_layers.ecb_law_type = 'linear'
 mxn.plot_MN_custom(ax, color='black', linestyle='-.', linewidth=2.0, label='linear')
-uni_layers.ecb_law_key = 'cubic'
+uni_layers.ecb_law_type = 'cubic'
 mxn.plot_MN_custom(ax, color='black', linestyle=':', linewidth=2.0, label='cubic')
 
 ax.legend()

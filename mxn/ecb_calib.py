@@ -129,7 +129,7 @@ class ECBCalib(MxNTreeNode):
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
         self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
-        self.cs.reinf_components_with_state[0].fabric.save()
+        self.cs.reinf_components_with_state[0].fabric_.save()
         return self.cs.reinf_components_with_state[0].ecb_law
 
     ecb_law = Property(Instance(ReinfLawBase))

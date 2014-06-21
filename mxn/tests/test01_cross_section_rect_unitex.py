@@ -26,7 +26,7 @@ def test_cross_section_mn():
                          )
 
     cp.reinf_components_with_state[0].ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
-    cp.reinf_components_with_state[0].fabric.set(s_0=0.00416, A_roving=0.461)
+    cp.reinf_components_with_state[0].fabric_.set(s_0=0.00416, A_roving=0.461)
 
     assert np.allclose([cp.M, cp.N], [1.14513592334, -22.1303533699])
     cp.reinf[0].n_layers = 5

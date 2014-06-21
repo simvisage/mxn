@@ -19,7 +19,7 @@ def test_mxn_diagram():
     '''Test the calibrated crack bridge law.
     '''
     rf = RLCTexUniform(n_layers=12, ecb_law_type='fbm')
-    rf.fabric.set(s_0=0.0083, A_roving=0.461)
+    rf.fabric_.set(s_0=0.0083, A_roving=0.461)
 
     mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, \
             height=0.06), n_cj=20, mm_key='default_mixture', cc_law_type='quadratic')

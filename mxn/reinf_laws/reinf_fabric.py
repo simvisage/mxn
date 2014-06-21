@@ -77,7 +77,7 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     # Management of backward links
     #===========================================================================
 
-    state_link_lst = List()
+    state_link_lst = List(transient=True)
     '''List of backward links to objects using the fabric
     '''
     def _state_link_lst_default(self):

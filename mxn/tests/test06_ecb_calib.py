@@ -42,7 +42,7 @@ def test_ecb_law_calib():
     uni_layers = RLCTexUniform(n_layers=12,
                                ecb_law_type='fbm')
 
-    uni_layers.fabric.set(s_0=0.0083, A_roving=0.461)
+    uni_layers.fabric_.set(s_0=0.0083, A_roving=0.461)
 
     cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 

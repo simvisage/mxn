@@ -47,6 +47,18 @@ class KeyRef(TraitType):
         obj.add_trait(self.keys_name, keys_prop)
 
         if key in self.map.keys():
+            prechange_mapped_val = getattr(obj, name + '_')
+            try:
+                prechange_mapped_val.del_link(obj)
+            except AttributeError:
+                print 'Unable to remove reference to object from mapped value\
+                    (Backwards link management not implemented in mapped type)'
+            postchange_mapped_val = self.mapped_value(key)
+            try:
+                postchange_mapped_val.add_link(obj)
+            except AttributeError:
+                print 'Unable to pass reference to object to mapped value \
+                    (Backwards link management not implemented in mapped type)'
             return key
         else:
             self.error(object, name, key)
@@ -72,8 +84,9 @@ class KeyRef(TraitType):
         return self.map[ key ]
 
     def post_setattr (self, object, name, value):
+        val = self.mapped_value(value)
         try:
-            setattr(object, name + '_', self.mapped_value(value))
+            setattr(object, name + '_', val)
         except:
             # We don't need a fancy error message, because this exception
             # should always be caught by a TraitCompound handler:
@@ -143,6 +156,7 @@ if __name__ == '__main__':
     print ukr.ref
     print 'value of ref'
     print ukr.ref_
+
 #    print 'KE1', ukr.ref_keys
 
     ukr.ref = 'steel-default'
@@ -157,7 +171,7 @@ if __name__ == '__main__':
     print 'value of ref'
     print ukr.ref_
 #
-#     ukr.configure_traits()
+    ukr.configure_traits()
 #     '''View the testclass - the default database keys
 #     are available in the dropdown list.
 #     '''

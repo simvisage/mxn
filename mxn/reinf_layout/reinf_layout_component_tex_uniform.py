@@ -10,24 +10,19 @@ Created on Sep 4, 2012
 from traits.api import \
     Float, Property, cached_property, Int, \
     Instance, Trait, on_trait_change, Button, \
-    Str
+    Str, Event
 
 from traitsui.api import \
-    View, Item, VGroup, Group, HGroup, Handler, \
-    spring, UIInfo
+    View, Item, VGroup, Group
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
-    ReinfLawCubic, ReinfLawBilinear, ReinfFabric
+    ReinfLawBase, ReinfFabric
 
 from reinf_layout_component import \
     ReinfLayoutComponent
 
 from reinf_layout_component_tex_layer import \
     RLCTexLayer
-
-from matresdev.db.simdb import \
-    SimDBClassExt, SimDBClass
 
 from reinf_fabric_handler import \
     FabricHandler
@@ -38,11 +33,9 @@ from mxn.utils import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input,law_changed,+law_input,ecb_law.+input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,law_changed,+law_input,ecb_law.+input'
 
 class RLCTexUniform(ReinfLayoutComponent):
-
-    node_name = 'Uniform textile layers'
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
@@ -66,19 +59,9 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Effective crack bridge law
     #===========================================================================
 
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
 
     fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
+    fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
@@ -86,7 +69,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
-        law = self.fabric.get_mtrl_law(self.ecb_law_type)
+        law = self.fabric_.get_mtrl_law(self.ecb_law_type)
         return law
 
     #===========================================================================
@@ -137,7 +120,7 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             self.layer_lst[i].eps_changed = True
 
-    @on_trait_change('fabric.+geo_input,ecb_law.+input')
+    @on_trait_change('fabric_changed,ecb_law.+input')
     def notify_mat_change(self):
         self.law_changed = True
 
@@ -160,6 +143,24 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             M += self.layer_lst[i].M
         return M
+
+    #===========================================================================
+    # UI-related functionality
+    #===========================================================================
+
+    node_name = 'Uniform textile layers'
+
+    save_fabric = Button(label='Save current fabric')
+    def _save_fabric_fired(self):
+        self.fabric.save()
+
+    new_fabric = Button(label='Make new fabric')
+    def _new_fabric_fired(self):
+        pass
+
+    del_fabric = Button(label='Delete current fabric')
+    def _del_fabric_fired(self):
+        pass
 
     def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''

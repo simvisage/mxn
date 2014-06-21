@@ -37,20 +37,19 @@ class RLCTexLayer(ReinfLayoutComponent):
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    fabric_changed = Event
-
     fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
+    fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
-    ecb_law = Property(Instance(ReinfLawBase))  # , depends_on='+law_input')
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')  # , depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
         law = self.fabric_.get_mtrl_law(self.ecb_law_type)
         return law
 
-    @on_trait_change('fabric_.+geo_input,ecb_law.+input')
+    @on_trait_change('fabric_changed,ecb_law.+input')
     def notify_mat_change(self):
         self.law_changed = True
 
@@ -58,7 +57,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    n_rovings = Property(depends_on='fabric_.s_0,matrix_cs.geo.changed')
+    n_rovings = Property(depends_on='fabric_changed,matrix_cs.geo.changed')
     '''Number of rovings in the textile layer
     '''
     @cached_property
@@ -191,4 +190,6 @@ class RLCTexLayer(ReinfLayoutComponent):
 if __name__ == '__main__':
     layer = RLCTexLayer()
     layer.fabric = 'default_fabric'
+    layer.fabric_.A_roving = 0.5
+    print layer.fabric_.state_link_lst
     layer.configure_traits()
