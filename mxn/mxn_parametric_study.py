@@ -38,7 +38,7 @@ class MxNDescription(HasStrictTraits):
 
     mxn = Instance(MxNDiagram)
     def _mxn_default(self):
-        cs = CrossSection(reinf=[RLCTexUniform(n_layers=12, fabric='default_fabric')],
+        cs = CrossSection(reinf=[RLCTexUniform(n_layers=12)],
                           matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
                                     height=0.06), n_cj=20, mm_key='default_mixture'))
         return MxNDiagram(cs=cs, n_eps=20)

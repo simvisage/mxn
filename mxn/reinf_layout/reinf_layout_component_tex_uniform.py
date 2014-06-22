@@ -37,6 +37,13 @@ STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fa
 
 class RLCTexUniform(ReinfLayoutComponent):
 
+    def __init__(self, *args, **metadata):
+        '''Default value of fabric must be set here to ensure
+        it has been set before an editor for it is requested
+        '''
+        setattr(self, 'fabric', 'default_fabric')
+        super(RLCTexUniform, self).__init__(**metadata)
+
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
     '''
@@ -61,8 +68,7 @@ class RLCTexUniform(ReinfLayoutComponent):
 
 
     fabric = KeyRef(db=ReinfFabric.db, law_input=True)
-    def _fabric_default(self):
-        return 'default_fabric'
+
     fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
@@ -201,6 +207,5 @@ class RLCTexUniform(ReinfLayoutComponent):
 
 
 if __name__ == '__main__':
-    layers = RLCTexUniform()
-    layers.fabric = 'default_fabric'
-    layers.configure_traits()
+    Layers = RLCTexUniform()
+    Layers.configure_traits()

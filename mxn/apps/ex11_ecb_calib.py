@@ -31,9 +31,8 @@ n_rovings_pm = int(16 / 0.14)
 Mu_pm = 3.11 / 0.20
 
 ge = MCSGeoRect(height=0.06, width=1.0)
-mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_type='constant', mm_key='default_mixture')
+mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_type='constant')
 uni_layers = RLCTexUniform(n_layers=12,
-                           n_rovings=n_rovings_pm,
                            ecb_law_type='fbm')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])

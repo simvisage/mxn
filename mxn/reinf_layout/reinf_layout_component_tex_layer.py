@@ -34,12 +34,17 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
+    def __init__(self, *args, **metadata):
+        '''Default value of fabric must be set here to ensure
+        it has been set before an editor for it is requested
+        '''
+        setattr(self, 'fabric', 'default_fabric')
+        super(RLCTexLayer, self).__init__(**metadata)
+
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
     fabric = KeyRef(db=ReinfFabric.db, law_input=True)
-    def _fabric_default(self):
-        return 'default_fabric'
     fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
