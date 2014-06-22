@@ -32,7 +32,7 @@ from mxn.utils import \
 
 import numpy as np
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric.+geo_input'
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,law_changed,+law_input,ecb_law.+input'
 
 class RLCTexUniform(ReinfLayoutComponent):
@@ -160,7 +160,7 @@ class RLCTexUniform(ReinfLayoutComponent):
 
     save_fabric = Button(label='Save current fabric')
     def _save_fabric_fired(self):
-        self.fabric.save()
+        self.fabric_.save()
 
     new_fabric = Button(label='Make new fabric')
     def _new_fabric_fired(self):

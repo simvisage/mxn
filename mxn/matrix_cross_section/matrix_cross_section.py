@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float, Property, cached_property, Int, \
     Event, on_trait_change, Callable, Instance, Trait, \
-    Button, List, Str
+    Button, List, Str, Event
 
 from matrix_cross_section_geo import \
     MCSGeo
@@ -40,12 +40,21 @@ from mxn import \
 
 import numpy as np
 
+from mxn.utils import \
+    KeyRef
+
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mm.+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mixture_changed'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
     '''
+    def __init__(self, *args, **metadata):
+        '''Default value of mixture must be set here to ensure
+        it has been set before an editor for it is requested
+        '''
+        setattr(self, 'mixture', 'default_mixture')
+        super(MatrixCrossSection, self).__init__(**metadata)
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
@@ -131,29 +140,24 @@ class MatrixCrossSection(CrossSectionComponent):
     # Compressive concrete constitutive law
     #===========================================================================
 
-    mm_key = Trait('default_mixture', MatrixMixture.db.keys(), law_input=True, auto_set=False, enter_set=True)
+    mixture = KeyRef(db=MatrixMixture.db, law_input=True)
 
-    mm = Property(Instance(MatrixMixture), depends_on='mm_key')
-    @cached_property
-    def _get_mm(self):
-        mm = MatrixMixture.db[ self.mm_key ]
-        # @todo: this side effect is questionable
-        return mm
+    mixture_changed = Event
 
-    cc_law_types = Property(depends_on='mm_key')
+    cc_law_types = Property(depends_on='mixture')
     @cached_property
     def _get_cc_law_types(self):
-        return self.mm.mtrl_laws.keys()
+        return self.mixture_.mtrl_laws.keys()
 
     cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad',
                                       'linear', 'bilinear'], law_input=True)
 
-    cc_law = Property(depends_on='+law_input,mm.+law_input')
+    cc_law = Property(depends_on='+law_input,mixture_changed')
     @cached_property
     def _get_cc_law(self):
-        return self.mm.get_mtrl_law(self.cc_law_type)
+        return self.mixture_.get_mtrl_law(self.cc_law_type)
 
-    @on_trait_change('cc_law.+input,mm.+law_input')
+    @on_trait_change('cc_law.+input,mixture_changed')
     def notify_law_change(self):
         self.law_changed = True
 
@@ -222,7 +226,7 @@ class MatrixCrossSection(CrossSectionComponent):
     #===========================================================================
     node_name = 'Matrix cross section'
 
-    tree_node_list = Property(depends_on='mm_key,+law_input')
+    tree_node_list = Property(depends_on='mixture_changed,+law_input')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.cc_law ]
@@ -230,7 +234,7 @@ class MatrixCrossSection(CrossSectionComponent):
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
-                      Item('mm_key'),
+                      Item('mixture'),
                       Item('cc_law_type'),
                       Group(
                       Item('geo', show_label=False,

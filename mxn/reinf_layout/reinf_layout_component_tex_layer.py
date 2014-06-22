@@ -27,7 +27,7 @@ from mxn.utils import \
 from reinf_fabric_handler import \
     FabricHandler
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed'
+STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
 STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,+law_input,ecb_law.+input'
 
 class RLCTexLayer(ReinfLayoutComponent):
@@ -49,7 +49,7 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
 
-    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')  # , depends_on='+law_input')
+    ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
     '''Effective crack bridge law corresponding to ecb_law_key'''
     @cached_property
     def _get_ecb_law(self):
@@ -139,7 +139,7 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     save_fabric = Button(label='Save current fabric')
     def _save_fabric_fired(self):
-        self.fabric.save()
+        self.fabric_.save()
 
     new_fabric = Button(label='Make new fabric')
     def _new_fabric_fired(self):

@@ -37,7 +37,7 @@ def test_ecb_law_calib():
     Mu = 3.50
 
     ge = MCSGeoRect(height=0.06, width=0.2)
-    mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type='constant')
+    mcs = MatrixCrossSection(geo=ge, n_cj=20, mixture='default_mixture', cc_law_type='constant')
 
     uni_layers = RLCTexUniform(n_layers=12,
                                ecb_law_type='fbm')

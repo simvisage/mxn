@@ -40,7 +40,7 @@ class MxNDescription(HasStrictTraits):
     def _mxn_default(self):
         cs = CrossSection(reinf=[RLCTexUniform(n_layers=12)],
                           matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
-                                    height=0.06), n_cj=20, mm_key='default_mixture'))
+                                    height=0.06), n_cj=20, mixture='default_mixture'))
         return MxNDiagram(cs=cs, n_eps=20)
 
     tree_node_list = Property(depends_on='mxn')

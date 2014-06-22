@@ -22,7 +22,7 @@ def test_mxn_diagram():
     rf.fabric_.set(s_0=0.0083, A_roving=0.461)
 
     mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, \
-            height=0.06), n_cj=20, mm_key='default_mixture', cc_law_type='quadratic')
+            height=0.06), n_cj=20, mixture='default_mixture', cc_law_type='quadratic')
     cs1 = CrossSection(reinf=[rf], matrix_cs=mx)
 
     c = ECBCalib(Mu=3.49, cs=cs1)

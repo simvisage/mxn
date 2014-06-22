@@ -53,7 +53,7 @@ class ECBCalib(MxNTreeNode):
     def _cs_default(self):
         return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
                                matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
-                                        height=0.06), n_cj=20, mm_key='default_mixture'))
+                                        height=0.06), n_cj=20, mixture='default_mixture'))
 
     u0 = Property(Array(float), depends_on='cs.changed')
     '''Construct the initial vector.
@@ -83,7 +83,7 @@ class ECBCalib(MxNTreeNode):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.cs.matrix_cs.mm.eps_c_u
+        eps_up = -self.cs.matrix_cs.mixture_.eps_c_u
         eps_lo = u[0]
 
         self.cs.set(eps_lo=eps_lo, eps_up=eps_up)

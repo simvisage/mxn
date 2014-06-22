@@ -87,7 +87,6 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     def notify_change(self):
         for link in self.state_link_lst:
             if link():
-                '''notifying change '''
                 link().fabric_changed = True
 
     def add_link(self, link_to_add):

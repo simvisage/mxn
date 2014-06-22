@@ -6,7 +6,7 @@ Created on Aug 23, 2012
 
 from traits.api import \
     Property, cached_property, Dict, Str, Float, \
-    WeakRef, on_trait_change, Event
+    WeakRef, on_trait_change, Event, List
 
 from traitsui.api import \
     View, Item
@@ -34,7 +34,7 @@ from matrix_law_quad import \
 from matrix_law_quadratic import \
     MatrixLawQuadratic
 
-STATE_LAW_CHANGE = '+law_input'
+import weakref
 
 class MatrixMixture(MxNTreeNode, SimDBClass):
     '''Base class for concrete constitutive laws.'''
@@ -64,12 +64,45 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
         law.eps_c_u = self.eps_c_u
         return law
 
+    #===========================================================================
+    # Management of backward links
+    #===========================================================================
+
+    state_link_lst = List(transient=True)
+    '''List of backward links to objects using the fabric
+    '''
+    def _state_link_lst_default(self):
+        return []
+
+    @on_trait_change('+law_input')
+    def notify_change(self):
+        for link in self.state_link_lst:
+            if link():
+                link().mixture_changed = True
+
+    def add_link(self, link_to_add):
+        '''Adding a backward link to the list - to be called
+        from objects using the fabric
+        '''
+        if link_to_add not in self.state_link_lst:
+            self.state_link_lst.append(weakref.ref(link_to_add))
+
+    def del_link(self, link_to_del):
+        '''Removing a backward link from the list - to be called
+        from objects using the fabric
+        '''
+        self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
+
+    #===========================================================================
+    # UI-related functionality
+    #===========================================================================
+
     tree_node_list = Property(depends_on='mtrl_laws')
     @cached_property
     def _get_tree_node_list(self):
         return self.named_mtrl_laws.values()
 
-    trait_view = View(Item('f_ck'),
+    traits_view = View(Item('f_ck'),
                 Item('eps_c_u'))
 
 dflt_mxtr = MatrixMixture(mtrl_laws={'bilinear':

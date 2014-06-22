@@ -21,7 +21,7 @@ def test_cross_section_mn():
     to rectangular also tested.
     '''
     ge = MCSGeoI(height=0.4, height_up=0.05, width_up=0.25, height_lo=0.05, width_lo=0.35, width_st=0.05)
-    mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture',
+    mcs = MatrixCrossSection(geo=ge, n_cj=20, mixture='default_mixture',
                              cc_law_type='constant')
     '''Cross section geometry + matrix
     '''
