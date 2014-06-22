@@ -18,7 +18,7 @@ from mxn.reinf_layout import \
 
 ge = MCSGeoRect(height=0.06, width=0.2)
 mcs = MatrixCrossSection(geo=ge, n_cj=20, mm_key='default_mixture', cc_law_type='quadratic')
-uni_layers = RLCTexUniform(n_layers=12, ecb_law_type='cubic')
+uni_layers = RLCTexUniform(n_layers=12, ecb_law_type='cubic', fabric='default_fabric')
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 mxn = MxNDiagram(cs=cs)

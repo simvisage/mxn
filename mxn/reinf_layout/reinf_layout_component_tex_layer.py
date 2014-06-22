@@ -37,7 +37,9 @@ class RLCTexLayer(ReinfLayoutComponent):
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
+    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
+    def _fabric_default(self):
+        return 'default_fabric'
     fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)

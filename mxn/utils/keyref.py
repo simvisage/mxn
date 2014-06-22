@@ -41,8 +41,9 @@ class KeyRef(TraitType):
 
     def validate(self, obj, name, key):
         ''' Set the trait value '''
-
+        print 'validating KeyRef value'
         self.keys_name = name + '_keys'
+        print self.keys_name, obj
         keys_prop = Property(fget=lambda: self.map.keys())
         obj.add_trait(self.keys_name, keys_prop)
 
@@ -143,7 +144,7 @@ if __name__ == '__main__':
         def _get_reinf_law_keys(self):
             return ReinfLawBase.db.keys()
 
-        ref = KeyRef(db=ReinfLawBase.db)
+        ref = KeyRef('fbm-test', db=ReinfLawBase.db)
 
         traits_view = View(Item('ref'),
                            Item('new_law'),

@@ -60,7 +60,9 @@ class RLCTexUniform(ReinfLayoutComponent):
     #===========================================================================
 
 
-    fabric = KeyRef('default_fabric', db=ReinfFabric.db, law_input=True)
+    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
+    def _fabric_default(self):
+        return 'default_fabric'
     fabric_changed = Event
 
     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
@@ -199,5 +201,6 @@ class RLCTexUniform(ReinfLayoutComponent):
 
 
 if __name__ == '__main__':
-    Layers = RLCTexUniform()
-    Layers.configure_traits()
+    layers = RLCTexUniform()
+    layers.fabric = 'default_fabric'
+    layers.configure_traits()
