@@ -5,7 +5,7 @@ Created on 14. 4. 2014
 '''
 
 from traits.api import \
-    HasStrictTraits, Str, List, WeakRef
+    HasStrictTraits, Str, List, WeakRef, HasTraits
 
 from traitsui.api import \
     View

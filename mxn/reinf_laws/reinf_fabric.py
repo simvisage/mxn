@@ -6,7 +6,8 @@ Created on 23. 4. 2014
 
 from traits.api import \
     Property, cached_property, Dict, Str, \
-    Float, on_trait_change, List, WeakRef
+    Float, on_trait_change, List, WeakRef, \
+    Trait
 
 from traitsui.api import \
     View, Item
@@ -31,6 +32,9 @@ from reinf_law_fbm import \
 
 from reinf_law_linear import \
     ReinfLawLinear
+#
+# from mxn.utils import \
+#     KeyRef
 
 import weakref
 
@@ -72,6 +76,15 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     def get_mtrl_law(self, key):
         law = self.named_mtrl_laws[key]
         return law
+
+#     def link_mat_laws(self, obj, trait_name):
+#         if trait_name in obj.trait_names():
+#             obj.remove_trait(trait_name)
+#         print 'linking fabric law database to reinforcement element %s' % obj
+#         print obj.trait_names()
+#         law_trait = Trait('fbm', self.named_mtrl_laws)
+#         obj.add_trait(trait_name, law_trait)
+#         print obj.trait_names()
 
     #===========================================================================
     # Management of backward links
