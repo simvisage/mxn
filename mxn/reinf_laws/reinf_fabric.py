@@ -52,7 +52,7 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     A_roving = Float(0.461, auto_set=False, enter_set=True, geo_input=True)
     '''Cross section of one roving [mm**2]'''
 
-    s_0 = Float(0.02, auto_set=False, enter_set=True, geo_input=True)
+    s_0 = Float(0.0083, auto_set=False, enter_set=True, geo_input=True)
     '''Distance between rovings oriented in 0-direction [m]'''
 
     s_90 = Float(0.02, auto_set=False, enter_set=True, geo_input=True)

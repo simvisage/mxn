@@ -38,8 +38,8 @@ uni_layers = RLCTexUniform(n_layers=12,
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)
 
-eps_lo1, eps_up1 = mcs.eps_c_u, -mcs.eps_c_u
-eps_lo2, eps_up2 = -mcs.eps_c_u, mcs.eps_c_u
+eps_lo1, eps_up1 = mcs.mixture_.eps_c_u, -mcs.mixture_.eps_c_u
+eps_lo2, eps_up2 = -mcs.mixture_.eps_c_u, mcs.mixture_.eps_c_u
 
 # 1st calibration
 cs.set(eps_up=eps_up1, eps_lo=eps_lo1)
@@ -71,7 +71,7 @@ print 'M = ', cs.M
 print 'N = ', cs.N
 
 # 3rd calibration - change ecb law type
-uni_layers.ecb_law_key = 'linear'
+uni_layers.ecb_law_type = 'linear'
 calib_law = calib.calibrated_ecb_law
 
 cs.set(eps_up=eps_up1, eps_lo=eps_lo1)
@@ -87,7 +87,7 @@ print 'M = ', cs.M
 print 'N = ', cs.N
 
 # 4th calibration - change f_ck
-mcs.f_ck = 60.0
+mcs.mixture_.f_ck = 60.0
 calib_law = calib.calibrated_ecb_law
 
 cs.set(eps_up=eps_up1, eps_lo=eps_lo1)

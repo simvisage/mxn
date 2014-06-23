@@ -51,14 +51,14 @@ class KeyRef(TraitType):
             try:
                 prechange_mapped_val.del_link(obj)
             except AttributeError:
-                print 'Unable to remove reference to object from mapped value\
-                    (Backwards link management not implemented in mapped type)'
+                print 'Unable to remove reference to object from mapped value of type %s\
+                    (Backwards link management not implemented in mapped type), trait name %s' % (prechange_mapped_val.__class__, name)
             postchange_mapped_val = self.mapped_value(key)
             try:
                 postchange_mapped_val.add_link(obj)
             except AttributeError:
-                print 'Unable to pass reference to object to mapped value \
-                    (Backwards link management not implemented in mapped type)'
+                print 'Unable to pass reference to object to mapped value of type %s\
+                    (Backwards link management not implemented in mapped type)' % prechange_mapped_val.__class__
             return key
         else:
             self.error(object, name, key)

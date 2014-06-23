@@ -35,7 +35,7 @@ mcs = MatrixCrossSection(geo=ge, n_cj=20,
                          cc_law_type='constant')
 uni_layers = RLCTexUniform(n_layers=12,
                            ecb_law_type='fbm')
-uni_layers.fabric.s_0 = 0.14 / 17
+uni_layers.fabric_.s_0 = 0.14 / 17
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)
