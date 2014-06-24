@@ -48,8 +48,11 @@ class RLCTexUniform(ReinfLayoutComponent):
         super(RLCTexUniform, self).__init__(**metadata)
 
     def _refresh_ecb_law(self):
+        print 'refreshing ecb law'
+        val = getattr(self, 'ecb_law')
         self.remove_trait('ecb_law')
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
+        setattr(self, 'ecb_law', val)
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]

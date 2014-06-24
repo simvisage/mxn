@@ -24,7 +24,7 @@ from matresdev.db.simdb import \
     SimDBClass
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,+law_input,ecb_law.+input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,+law_input'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
@@ -44,7 +44,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
 
         return state
 
-    @on_trait_change('ecb_law.+input')
+    @on_trait_change('ecb_law')
     def notify_law_change(self):
         # print 'law internal change - object:', self
         self.law_changed = True
@@ -77,10 +77,10 @@ class ReinfLayoutComponent(CrossSectionComponent):
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
-    tree_node_list = Property(depends_on='ecb_law_key, ecb_law_type')
+    tree_node_list = Property(depends_on='ecb_law')
     @cached_property
     def _get_tree_node_list(self):
-        return [ self.ecb_law ]
+        return [ self.ecb_law_ ]
 
 if __name__ == '__main__':
     ReinfLawBase.db.configure_traits()

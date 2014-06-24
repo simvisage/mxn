@@ -10,8 +10,7 @@ from traits.api import \
     Button, Event
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfLawLinear, ReinfLawFBM, \
-    ReinfLawCubic, ReinfLawBilinear, ReinfFabric
+    ReinfFabric
 
 from traitsui.api import \
     View, Item, VGroup, Group
@@ -45,8 +44,10 @@ class RLCTexLayer(ReinfLayoutComponent):
         super(RLCTexLayer, self).__init__(**metadata)
 
     def _refresh_ecb_law(self):
+        val = getattr(self, 'ecb_law')
         self.remove_trait('ecb_law')
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
+        setattr(self, 'ecb_law', val)
 
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
