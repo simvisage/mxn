@@ -13,7 +13,7 @@ from traits.api import \
     Str, Event
 
 from traitsui.api import \
-    View, Item, VGroup, Group
+    View, Item, VGroup, Group, UIInfo
 
 from mxn.reinf_laws import \
     ReinfLawBase, ReinfFabric
@@ -41,18 +41,26 @@ class RLCTexUniform(ReinfLayoutComponent):
         '''Default value of fabric must be set here to ensure
         it has been set before an editor for it is requested
         '''
-        setattr(self, 'fabric', 'default_fabric')
+        default_fabric = metadata.get('fabric', None)
+        if default_fabric:
+            self.fabric = default_fabric
+        else:
+            self.fabric = 'default_fabric'
+
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
         self.on_trait_change(self._refresh_ecb_law, 'fabric')
-        setattr(self, 'ecb_law', 'fbm')
+        default_ecb_law = metadata.get('ecb_law', None)
+        if default_ecb_law:
+            self.ecb_law = default_ecb_law
+        else:
+            self.ecb_law = 'fbm'
+
         super(RLCTexUniform, self).__init__(**metadata)
 
     def _refresh_ecb_law(self):
-        print 'refreshing ecb law'
-        val = getattr(self, 'ecb_law')
-        self.remove_trait('ecb_law')
+        val = self.ecb_law
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        setattr(self, 'ecb_law', val)
+        self.ecb_law = val
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''total number of reinforcement layers [-]
@@ -80,15 +88,6 @@ class RLCTexUniform(ReinfLayoutComponent):
     fabric = KeyRef(db=ReinfFabric.db, law_input=True)
 
     fabric_changed = Event
-
-#     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
-#
-#     ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-#     '''Effective crack bridge law corresponding to ecb_law_key'''
-#     @cached_property
-#     def _get_ecb_law(self):
-#         law = self.fabric_.get_mtrl_law(self.ecb_law_type)
-#         return law
 
     #===========================================================================
     # Distribution of reinforcement
@@ -119,7 +118,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    layer_lst = Property(depends_on='+geo_input,matrix_cs.geo.changed,+law_input')
+    layer_lst = Property(depends_on='+geo_input,matrix_cs.geo.changed,+law_input,ecb_law')
     '''List of reinforcement layers
     '''
     @cached_property
@@ -128,8 +127,8 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
+                                     fabric=self.fabric,
                                      ecb_law=self.ecb_law,
-                                     fabric=self.fabric
                                      ))
         return lst
 
@@ -206,6 +205,7 @@ class RLCTexUniform(ReinfLayoutComponent):
                       Item('save_fabric', show_label=False),
                       Item('new_fabric', show_label=False),
                       Item('del_fabric', show_label=False),
+                      springy=True,
                       label='Fabric material',
                       ),
                       springy=True,

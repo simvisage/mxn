@@ -71,7 +71,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
         self.state.plot_geometry(ax1)
         self.plot_geometry(ax1, clr='red')
         ax2 = fig.add_subplot(1, 2, 2)
-        self.ecb_law.plot_ax(ax2)
+        self.ecb_law_.plot_ax(ax2)
 
 
     #===========================================================================

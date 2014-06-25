@@ -22,8 +22,8 @@ def test_cross_section_mn():
 
     from mxn import ReinfLawBase
 
-    tl1 = RLCTexLayer(z_coord=0.4, ecb_law_type='fbm')
-    tl2 = RLCTexLayer(z_coord=0.45, ecb_law_type='fbm')
+    tl1 = RLCTexLayer(z_coord=0.4, ecb_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.45, ecb_law='fbm')
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,
@@ -33,7 +33,7 @@ def test_cross_section_mn():
                          eps_up=-0.0033,
                          )
 
-    tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    tl1.ecb_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
     tl1.fabric_.set(s_0=0.018, A_roving=0.461)
 
     assert np.allclose([cs.M, cs.N], [433.45620169134492, -2247.2883277004325])

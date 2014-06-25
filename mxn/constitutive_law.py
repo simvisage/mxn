@@ -6,7 +6,7 @@ Created on Aug 23, 2012
 
 from etsproxy.traits.api import \
     HasStrictTraits, Property, WeakRef, \
-    cached_property, on_trait_change, Event
+    cached_property, on_trait_change, List
 
 from etsproxy.traits.ui.api import \
     View, Item
@@ -14,6 +14,8 @@ from etsproxy.traits.ui.api import \
 import numpy as np
 
 from mathkit.mfn import MFnLineArray
+
+import weakref
 
 class CLBase(HasStrictTraits):
     '''Base class for Effective Crack Bridge Laws.'''
@@ -44,6 +46,35 @@ class CLBase(HasStrictTraits):
 
     def plot_ax(self, ax):
         ax.plot(*self.arr)
+
+    #===========================================================================
+    # Management of backward links
+    #===========================================================================
+
+    state_link_lst = List(transient=True)
+    '''List of backward links to objects using the fabric
+    '''
+    def _state_link_lst_default(self):
+        return []
+
+    @on_trait_change('+geo_input')
+    def notify_change(self):
+        for link in self.state_link_lst:
+            if link():
+                link().fabric_changed = True
+
+    def add_link(self, link_to_add):
+        '''Adding a backward link to the list - to be called
+        from objects using the fabric
+        '''
+        if link_to_add not in self.state_link_lst:
+            self.state_link_lst.append(weakref.ref(link_to_add))
+
+    def del_link(self, link_to_del):
+        '''Removing a backward link from the list - to be called
+        from objects using the fabric
+        '''
+        self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
 
     def default_traits_view(self):
 

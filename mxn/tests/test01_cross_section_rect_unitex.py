@@ -18,14 +18,14 @@ import numpy as np
 def test_cross_section_mn():
     '''Test the moment and normal force calculated for a cross section.
     '''
-    cp = CrossSection(reinf=[RLCTexUniform(n_layers=3, ecb_law_type='fbm')],
+    cp = CrossSection(reinf=[RLCTexUniform(n_layers=3, ecb_law='fbm')],
                          matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.1, height=0.05),
                                                       n_cj=20, cc_law_type='constant', mixture='default_mixture'),
                          eps_lo=0.014,
                          eps_up=-0.0033,
                          )
 
-    cp.reinf_components_with_state[0].ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    cp.reinf_components_with_state[0].ecb_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
     cp.reinf_components_with_state[0].fabric_.set(s_0=0.00416, A_roving=0.461)
 
     assert np.allclose([cp.M, cp.N], [1.14513592334, -22.1303533699])

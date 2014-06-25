@@ -47,8 +47,8 @@ basic_laws = {'bilinear':
               'fbm':
                ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
                            m=0.5),
-              'linear':
-               ReinfLawLinear(eps_u=0.014, E_tex=80000.),
+            'linear':
+             ReinfLawLinear(eps_u=0.014, E_tex=80000.),
                }
 
 class ReinfFabric(MxNTreeNode, SimDBClass):
@@ -76,15 +76,6 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     def get_mtrl_law(self, key):
         law = self.named_mtrl_laws[key]
         return law
-
-#     def link_mat_laws(self, obj, trait_name):
-#         if trait_name in obj.trait_names():
-#             obj.remove_trait(trait_name)
-#         print 'linking fabric law database to reinforcement element %s' % obj
-#         print obj.trait_names()
-#         law_trait = Trait('fbm', self.named_mtrl_laws)
-#         obj.add_trait(trait_name, law_trait)
-#         print obj.trait_names()
 
     #===========================================================================
     # Management of backward links

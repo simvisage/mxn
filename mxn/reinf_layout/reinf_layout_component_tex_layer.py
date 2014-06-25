@@ -37,32 +37,32 @@ class RLCTexLayer(ReinfLayoutComponent):
         '''Default value of fabric must be set here to ensure
         it has been set before an editor for it is requested
         '''
-        setattr(self, 'fabric', 'default_fabric')
+        default_fabric = metadata.get('fabric', None)
+        if default_fabric:
+            self.fabric = default_fabric
+        else:
+            self.fabric = 'default_fabric'
+
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
         self.on_trait_change(self._refresh_ecb_law, 'fabric')
-        setattr(self, 'ecb_law', 'fbm')
+        default_ecb_law = metadata.get('ecb_law', None)
+        if default_ecb_law:
+            self.ecb_law = default_ecb_law
+        else:
+            self.ecb_law = 'fbm'
+
         super(RLCTexLayer, self).__init__(**metadata)
 
     def _refresh_ecb_law(self):
-        val = getattr(self, 'ecb_law')
-        self.remove_trait('ecb_law')
+        val = self.ecb_law
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        setattr(self, 'ecb_law', val)
+        self.ecb_law = val
 
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
     fabric = KeyRef(db=ReinfFabric.db, law_input=True)
     fabric_changed = Event
-
-#     ecb_law_type = Trait('fbm', ['fbm', 'cubic', 'linear', 'bilinear'], law_input=True)
-#
-#     ecb_law = Property(Instance(ReinfLawBase), depends_on='+law_input')
-#     '''Effective crack bridge law corresponding to ecb_law_key'''
-#     @cached_property
-#     def _get_ecb_law(self):
-#         law = self.fabric_.get_mtrl_law(self.ecb_law_type)
-#         return law
 
     @on_trait_change('fabric_changed')
     def notify_mat_change(self):

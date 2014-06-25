@@ -59,6 +59,10 @@ class FabricHandler(Handler):
             self.info = info
             self._ui = self.edit_traits(parent=info.del_fabric.control, view='del_view')
 
+    def object_fabric_changed (self, info):
+        if info.initialized:
+            info.ui.parent.updated = True
+
     def _ok_fired (self):
         object = self.info.object
         if self.fabric_name == '':
