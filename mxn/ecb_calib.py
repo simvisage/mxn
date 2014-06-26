@@ -60,9 +60,9 @@ class ECBCalib(MxNTreeNode):
     '''
     @cached_property
     def _get_u0(self):
-        u0 = self.cs.reinf_components_with_state[0].ecb_law.u0
+        u0 = self.cs.reinf_components_with_state[0].ecb_law_.u0
 
-        eps_up = -self.cs.matrix_cs.cc_law.eps_c_u
+        eps_up = -self.cs.matrix_cs.cc_law_.eps_c_u
         eps_lo = self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(u0[0])
 
         print 'eps_up', eps_up
@@ -89,7 +89,7 @@ class ECBCalib(MxNTreeNode):
         self.cs.set(eps_lo=eps_lo, eps_up=eps_up)
 
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, u[1])
+        self.cs.reinf_components_with_state[0].ecb_law_.set_cparams(eps_tex_u, u[1])
 
         N_internal = self.cs.N
         M_internal = self.cs.M
@@ -127,16 +127,16 @@ class ECBCalib(MxNTreeNode):
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
-        self.cs.reinf_components_with_state[0].ecb_law.set_cparams(eps_tex_u, self.u_sol[1])
+        self.cs.reinf_components_with_state[0].ecb_law_.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
         self.cs.reinf_components_with_state[0].fabric_.save()
-        return self.cs.reinf_components_with_state[0].ecb_law
+        return self.cs.reinf_components_with_state[0].ecb_law_
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law
     '''
     def _get_ecb_law(self):
-        return self.cs.reinf_components_with_state[0].ecb_law
+        return self.cs.reinf_components_with_state[0].ecb_law_
 
     #===========================================================================
     # Visualisation related attributes

@@ -20,7 +20,7 @@ def test_cross_section_mn():
     '''
     cp = CrossSection(reinf=[RLCTexUniform(n_layers=3, ecb_law='fbm')],
                          matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.1, height=0.05),
-                                                      n_cj=20, cc_law_type='constant', mixture='default_mixture'),
+                                                      n_cj=20, cc_law='constant', mixture='default_mixture'),
                          eps_lo=0.014,
                          eps_up=-0.0033,
                          )

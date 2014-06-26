@@ -32,23 +32,20 @@ from reinf_law_fbm import \
 
 from reinf_law_linear import \
     ReinfLawLinear
-#
-# from mxn.utils import \
-#     KeyRef
 
 import weakref
 
-basic_laws = {'bilinear':
+basic_laws = { 'bilinear':
                ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
                                 var_a=0.8, eps_el_fraction=0.0001),
-              'cubic':
+               'cubic':
                ReinfLawCubic(sig_tex_u=1216., eps_u=0.016,
                                 var_a=-5e+6),
-              'fbm':
+               'fbm':
                ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
                            m=0.5),
-            'linear':
-             ReinfLawLinear(eps_u=0.014, E_tex=80000.),
+               'linear':
+               ReinfLawLinear(eps_u=0.014, E_tex=80000.),
                }
 
 class ReinfFabric(MxNTreeNode, SimDBClass):
@@ -91,7 +88,7 @@ class ReinfFabric(MxNTreeNode, SimDBClass):
     def notify_change(self):
         for link in self.state_link_lst:
             if link():
-                link().fabric_changed = True
+                link().material_changed = True
 
     def add_link(self, link_to_add):
         '''Adding a backward link to the list - to be called

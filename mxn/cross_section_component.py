@@ -16,7 +16,7 @@ from cross_section_state import \
 from mxn.view import \
     MxNTreeNode
 
-COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed,law_changed'
+COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed,material_changed'
 
 class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..
@@ -39,10 +39,13 @@ class CrossSectionComponent(MxNTreeNode):
 
     unit_conversion_factor = Constant(1000.0)
 
-    law_changed = Event
-    '''Notifier set to True when internal values of a constitutive law change
+    material_changed = Event
+    '''Notifier set to True when internal values of material change
     '''
 
+    law_changed = Event
+    '''Notifier set to True when internal values of constitutive law change
+    '''
     eps_changed = Event
     '''State notifier that is set to true if the cross section state has changed
     upon modifications of eps_lo and eps_up

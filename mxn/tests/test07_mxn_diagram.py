@@ -18,11 +18,11 @@ import numpy as np
 def test_mxn_diagram():
     '''Test the calibrated crack bridge law.
     '''
-    rf = RLCTexUniform(n_layers=12, ecb_law_type='fbm')
+    rf = RLCTexUniform(n_layers=12, ecb_law='fbm')
     rf.fabric_.set(s_0=0.0083, A_roving=0.461)
 
     mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, \
-            height=0.06), n_cj=20, mixture='default_mixture', cc_law_type='quadratic')
+            height=0.06), n_cj=20, mixture='default_mixture', cc_law='quadratic')
     cs1 = CrossSection(reinf=[rf], matrix_cs=mx)
 
     c = ECBCalib(Mu=3.49, cs=cs1)

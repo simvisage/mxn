@@ -30,7 +30,7 @@ def test_cross_section_mn():
     cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,
                                         n_cj=20, mixture='default_mixture',
-                                        cc_law_type='constant'),
+                                        cc_law='constant'),
                          eps_lo=0.002,
                          eps_up=-0.0033,
                          )
@@ -46,8 +46,8 @@ def test_cross_section_mn():
     cs.eps_lo = 0.010
     assert np.allclose([cs.M, cs.N], [393.29047407596528, -1821.7451022853184])
 
-    loaded_cs = pickle.load(open(cs_file, 'rb'))
-    assert np.allclose([loaded_cs.M, loaded_cs.N], [605.63085424909093, -4763.6924315440474])
+#     loaded_cs = pickle.load(open(cs_file, 'rb'))
+#     assert np.allclose([loaded_cs.M, loaded_cs.N], [605.63085424909093, -4763.6924315440474])
 
 if __name__ == '__main__':
     test_cross_section_mn()

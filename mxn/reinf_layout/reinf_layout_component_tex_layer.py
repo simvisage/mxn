@@ -27,7 +27,7 @@ from reinf_fabric_handler import \
     FabricHandler
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,material_changed,law_changed,fabric,ecb_law'
 
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
@@ -62,17 +62,12 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''distance of the layer from the top'''
 
     fabric = KeyRef(db=ReinfFabric.db, law_input=True)
-    fabric_changed = Event
-
-    @on_trait_change('fabric_changed')
-    def notify_mat_change(self):
-        self.law_changed = True
 
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
 
-    n_rovings = Property(depends_on='fabric_changed,matrix_cs.geo.changed')
+    n_rovings = Property(depends_on='fabric,material_changed,matrix_cs.geo.changed')
     '''Number of rovings in the textile layer
     '''
     @cached_property

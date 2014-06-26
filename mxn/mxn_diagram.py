@@ -30,22 +30,22 @@ class MxNDiagram(MxNTreeNode):
     # cross section
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection(notify_change_ext = self.set_modified)
+        return CrossSection(notify_change_ext=self.set_modified)
     def _cs_changed(self):
         self.cs.notify_change_ext = self.set_modified
 
     eps_cu = Property()
     def _get_eps_cu(self):
-        return -self.cs.matrix_cs_with_state.cc_law.eps_c_u
+        return -self.cs.matrix_cs_with_state.cc_law_.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
         if len(self.cs.reinf_components_with_state) == 1 and self.cs.reinf_components_with_state[0].__class__ == RLCTexUniform:
-            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law.eps_u)
+            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law_.eps_u)
         eps = 0
         for r in self.cs.reinf_components_with_state:
-            if eps < r.ecb_law.eps_u:
-                eps = r.ecb_law.eps_u
+            if eps < r.ecb_law_.eps_u:
+                eps = r.ecb_law_.eps_u
         return eps
 
     n_eps = Int(5, auto_set=False, enter_set=True)
@@ -102,7 +102,7 @@ class MxNDiagram(MxNTreeNode):
     current_eps = Property(depends_on='current_eps_idx')
     @cached_property
     def _get_current_eps(self):
-        return self.eps_range[(0, 1), self.current_eps_idx-1]
+        return self.eps_range[(0, 1), self.current_eps_idx - 1]
 
     current_MN = Property(depends_on='current_eps_idx')
     @cached_property

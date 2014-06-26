@@ -7,9 +7,9 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from traits.api import \
-    HasStrictTraits, Float, Property, cached_property, Int, \
-    Event, on_trait_change, Callable, Instance, Trait, \
-    Button, List, Str, Event
+    Float, Property, cached_property, \
+    on_trait_change, Instance, Trait, \
+    Event
 
 from matrix_cross_section_geo import \
     MCSGeo
@@ -23,17 +23,11 @@ from matrix_cross_section_geo_circ import \
 from matrix_cross_section_geo_rect import \
     MCSGeoRect
 
-from matplotlib.figure import \
-    Figure
-
 from traitsui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup, InstanceEditor
+    View, Item, Group, HGroup, InstanceEditor
 
 from mxn.matrix_laws import \
     MatrixMixture
-
-from matresdev.db.simdb import \
-    SimDBClass
 
 from mxn import \
     CrossSectionComponent
@@ -44,7 +38,7 @@ from mxn.utils import \
     KeyRef
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,+law_input,law_changed,cc_law.+input,mixture_changed'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,material_changed,law_changed,cc_law,mixture'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
@@ -53,12 +47,38 @@ class MatrixCrossSection(CrossSectionComponent):
         '''Default value of mixture must be set here to ensure
         it has been set before an editor for it is requested
         '''
-        setattr(self, 'mixture', 'default_mixture')
+        default_mixture = metadata.get('mixture', None)
+        if default_mixture:
+            self.mixture = default_mixture
+        else:
+            self.mixture = 'default_mixture'
+
+        self.add_trait('cc_law', KeyRef(db=self.mixture_.named_mtrl_laws))
+        self.on_trait_change(self._refresh_cc_law, 'mixture,material_changed')
+        default_cc_law = metadata.get('cc_law', None)
+        if default_cc_law:
+            self.cc_law = default_cc_law
+        else:
+            self.cc_law = 'quadratic'
+
         super(MatrixCrossSection, self).__init__(**metadata)
+
+    def _refresh_cc_law(self):
+        val = self.cc_law
+        self.remove_trait('cc_law')
+        self.add_trait('cc_law', KeyRef(db=self.mixture_.named_mtrl_laws))
+        self.cc_law = val
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
     '''
+
+    mixture = KeyRef(db=MatrixMixture.db)
+
+    @on_trait_change('mixture,cc_law')
+    def notify_mat_change(self):
+        if self.state:
+            self.state.changed = True
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Height of the compressive zone
@@ -137,31 +157,6 @@ class MatrixCrossSection(CrossSectionComponent):
         return self.geo.width_vct(self.z_ti_arr)
 
     #===========================================================================
-    # Compressive concrete constitutive law
-    #===========================================================================
-
-    mixture = KeyRef(db=MatrixMixture.db, law_input=True)
-
-    mixture_changed = Event
-
-    cc_law_types = Property(depends_on='mixture')
-    @cached_property
-    def _get_cc_law_types(self):
-        return self.mixture_.mtrl_laws.keys()
-
-    cc_law_type = Trait('quadratic', ['constant', 'quadratic', 'quad',
-                                      'linear', 'bilinear'], law_input=True)
-
-    cc_law = Property(depends_on='+law_input,mixture_changed')
-    @cached_property
-    def _get_cc_law(self):
-        return self.mixture_.get_mtrl_law(self.cc_law_type)
-
-    @on_trait_change('cc_law.+input,mixture_changed')
-    def notify_law_change(self):
-        self.law_changed = True
-
-    #===========================================================================
     # Calculation of compressive stresses and forces
     #===========================================================================
 
@@ -170,7 +165,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_sig_ti_arr(self):
-        return -self.cc_law.mfn_vct(-self.eps_ti_arr)
+        return -self.cc_law_.mfn_vct(-self.eps_ti_arr)
 
     f_ti_arr = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Layer force corresponding to the j-th integration point.

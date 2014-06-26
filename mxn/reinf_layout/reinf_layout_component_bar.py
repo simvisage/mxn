@@ -22,12 +22,23 @@ from mxn.reinf_laws import \
 from mxn.reinf_laws import \
     ReinfLawBase
 
-from matresdev.db.simdb import \
-    SimDBClass
+from mxn.utils import \
+    KeyRef
 
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
     '''
+    def __init__(self, *args, **metadata):
+        '''Default value of law must be set here to ensure
+        it has been set before an editor for it is requested
+        '''
+        default_law = metadata.get('ecb_law', None)
+        if default_law:
+            self.ecb_law = default_law
+        else:
+            self.ecb_law = 'steel-default'
+
+        super(RLCBar, self).__init__(**metadata)
 
     x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)
     z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)
@@ -39,19 +50,7 @@ class RLCBar(ReinfLayoutComponent):
     '''area of the bar
     '''
 
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-
-    ecb_law_key = Trait('fbm', ReinfLawBase.db.keys(), law_input=True)
-
-    ecb_law = Property(Instance(SimDBClass), depends_on='+law_input')
-    '''Effective crack bridge law corresponding to ecb_law_key'''
-    @cached_property
-    def _get_ecb_law(self):
-        law = ReinfLawBase.db[ self.ecb_law_key ]
-        return law
-
+    ecb_law = KeyRef(db=ReinfLawBase.db)
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar
@@ -73,7 +72,7 @@ class RLCBar(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_sig(self):
-        return self.ecb_law.mfn.get_value(self.eps)
+        return self.ecb_law_.mfn.get_value(self.eps)
 
     f = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''force in the bar [kN]:
@@ -118,7 +117,7 @@ class RLCBar(ReinfLayoutComponent):
                        label='Position'
                        ),
                        Group(
-                       Item('ecb_law_key', show_label=False),
+                       Item('ecb_law', show_label=False),
                        label='Reinforcement law'
                        ),
                        springy=True

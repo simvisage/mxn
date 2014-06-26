@@ -43,20 +43,20 @@ def test_cross_section_mn():
     for i in range(n_bars):
         bar_lst.append(RLCSteelBar(x=x_bar_arr[i], z=z_bar_arr[i], area=bar_area))
 
-    tl1 = RLCTexLayer(z_coord=0.45, ecb_law_type='fbm')
-    tl2 = RLCTexLayer(z_coord=0.44, ecb_law_type='fbm')
+    tl1 = RLCTexLayer(z_coord=0.45, ecb_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.44, ecb_law='fbm')
     '''Two layers of textile reinforcement
     '''
 
     cs = CrossSection(reinf=[tl1, tl2] + bar_lst,
                              matrix_cs=MatrixCrossSection(geo=ge,
                                          n_cj=20, mixture='default_mixture',
-                                         cc_law_type='constant'),
+                                         cc_law='constant'),
                              eps_lo=0.002,
                              eps_up=-0.0033,
                              )
 
-    tl1.ecb_law.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    tl1.ecb_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
     tl1.fabric_.set(s_0=0.0247, A_roving=0.5)
 
     assert np.allclose([cs.M, cs.N], [1236.3684520623658, -9300.9390846971837])

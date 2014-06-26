@@ -24,7 +24,7 @@ from matresdev.db.simdb import \
     SimDBClass
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,material_changed,+law_input'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
@@ -44,10 +44,10 @@ class ReinfLayoutComponent(CrossSectionComponent):
 
         return state
 
-    @on_trait_change('ecb_law')
-    def notify_law_change(self):
-        # print 'law internal change - object:', self
-        self.law_changed = True
+    @on_trait_change('ecb_law,fabric')
+    def notify_mat_change(self):
+        if self.state:
+            self.state.changed = True
 
     #===============================================================================
     # Plotting functions

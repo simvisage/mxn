@@ -57,22 +57,22 @@ class CLBase(HasStrictTraits):
     def _state_link_lst_default(self):
         return []
 
-    @on_trait_change('+geo_input')
+    @on_trait_change('+input')
     def notify_change(self):
         for link in self.state_link_lst:
             if link():
-                link().fabric_changed = True
+                link().law_changed = True
 
     def add_link(self, link_to_add):
         '''Adding a backward link to the list - to be called
-        from objects using the fabric
+        from objects using the law
         '''
         if link_to_add not in self.state_link_lst:
             self.state_link_lst.append(weakref.ref(link_to_add))
 
     def del_link(self, link_to_del):
         '''Removing a backward link from the list - to be called
-        from objects using the fabric
+        from objects using the law
         '''
         self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
 

@@ -28,7 +28,7 @@ def test_cross_section_mn():
     cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,
                                         n_cj=20, mixture='default_mixture',
-                                        cc_law_type='constant'),
+                                        cc_law='constant'),
                          eps_lo=0.008,
                          eps_up=-0.0033,
                          )

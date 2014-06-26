@@ -51,18 +51,20 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
 
     mtrl_laws = Dict((Str, CLBase))
 
-    named_mtrl_laws = Property(depends_on='mtrl_laws')
+    named_mtrl_laws = Property(depends_on='mtrl_laws,+law_input')
     @cached_property
     def _get_named_mtrl_laws(self):
         for key, mtrl_law in self.mtrl_laws.items():
             mtrl_law.node_name = key
+            mtrl_law.f_ck = self.f_ck
+            mtrl_law.eps_c_u = self.eps_c_u
         return self.mtrl_laws
 
-    def get_mtrl_law(self, key):
-        law = self.named_mtrl_laws[key]
-        law.f_ck = self.f_ck
-        law.eps_c_u = self.eps_c_u
-        return law
+#     def get_mtrl_law(self, key):
+#         law = self.named_mtrl_laws[key]
+#         law.f_ck = self.f_ck
+#         law.eps_c_u = self.eps_c_u
+#         return law
 
     #===========================================================================
     # Management of backward links
@@ -78,7 +80,7 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
     def notify_change(self):
         for link in self.state_link_lst:
             if link():
-                link().mixture_changed = True
+                link().material_changed = True
 
     def add_link(self, link_to_add):
         '''Adding a backward link to the list - to be called

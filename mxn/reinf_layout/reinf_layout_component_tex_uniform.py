@@ -33,7 +33,7 @@ from mxn.utils import \
 import numpy as np
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,fabric_changed,law_changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,material_changed,law_changed,fabric,ecb_law'
 
 class RLCTexUniform(ReinfLayoutComponent):
 
@@ -63,8 +63,10 @@ class RLCTexUniform(ReinfLayoutComponent):
         self.ecb_law = val
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
-    '''total number of reinforcement layers [-]
+    '''Total number of reinforcement layers [-]
     '''
+
+    fabric = KeyRef(db=ReinfFabric.db)
 
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure
@@ -79,15 +81,6 @@ class RLCTexUniform(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         height = self.matrix_cs.geo.height
         return (eps_up + (eps_lo - eps_up) / height * self.z_ti_arr[0])
-
-    #===========================================================================
-    # Effective crack bridge law
-    #===========================================================================
-
-
-    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
-
-    fabric_changed = Event
 
     #===========================================================================
     # Distribution of reinforcement
@@ -134,12 +127,8 @@ class RLCTexUniform(ReinfLayoutComponent):
 
     @on_trait_change('eps_changed')
     def notify_eps_change(self):
-        for i in range(self.n_layers):
-            self.layer_lst[i].eps_changed = True
-
-    @on_trait_change('fabric_changed')
-    def notify_mat_change(self):
-        self.law_changed = True
+        for layer in self.layer_lst:
+            layer.eps_changed = True
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Get the resulting normal force.
