@@ -65,8 +65,8 @@ class MatrixCrossSection(CrossSectionComponent):
 
     def _refresh_cc_law(self):
         val = self.cc_law
-        self.remove_trait('cc_law')
         self.add_trait('cc_law', KeyRef(db=self.mixture_.named_mtrl_laws))
+        del self.cc_law
         self.cc_law = val
 
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
@@ -214,23 +214,23 @@ class MatrixCrossSection(CrossSectionComponent):
         ax1 = fig.add_subplot(1, 2, 1)
         self.geo.plot_geometry(ax1)
         ax2 = fig.add_subplot(1, 2, 2)
-        self.cc_law.plot_ax(ax2)
+        self.cc_law_.plot_ax(ax2)
 
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
     node_name = 'Matrix cross section'
 
-    tree_node_list = Property(depends_on='mixture_changed,+law_input')
+    tree_node_list = Property(depends_on='cc_law')
     @cached_property
     def _get_tree_node_list(self):
-        return [ self.cc_law ]
+        return [ self.cc_law_ ]
 
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
                       Item('mixture'),
-                      Item('cc_law_type'),
+                      Item('cc_law'),
                       Group(
                       Item('geo', show_label=False,
                            editor=InstanceEditor(name='geo_lst',

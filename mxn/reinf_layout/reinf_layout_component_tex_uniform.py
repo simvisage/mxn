@@ -60,6 +60,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     def _refresh_ecb_law(self):
         val = self.ecb_law
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
+        del self.ecb_law
         self.ecb_law = val
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)

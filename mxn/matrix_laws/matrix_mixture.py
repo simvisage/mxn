@@ -60,12 +60,6 @@ class MatrixMixture(MxNTreeNode, SimDBClass):
             mtrl_law.eps_c_u = self.eps_c_u
         return self.mtrl_laws
 
-#     def get_mtrl_law(self, key):
-#         law = self.named_mtrl_laws[key]
-#         law.f_ck = self.f_ck
-#         law.eps_c_u = self.eps_c_u
-#         return law
-
     #===========================================================================
     # Management of backward links
     #===========================================================================

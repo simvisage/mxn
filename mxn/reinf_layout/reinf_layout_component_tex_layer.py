@@ -56,6 +56,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _refresh_ecb_law(self):
         val = self.ecb_law
         self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
+        del self.ecb_law
         self.ecb_law = val
 
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)

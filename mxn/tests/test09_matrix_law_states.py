@@ -56,8 +56,6 @@ def test_matrix_law_states():
     object_file = get_outfile(folder_name='.mxn',
                              file_name='test09_reinf_law.pkl')
     pickle.dump(cp, open(object_file, 'wb'), 1)
-
-    print [cp.M, cp.N]
     assert np.allclose([cp.M, cp.N], [1.3140950375716971, 3.8701260913315991])
 
     MatrixMixture.db['mixture-test'].f_ck = 70.0
