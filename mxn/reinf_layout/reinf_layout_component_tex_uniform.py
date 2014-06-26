@@ -8,15 +8,14 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from traits.api import \
-    Float, Property, cached_property, Int, \
-    Instance, Trait, on_trait_change, Button, \
-    Str, Event
+    Property, cached_property, Int, \
+    on_trait_change, Button
 
 from traitsui.api import \
-    View, Item, VGroup, Group, UIInfo
+    View, Item, VGroup, Group
 
-from mxn.reinf_laws import \
-    ReinfLawBase, ReinfFabric
+from mxn.material_types import \
+    MTReinfFabric
 
 from reinf_layout_component import \
     ReinfLayoutComponent, \
@@ -40,7 +39,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''Total number of reinforcement layers [-]
     '''
 
-    material = KeyRef(db=ReinfFabric.db)
+    material = KeyRef(db=MTReinfFabric.db)
 
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure

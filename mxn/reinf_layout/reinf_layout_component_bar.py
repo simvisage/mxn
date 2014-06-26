@@ -5,8 +5,7 @@ Created on 31. 1. 2014
 '''
 
 from etsproxy.traits.api import \
-    Float, Property, cached_property, \
-    Trait, Instance
+    Float, Property, cached_property
 
 from etsproxy.traits.ui.api import \
     View, Item, VGroup, Group
@@ -19,8 +18,8 @@ from reinf_layout_component import \
 from mxn.utils import \
     KeyRef
 
-from mxn.reinf_laws.reinf_bar import \
-    ReinfBar
+from mxn.material_types import \
+    MTReinfBar
 
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
@@ -32,7 +31,7 @@ class RLCBar(ReinfLayoutComponent):
     corner of reinforced cross section
     '''
 
-    material = KeyRef(db=ReinfBar.db)
+    material = KeyRef(db=MTReinfBar.db)
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar

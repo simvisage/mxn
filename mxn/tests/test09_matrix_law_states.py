@@ -14,7 +14,10 @@ from mxn.reinf_layout import \
     RLCTexUniform
 
 from mxn.matrix_laws import \
-    MatrixLawBase, MatrixLawBlock, MatrixMixture, MatrixLawQuadratic
+    MatrixLawBase, MatrixLawBlock, MatrixLawQuadratic
+
+from mxn.material_types import \
+    MTMatrixMixture
 
 import numpy as np
 
@@ -23,9 +26,9 @@ import pickle
 from mxn.utils import \
     get_outfile
 
-if MatrixMixture.db.get('mixture-test', None):
-    del MatrixMixture.db['mixture-test']
-MatrixMixture.db['mixture-test'] = MatrixMixture(f_ck=53.7,
+if MTMatrixMixture.db.get('mixture-test', None):
+    del MTMatrixMixture.db['mixture-test']
+MTMatrixMixture.db['mixture-test'] = MTMatrixMixture(f_ck=53.7,
                                                 eps_c_u=0.0033,
                                                 mtrl_laws={'constant':
                                                                 MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
@@ -34,7 +37,7 @@ MatrixMixture.db['mixture-test'] = MatrixMixture(f_ck=53.7,
                                                                 MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
                                                                     high_strength_level=50.0, E_c=28e+3),
                                          })
-MatrixMixture.db['mixture-test'].key = 'mixture-test'
+MTMatrixMixture.db['mixture-test'].key = 'mixture-test'
 
 def test_matrix_law_states():
     '''Test the moment and normal force calculated for a cross section
@@ -58,9 +61,9 @@ def test_matrix_law_states():
     pickle.dump(cp, open(object_file, 'wb'), 1)
     assert np.allclose([cp.M, cp.N], [1.3140950375716971, 3.8701260913315991])
 
-    MatrixMixture.db['mixture-test'].f_ck = 70.0
+    MTMatrixMixture.db['mixture-test'].f_ck = 70.0
     assert np.allclose([cp.M, cp.N], [1.5155334535680236, -5.0522452437834104])
-    MatrixMixture.db['mixture-test'].f_ck = 53.7
+    MTMatrixMixture.db['mixture-test'].f_ck = 53.7
     assert np.allclose([cp.M, cp.N], [1.3140950375716971, 3.8701260913315991])
 
 #     loaded_cp = pickle.load(open(object_file, 'rb'))

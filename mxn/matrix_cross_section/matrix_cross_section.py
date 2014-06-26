@@ -8,8 +8,7 @@ Created on Sep 4, 2012
 '''
 from traits.api import \
     Float, Property, cached_property, \
-    on_trait_change, Instance, Trait, \
-    Event
+    Instance
 
 from matrix_cross_section_geo import \
     MCSGeo
@@ -26,8 +25,8 @@ from matrix_cross_section_geo_rect import \
 from traitsui.api import \
     View, Item, Group, HGroup, InstanceEditor
 
-from mxn.matrix_laws import \
-    MatrixMixture
+from mxn.material_types import \
+    MTMatrixMixture
 
 from mxn import \
     CrossSectionComponent
@@ -47,7 +46,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Number of integration points.
     '''
 
-    material = KeyRef(db=MatrixMixture.db)
+    material = KeyRef(db=MTMatrixMixture.db)
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Height of the compressive zone

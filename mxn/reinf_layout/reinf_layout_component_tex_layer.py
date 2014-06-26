@@ -6,11 +6,10 @@ Created on 31. 1. 2014
 
 from traits.api import \
     Float, Property, cached_property, \
-    Int, Instance, Trait, on_trait_change, \
-    Button, Event
+    Button
 
-from mxn.reinf_laws import \
-    ReinfFabric
+from mxn.material_types import \
+    MTReinfFabric
 
 from traitsui.api import \
     View, Item, VGroup, Group
@@ -35,7 +34,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    material = KeyRef(db=ReinfFabric.db, law_input=True)
+    material = KeyRef(db=MTReinfFabric.db, law_input=True)
 
     #===========================================================================
     # Discretization conform to the tex layers

@@ -10,8 +10,8 @@ from traits.api import \
 from traitsui.api import \
     View, Item, HGroup, Handler, spring, UIInfo
 
-from mxn.reinf_laws import \
-    ReinfFabric
+from mxn.material_types import \
+    MTReinfFabric
 
 class FabricHandler(Handler):
     '''Handles adding and removing of ReinfFabric database
@@ -67,18 +67,18 @@ class FabricHandler(Handler):
         object = self.info.object
         if self.fabric_name == '':
             print 'Please enter fabric name!'
-        elif ReinfFabric.db.get(self.fabric_name, None):
+        elif MTReinfFabric.db.get(self.fabric_name, None):
             print 'Fabric name already occupied!'
         else:
-            ReinfFabric.db[self.fabric_name] = ReinfFabric()
+            MTReinfFabric.db[self.fabric_name] = MTReinfFabric()
             object.fabric = self.fabric_name
             self._ui.dispose()
             self.info.ui.parent.updated = True
 
     def _delete_fired (self):
         object = self.info.object
-        ReinfFabric.db.__delitem__(key=object.fabric)
-        object.fabric = ReinfFabric.db.inst_list[0].key
+        MTReinfFabric.db.__delitem__(key=object.fabric)
+        object.fabric = MTReinfFabric.db.inst_list[0].key
         self._ui.dispose()
         self.info.ui.parent.updated = True
 
