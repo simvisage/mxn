@@ -11,7 +11,7 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoCirc
 
 from mxn.reinf_layout import \
-    RLCSteelBar, RLCTexLayer
+    RLCBar, RLCTexLayer
 
 import numpy as np
 
@@ -41,31 +41,32 @@ def test_cross_section_mn():
     '''List of bars
     '''
     for i in range(n_bars):
-        bar_lst.append(RLCSteelBar(x=x_bar_arr[i], z=z_bar_arr[i], area=bar_area))
+        bar_lst.append(RLCBar(x=x_bar_arr[i], z=z_bar_arr[i], material='bar_d10'))
+    bar_lst[0].material_.area = bar_area
 
-    tl1 = RLCTexLayer(z_coord=0.45, ecb_law='fbm')
-    tl2 = RLCTexLayer(z_coord=0.44, ecb_law='fbm')
+    tl1 = RLCTexLayer(z_coord=0.45, material='default_fabric', material_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.44, material='default_fabric', material_law='fbm')
     '''Two layers of textile reinforcement
     '''
 
     cs = CrossSection(reinf=[tl1, tl2] + bar_lst,
                              matrix_cs=MatrixCrossSection(geo=ge,
-                                         n_cj=20, mixture='default_mixture',
-                                         cc_law='constant'),
+                                         n_cj=20, material='default_mixture',
+                                         material_law='constant'),
                              eps_lo=0.002,
                              eps_up=-0.0033,
                              )
 
-    tl1.ecb_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
-    tl1.fabric_.set(s_0=0.0247, A_roving=0.5)
+    tl1.material_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
+    tl1.material_.set(s_0=0.0247, A_roving=0.5)
 
     assert np.allclose([cs.M, cs.N], [1236.3684520623658, -9300.9390846971837])
-    bar_lst[3].area = 0.0004
-    assert np.allclose([cs.M, cs.N], [1261.0959216705535, -9400.9390846971837])
+    bar_lst[0].material_.area = 0.0004
+    assert np.allclose([cs.M, cs.N], [1349.182793672938, -9534.1983257666307])
     ge.radius = 0.33
-    assert np.allclose([cs.M, cs.N], [1633.4192537491854, -11401.438217633615])
+    assert np.allclose([cs.M, cs.N], [1716.5986624495654, -11627.673868608799])
     cs.eps_lo = 0.004
-    assert np.allclose([cs.M, cs.N], [1518.3366590381993, -7292.1434236508921])
+    assert np.allclose([cs.M, cs.N], [1630.7198301717485, -7187.7797872872561])
 
 if __name__ == '__main__':
     test_cross_section_mn()

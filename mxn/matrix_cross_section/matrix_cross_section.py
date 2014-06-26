@@ -38,47 +38,16 @@ from mxn.utils import \
     KeyRef
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,material_changed,law_changed,cc_law,mixture'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed,material_changed,law_changed,material,material_law'
 
 class MatrixCrossSection(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens.
     '''
-    def __init__(self, *args, **metadata):
-        '''Default value of mixture must be set here to ensure
-        it has been set before an editor for it is requested
-        '''
-        default_mixture = metadata.get('mixture', None)
-        if default_mixture:
-            self.mixture = default_mixture
-        else:
-            self.mixture = 'default_mixture'
-
-        self.add_trait('cc_law', KeyRef(db=self.mixture_.named_mtrl_laws))
-        self.on_trait_change(self._refresh_cc_law, 'mixture,material_changed')
-        default_cc_law = metadata.get('cc_law', None)
-        if default_cc_law:
-            self.cc_law = default_cc_law
-        else:
-            self.cc_law = 'quadratic'
-
-        super(MatrixCrossSection, self).__init__(**metadata)
-
-    def _refresh_cc_law(self):
-        val = self.cc_law
-        self.add_trait('cc_law', KeyRef(db=self.mixture_.named_mtrl_laws))
-        del self.cc_law
-        self.cc_law = val
-
     n_cj = Float(30, auto_set=False, enter_set=True, geo_input=True)
     '''Number of integration points.
     '''
 
-    mixture = KeyRef(db=MatrixMixture.db)
-
-    @on_trait_change('mixture,cc_law')
-    def notify_mat_change(self):
-        if self.state:
-            self.state.changed = True
+    material = KeyRef(db=MatrixMixture.db)
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Height of the compressive zone
@@ -165,7 +134,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_sig_ti_arr(self):
-        return -self.cc_law_.mfn_vct(-self.eps_ti_arr)
+        return -self.material_law_.mfn_vct(-self.eps_ti_arr)
 
     f_ti_arr = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Layer force corresponding to the j-th integration point.
@@ -214,23 +183,18 @@ class MatrixCrossSection(CrossSectionComponent):
         ax1 = fig.add_subplot(1, 2, 1)
         self.geo.plot_geometry(ax1)
         ax2 = fig.add_subplot(1, 2, 2)
-        self.cc_law_.plot_ax(ax2)
+        self.material_law_.plot_ax(ax2)
 
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
     node_name = 'Matrix cross section'
 
-    tree_node_list = Property(depends_on='cc_law')
-    @cached_property
-    def _get_tree_node_list(self):
-        return [ self.cc_law_ ]
-
     tree_view = View(HGroup(
                 Group(
                       Item('n_cj'),
-                      Item('mixture'),
-                      Item('cc_law'),
+                      Item('material'),
+                      Item('material_law'),
                       Group(
                       Item('geo', show_label=False,
                            editor=InstanceEditor(name='geo_lst',

@@ -8,7 +8,8 @@ Created on Sep 4, 2012
 '''
 from etsproxy.traits.api import \
     HasStrictTraits, Property, \
-    Event, on_trait_change, WeakRef, Constant
+    Event, on_trait_change, WeakRef, \
+    Constant, cached_property
 
 from cross_section_state import \
     CrossSectionState
@@ -16,11 +17,39 @@ from cross_section_state import \
 from mxn.view import \
     MxNTreeNode
 
-COMPONENT_CHANGE = '+geo_input,+law_input,geo.changed,material_changed'
+from mxn.utils import \
+    KeyRef
+
+COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'
 
 class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..
     '''
+
+    def __init__(self, *args, **metadata):
+        '''
+        '''
+        default_material = metadata.get('material', None)
+        if default_material:
+            self.material = default_material
+
+        self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
+        self.on_trait_change(self._refresh_material_law, 'material,material_changed')
+
+        default_material_law = metadata.get('material_law', self.material_.named_mtrl_laws.keys()[0])
+        self.material_law = default_material_law
+
+        super(CrossSectionComponent, self).__init__(**metadata)
+
+    def _refresh_material_law(self):
+        val = self.material_law
+        self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
+        del self.material_law
+        try:
+            self.material_law = val
+        except:
+            self.material_law = self.material_.named_mtrl_laws.keys()[0]
+
     state = WeakRef(CrossSectionState, transient=True)
     '''Strain state of a cross section
     '''
@@ -70,6 +99,14 @@ class CrossSectionComponent(MxNTreeNode):
     M = Property()
     '''Resulting moment.
     '''
+
+    #===========================================================================
+    # Auxiliary methods for tree editor
+    #===========================================================================
+    tree_node_list = Property(depends_on='material_law')
+    @cached_property
+    def _get_tree_node_list(self):
+        return [ self.material_law_ ]
 
 if __name__ == '__main__':
     pass

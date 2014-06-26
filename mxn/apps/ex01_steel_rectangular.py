@@ -14,7 +14,7 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCSteelBar
+    RLCBar
 
 from matplotlib.figure import \
     Figure
@@ -25,7 +25,7 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-bar = RLCSteelBar(x=0.1, z=0.45, area=0.0002)
+bar = RLCBar(x=0.1, z=0.45, material='bar_d10')
 '''Single steel reinforcement bar
 '''
 

@@ -25,18 +25,20 @@ def test_cross_section_mn():
     Rectangular cross section with steel reinforcement.
     '''
 
-    bar = RLCSteelBar(x=0.1, z=0.45, area=0.0002)
+    bar = RLCSteelBar(x=0.1, z=0.45, material='bar_d10')
+    bar.material_.area = 0.0002
+
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[bar],
                          matrix_cs=MatrixCrossSection(geo=ge,
-                                        n_cj=20, mixture='default_mixture',
-                                        cc_law='constant'),
+                                        n_cj=20, material='default_mixture',
+                                        material_law='constant'),
                          eps_lo=0.002,
                          eps_up=-0.0033,
                          )
 
     cs_file = get_outfile(folder_name='.mxn',
-                          file_name='test03_cs.pkl')
+                          file_name='test02_cs.pkl')
     assert np.allclose([cs.M, cs.N], [605.63085424909093, -4763.6924315440474])
     pickle.dump(cs, open(cs_file, 'wb'), 1)
 

@@ -4,21 +4,21 @@ Created on 15. 3. 2014
 @author: Vancikv
 '''
 
-'''MxN diagram for a rectangular concrete cross section 
+'''MxN diagram for a rectangular concrete cross section
 with steel reinforcement
 '''
 
 from mxn import \
     CrossSection, MxNDiagram, MxNDiagramView
-    
+
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCSteelBar
+    RLCBar
 
-bar1 = RLCSteelBar(x=0.1, z=0.45, area=0.0005)
-bar2 = RLCSteelBar(x=0.1, z=0.05, area=0.002)
+bar1 = RLCBar(x=0.1, z=0.45, material='bar_d10')
+bar2 = RLCBar(x=0.1, z=0.05, material='bar_d10')
 '''Single steel reinforcement bar
 '''
 

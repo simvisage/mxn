@@ -43,14 +43,15 @@ test_fabric_laws = {'bilinear':
 ReinfFabric.db['test_fabric'].mtrl_laws = test_fabric_laws
 ReinfFabric.db['test_fabric'].save()
 
-tex_layers = RLCTexUniform(n_layers=12)
+tex_layers = RLCTexUniform(n_layers=12, material='default_fabric')
 ge = MCSGeoRect(height=0.06, width=0.2)
 '''Cross section geometry
 '''
 
 cs = CrossSection(reinf=[tex_layers],
                   matrix_cs=MatrixCrossSection(geo=ge,
-                                               n_cj=20),
+                                               n_cj=20,
+                                               material='default_mixture'),
                   eps_lo=0.002,
                   eps_up=-0.0033
                   )

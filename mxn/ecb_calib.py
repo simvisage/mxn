@@ -51,18 +51,19 @@ class ECBCalib(MxNTreeNode):
 
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection(reinf=[RLCTexUniform(n_layers=12)],
+        return CrossSection(reinf=[RLCTexUniform(n_layers=12, material='default_fabric')],
                                matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
-                                        height=0.06), n_cj=20, mixture='default_mixture'))
+                                        height=0.06), n_cj=20, material='default_mixture',
+                                                            material_law='constant'))
 
     u0 = Property(Array(float), depends_on='cs.changed')
     '''Construct the initial vector.
     '''
     @cached_property
     def _get_u0(self):
-        u0 = self.cs.reinf_components_with_state[0].ecb_law_.u0
+        u0 = self.cs.reinf_components_with_state[0].material_law_.u0
 
-        eps_up = -self.cs.matrix_cs.cc_law_.eps_c_u
+        eps_up = -self.cs.matrix_cs.material_law_.eps_c_u
         eps_lo = self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(u0[0])
 
         print 'eps_up', eps_up
@@ -83,13 +84,13 @@ class ECBCalib(MxNTreeNode):
         self.n += 1
         # set iteration counter
         #
-        eps_up = -self.cs.matrix_cs.mixture_.eps_c_u
+        eps_up = -self.cs.matrix_cs.material_.eps_c_u
         eps_lo = u[0]
 
         self.cs.set(eps_lo=eps_lo, eps_up=eps_up)
 
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(u[0])
-        self.cs.reinf_components_with_state[0].ecb_law_.set_cparams(eps_tex_u, u[1])
+        self.cs.reinf_components_with_state[0].material_law_.set_cparams(eps_tex_u, u[1])
 
         N_internal = self.cs.N
         M_internal = self.cs.M
@@ -127,16 +128,16 @@ class ECBCalib(MxNTreeNode):
     def _get_calibrated_ecb_law(self):
         print 'NEW CALIBRATION'
         eps_tex_u = self.cs.reinf_components_with_state[0].convert_eps_lo_2_tex_u(self.u_sol[0])
-        self.cs.reinf_components_with_state[0].ecb_law_.set_cparams(eps_tex_u, self.u_sol[1])
+        self.cs.reinf_components_with_state[0].material_law_.set_cparams(eps_tex_u, self.u_sol[1])
         self.n = 0
-        self.cs.reinf_components_with_state[0].fabric_.save()
-        return self.cs.reinf_components_with_state[0].ecb_law_
+        self.cs.reinf_components_with_state[0].material_.save()
+        return self.cs.reinf_components_with_state[0].material_law_
 
     ecb_law = Property(Instance(ReinfLawBase))
     '''Not calibrated law
     '''
     def _get_ecb_law(self):
-        return self.cs.reinf_components_with_state[0].ecb_law_
+        return self.cs.reinf_components_with_state[0].material_law_
 
     #===========================================================================
     # Visualisation related attributes

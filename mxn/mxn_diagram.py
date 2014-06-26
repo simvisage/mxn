@@ -36,16 +36,16 @@ class MxNDiagram(MxNTreeNode):
 
     eps_cu = Property()
     def _get_eps_cu(self):
-        return -self.cs.matrix_cs_with_state.cc_law_.eps_c_u
+        return -self.cs.matrix_cs_with_state.material_law_.eps_c_u
 
     eps_tu = Property()
     def _get_eps_tu(self):
         if len(self.cs.reinf_components_with_state) == 1 and self.cs.reinf_components_with_state[0].__class__ == RLCTexUniform:
-            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].ecb_law_.eps_u)
+            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].material_law_.eps_u)
         eps = 0
         for r in self.cs.reinf_components_with_state:
-            if eps < r.ecb_law_.eps_u:
-                eps = r.ecb_law_.eps_u
+            if eps < r.material_law_.eps_u:
+                eps = r.material_law_.eps_u
         return eps
 
     n_eps = Int(5, auto_set=False, enter_set=True)

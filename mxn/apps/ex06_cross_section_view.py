@@ -11,9 +11,9 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCSteelBar
+    RLCBar
 
-bar = RLCSteelBar(x=0.1, z=0.45, area=0.0002)
+bar = RLCBar(x=0.1, z=0.45, material='bar_d10')
 '''Single steel reinforcement bar
 '''
 
@@ -21,9 +21,10 @@ ge = MCSGeoRect(height=0.5, width=0.3)
 '''Cross section geometry
 '''
 
+mcs = MatrixCrossSection(geo=ge, n_cj=20, material='default_mixture')
+
 cs = CrossSection(reinf=[bar],
-                  matrix_cs=MatrixCrossSection(geo=ge,
-                                               n_cj=20),
+                  matrix_cs=mcs,
                   eps_lo=0.002,
                   eps_up=-0.0033
                   )

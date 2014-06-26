@@ -16,7 +16,9 @@ from traitsui.api import \
     View, Item, VGroup, Group
 
 from reinf_layout_component import \
-    ReinfLayoutComponent
+    ReinfLayoutComponent, \
+    STATE_LAW_AND_GEOMETRY_CHANGE, \
+    STATE_AND_GEOMETRY_CHANGE
 
 import numpy as np
 
@@ -26,54 +28,25 @@ from mxn.utils import \
 from reinf_fabric_handler import \
     FabricHandler
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,material_changed,law_changed,fabric,ecb_law'
-
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
 
-    def __init__(self, *args, **metadata):
-        '''Default value of fabric must be set here to ensure
-        it has been set before an editor for it is requested
-        '''
-        default_fabric = metadata.get('fabric', None)
-        if default_fabric:
-            self.fabric = default_fabric
-        else:
-            self.fabric = 'default_fabric'
-
-        self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        self.on_trait_change(self._refresh_ecb_law, 'fabric')
-        default_ecb_law = metadata.get('ecb_law', None)
-        if default_ecb_law:
-            self.ecb_law = default_ecb_law
-        else:
-            self.ecb_law = 'fbm'
-
-        super(RLCTexLayer, self).__init__(**metadata)
-
-    def _refresh_ecb_law(self):
-        val = self.ecb_law
-        self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        del self.ecb_law
-        self.ecb_law = val
-
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    fabric = KeyRef(db=ReinfFabric.db, law_input=True)
+    material = KeyRef(db=ReinfFabric.db, law_input=True)
 
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
 
-    n_rovings = Property(depends_on='fabric,material_changed,matrix_cs.geo.changed')
+    n_rovings = Property(depends_on='material,material_changed,matrix_cs.geo.changed')
     '''Number of rovings in the textile layer
     '''
     @cached_property
     def _get_n_rovings(self):
-        return int(self.matrix_cs.geo.get_width(self.z_coord) / self.fabric_.s_0) - 1
+        return int(self.matrix_cs.geo.get_width(self.z_coord) / self.material_.s_0) - 1
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain at the level of the reinforcement layer
@@ -109,7 +82,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_sig_t(self):
-        return self.ecb_law_.mfn.get_value(self.eps_t)
+        return self.material_law_.mfn.get_value(self.eps_t)
 
     f_t = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''force at the height of reinforcement layer [kN]:
@@ -118,7 +91,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     def _get_f_t(self):
         sig_t = self.sig_t
         n_rovings = self.n_rovings
-        A_roving = self.fabric_.A_roving
+        A_roving = self.material_.A_roving
         return sig_t * n_rovings * A_roving / self.unit_conversion_factor
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
@@ -184,8 +157,8 @@ class RLCTexLayer(ReinfLayoutComponent):
                       label='Geometry'
                       ),
                       Group(
-                      Item('fabric'),
-                      Item('ecb_law'),
+                      Item('material'),
+                      Item('material_law'),
                       Item('save_fabric', show_label=False),
                       Item('new_fabric', show_label=False),
                       Item('del_fabric', show_label=False),

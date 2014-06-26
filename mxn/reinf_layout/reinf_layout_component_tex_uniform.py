@@ -19,7 +19,9 @@ from mxn.reinf_laws import \
     ReinfLawBase, ReinfFabric
 
 from reinf_layout_component import \
-    ReinfLayoutComponent
+    ReinfLayoutComponent, \
+    STATE_LAW_AND_GEOMETRY_CHANGE, \
+    STATE_AND_GEOMETRY_CHANGE
 
 from reinf_layout_component_tex_layer import \
     RLCTexLayer
@@ -32,42 +34,13 @@ from mxn.utils import \
 
 import numpy as np
 
-STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,material_changed,law_changed,fabric,ecb_law'
-
 class RLCTexUniform(ReinfLayoutComponent):
-
-    def __init__(self, *args, **metadata):
-        '''Default value of fabric must be set here to ensure
-        it has been set before an editor for it is requested
-        '''
-        default_fabric = metadata.get('fabric', None)
-        if default_fabric:
-            self.fabric = default_fabric
-        else:
-            self.fabric = 'default_fabric'
-
-        self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        self.on_trait_change(self._refresh_ecb_law, 'fabric')
-        default_ecb_law = metadata.get('ecb_law', None)
-        if default_ecb_law:
-            self.ecb_law = default_ecb_law
-        else:
-            self.ecb_law = 'fbm'
-
-        super(RLCTexUniform, self).__init__(**metadata)
-
-    def _refresh_ecb_law(self):
-        val = self.ecb_law
-        self.add_trait('ecb_law', KeyRef(db=self.fabric_.named_mtrl_laws))
-        del self.ecb_law
-        self.ecb_law = val
 
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''Total number of reinforcement layers [-]
     '''
 
-    fabric = KeyRef(db=ReinfFabric.db)
+    material = KeyRef(db=ReinfFabric.db)
 
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure
@@ -112,7 +85,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     # Discretization conform to the tex layers
     #===========================================================================
 
-    layer_lst = Property(depends_on='+geo_input,matrix_cs.geo.changed,+law_input,ecb_law')
+    layer_lst = Property(depends_on='+geo_input,matrix_cs.geo.changed,+law_input,material_law')
     '''List of reinforcement layers
     '''
     @cached_property
@@ -121,8 +94,8 @@ class RLCTexUniform(ReinfLayoutComponent):
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
                                      z_coord=self.z_ti_arr[i],
-                                     fabric=self.fabric,
-                                     ecb_law=self.ecb_law,
+                                     material=self.material,
+                                     material_law=self.material_law,
                                      ))
         return lst
 
@@ -190,8 +163,8 @@ class RLCTexUniform(ReinfLayoutComponent):
                       label='Geometry'
                       ),
                       Group(
-                      Item('fabric'),
-                      Item('ecb_law'),
+                      Item('material'),
+                      Item('material_law'),
                       Item('save_fabric', show_label=False),
                       Item('new_fabric', show_label=False),
                       Item('del_fabric', show_label=False),

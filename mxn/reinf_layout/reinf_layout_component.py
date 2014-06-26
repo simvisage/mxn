@@ -8,11 +8,10 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from traits.api import \
-    Property, cached_property, HasStrictTraits, \
-    Trait, Instance, WeakRef, Str, on_trait_change
+    HasStrictTraits, WeakRef
 
 from mxn.reinf_laws import \
-    ReinfLawBase, ReinfFabric
+    ReinfLawBase
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -20,11 +19,8 @@ from mxn.matrix_cross_section import \
 from mxn import \
     CrossSectionComponent
 
-from matresdev.db.simdb import \
-    SimDBClass
-
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
-STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,law_changed,material_changed,+law_input'
+STATE_LAW_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed,material_changed,law_changed,material,material_law'
 
 class ReinfLayoutComponent(CrossSectionComponent):
     '''Cross section characteristics needed for tensile specimens
@@ -43,11 +39,6 @@ class ReinfLayoutComponent(CrossSectionComponent):
                 del state[ key ]
 
         return state
-
-    @on_trait_change('ecb_law,fabric')
-    def notify_mat_change(self):
-        if self.state:
-            self.state.changed = True
 
     #===============================================================================
     # Plotting functions
@@ -71,16 +62,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
         self.state.plot_geometry(ax1)
         self.plot_geometry(ax1, clr='red')
         ax2 = fig.add_subplot(1, 2, 2)
-        self.ecb_law_.plot_ax(ax2)
-
-
-    #===========================================================================
-    # Auxiliary methods for tree editor
-    #===========================================================================
-    tree_node_list = Property(depends_on='ecb_law')
-    @cached_property
-    def _get_tree_node_list(self):
-        return [ self.ecb_law_ ]
+        self.material_law_.plot_ax(ax2)
 
 if __name__ == '__main__':
     ReinfLawBase.db.configure_traits()

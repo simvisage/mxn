@@ -15,7 +15,7 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCTexLayer, RLCSteelBar
+    RLCTexLayer, RLCBar
 
 from matplotlib.figure import \
     Figure
@@ -26,15 +26,15 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-tl1 = RLCTexLayer(z_coord=0.39)
-tl2 = RLCTexLayer(z_coord=0.38)
+tl1 = RLCTexLayer(z_coord=0.39, material='default_fabric', material_law='fbm')
+tl2 = RLCTexLayer(z_coord=0.38, material='default_fabric')
 '''Two layers of textile reinforcement
 '''
 
-bar1 = RLCSteelBar(x=0.1, z=0.36, area=0.0002)
-bar2 = RLCSteelBar(x=0.2, z=0.36, area=0.0002)
-bar3 = RLCSteelBar(x=0.1, z=0.04, area=0.0002)
-bar4 = RLCSteelBar(x=0.2, z=0.04, area=0.0002)
+bar1 = RLCBar(x=0.1, z=0.36, material='bar_d10')
+bar2 = RLCBar(x=0.2, z=0.36, material='bar_d10')
+bar3 = RLCBar(x=0.1, z=0.04, material='bar_d10')
+bar4 = RLCBar(x=0.2, z=0.04, material='bar_d10')
 '''Four steel reinforcement bars
 '''
 

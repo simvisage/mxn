@@ -16,29 +16,15 @@ from reinf_layout_component import \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
 
-from mxn.reinf_laws import \
-    ReinfLawSteel
-
-from mxn.reinf_laws import \
-    ReinfLawBase
-
 from mxn.utils import \
     KeyRef
+
+from mxn.reinf_laws.reinf_bar import \
+    ReinfBar
 
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
     '''
-    def __init__(self, *args, **metadata):
-        '''Default value of law must be set here to ensure
-        it has been set before an editor for it is requested
-        '''
-        default_law = metadata.get('ecb_law', None)
-        if default_law:
-            self.ecb_law = default_law
-        else:
-            self.ecb_law = 'steel-default'
-
-        super(RLCBar, self).__init__(**metadata)
 
     x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)
     z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)
@@ -46,11 +32,7 @@ class RLCBar(ReinfLayoutComponent):
     corner of reinforced cross section
     '''
 
-    area = Float(0.0002, auto_set=False, enter_set=True, geo_input=True)
-    '''area of the bar
-    '''
-
-    ecb_law = KeyRef(db=ReinfLawBase.db)
+    material = KeyRef(db=ReinfBar.db)
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar
@@ -72,7 +54,7 @@ class RLCBar(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_sig(self):
-        return self.ecb_law_.mfn.get_value(self.eps)
+        return self.material_law_.mfn.get_value(self.eps)
 
     f = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''force in the bar [kN]:
@@ -80,7 +62,7 @@ class RLCBar(ReinfLayoutComponent):
     @cached_property
     def _get_f(self):
         sig = self.sig
-        A_bar = self.area
+        A_bar = self.material_.area
         return sig * A_bar * self.unit_conversion_factor
 
     N = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
@@ -109,15 +91,16 @@ class RLCBar(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         ax.hlines([h - self.z], [0], [-self.f], lw=4, color='DarkOrange')
 
+    node_name = 'Reinforcement Bar'
+
     tree_view = View(VGroup(
-                       Item('area'),
                        Group(
                        Item('x'),
                        Item('z'),
                        label='Position'
                        ),
                        Group(
-                       Item('ecb_law', show_label=False),
+                       Item('material_law', show_label=False),
                        label='Reinforcement law'
                        ),
                        springy=True

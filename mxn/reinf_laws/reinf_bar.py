@@ -26,7 +26,7 @@ from reinf_law_steel import \
 
 import weakref
 
-basic_laws = { 'bilinear':
+basic_laws = { 'steel':
                ReinfLawSteel(f_yk=500., E_s=200000., eps_u=0.025),
                }
 
