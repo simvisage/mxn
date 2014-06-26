@@ -66,13 +66,13 @@ class MTMatrixMixture(MaterialTypeBase):
     # UI-related functionality
     #===========================================================================
 
-    traits_view = View(Item('f_ck'),
+    tree_view = View(Item('f_ck'),
                        Item('eps_c_u'))
 
 MTMatrixMixture.db = MxNClassExt(
             klass=MTMatrixMixture,
             verbose='io',
-            node_name='Reinforcement fabrics'
+            node_name='Matrix mixtures'
             )
 
 print 'XXXXX'

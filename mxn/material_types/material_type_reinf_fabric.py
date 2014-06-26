@@ -61,7 +61,7 @@ class MTReinfFabric(MaterialTypeBase):
     # UI-related functionality
     #===========================================================================
 
-    traits_view = View(Item('A_roving'),
+    tree_view = View(Item('A_roving'),
                       Item('s_0'),
                       Item('s_90'),
                       )

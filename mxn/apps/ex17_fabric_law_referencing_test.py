@@ -14,13 +14,16 @@ from mxn.reinf_layout import \
     RLCTexUniform
 
 from mxn.reinf_laws import \
-    ReinfFabric, ReinfLawBilinear, ReinfLawCubic, \
+    ReinfLawBilinear, ReinfLawCubic, \
     ReinfLawFBM, ReinfLawLinear
 
-if ReinfFabric.db.get('test_fabric', None):
-    del ReinfFabric.db['test_fabric']
-ReinfFabric.db['test_fabric'] = ReinfFabric()
-ReinfFabric.db['test_fabric'].key = 'test_fabric'
+from mxn.material_types import \
+    MTReinfFabric
+
+if MTReinfFabric.db.get('test_fabric', None):
+    del MTReinfFabric.db['test_fabric']
+MTReinfFabric.db['test_fabric'] = MTReinfFabric()
+MTReinfFabric.db['test_fabric'].key = 'test_fabric'
 
 test_fabric_laws = {'bilinear':
                ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
@@ -40,8 +43,8 @@ test_fabric_laws = {'bilinear':
                            m=0.7),
                }
 
-ReinfFabric.db['test_fabric'].mtrl_laws = test_fabric_laws
-ReinfFabric.db['test_fabric'].save()
+MTReinfFabric.db['test_fabric'].mtrl_laws = test_fabric_laws
+MTReinfFabric.db['test_fabric'].save()
 
 tex_layers = RLCTexUniform(n_layers=12, material='default_fabric')
 ge = MCSGeoRect(height=0.06, width=0.2)

@@ -7,13 +7,10 @@ Created on 14. 4. 2014
 from mxn.view import \
     MxNTreeView, MxNTreeNode
 
-from mxn import \
-    MatrixMixture
+from mxn.material_types import \
+    MTMatrixMixture, MTReinfFabric, MTReinfBar
 
-from mxn.reinf_laws import \
-    ReinfFabric
-
-database_root_node = MxNTreeNode(tree_node_list=[MatrixMixture.db, ReinfFabric.db
-                                                 ], node_name='database')
+database_root_node = MxNTreeNode(tree_node_list=[MTMatrixMixture.db, MTReinfFabric.db,
+                                                 MTReinfBar.db], node_name='database')
 database_view = MxNTreeView(root=database_root_node)
 database_view.configure_traits()
