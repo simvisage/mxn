@@ -34,7 +34,7 @@ class RLCTexLayer(ReinfLayoutComponent):
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''
 
-    material = KeyRef(db=MTReinfFabric.db, law_input=True)
+    material = KeyRef('default_fabric', db=MTReinfFabric.db, law_input=True)
 
     #===========================================================================
     # Discretization conform to the tex layers

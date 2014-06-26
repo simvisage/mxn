@@ -57,7 +57,3 @@ print 'XXXXX'
 if MTReinfBar.db.get('bar_d10', None):
     del MTReinfBar.db['bar_d10']
 MTReinfBar.db['bar_d10'] = MTReinfBar(area=0.0000785)
-
-# for key, item in MTReinfBar.db.items():
-
-

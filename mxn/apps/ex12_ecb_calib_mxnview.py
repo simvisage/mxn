@@ -6,15 +6,18 @@ Created on 1. 4. 2014
 
 from mxn import \
     ECBCalib, \
-    MatrixLawBase, ReinfLawBase, \
     MxNTreeNode, MxNTreeView
+
+from mxn.material_types import \
+    MTMatrixMixture, MTReinfFabric, MTReinfBar
 
 ec = ECBCalib(Mu=3.49)
 
-root_node = MxNTreeNode(tree_node_list=[MatrixLawBase.db,
-                                                 ReinfLawBase.db,
-                                                 ec],
-                                 node_name='database')
+database_root_node = MxNTreeNode(tree_node_list=[MTMatrixMixture.db, MTReinfFabric.db,
+                                                 MTReinfBar.db], node_name='Material database')
+
+root_node = MxNTreeNode(tree_node_list=[database_root_node, ec],
+                                 node_name='Calibration / Database')
 
 ecw = MxNTreeView(root=root_node)
 ecw.configure_traits()

@@ -31,7 +31,7 @@ class RLCBar(ReinfLayoutComponent):
     corner of reinforced cross section
     '''
 
-    material = KeyRef(db=MTReinfBar.db)
+    material = KeyRef('bar_d10', db=MTReinfBar.db)
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Strain of the bar

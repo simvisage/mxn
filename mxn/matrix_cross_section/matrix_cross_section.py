@@ -46,7 +46,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''Number of integration points.
     '''
 
-    material = KeyRef(db=MTMatrixMixture.db)
+    material = KeyRef('default_mixture', db=MTMatrixMixture.db)
 
     x = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Height of the compressive zone

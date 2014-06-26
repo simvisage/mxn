@@ -39,7 +39,7 @@ class RLCTexUniform(ReinfLayoutComponent):
     '''Total number of reinforcement layers [-]
     '''
 
-    material = KeyRef(db=MTReinfFabric.db)
+    material = KeyRef('default_fabric', db=MTReinfFabric.db)
 
     def convert_eps_tex_u_2_lo(self, eps_tex_u):
         '''Convert the strain in the lowest reinforcement layer at failure

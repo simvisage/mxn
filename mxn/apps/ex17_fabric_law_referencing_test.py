@@ -60,10 +60,4 @@ cs = CrossSection(reinf=[tex_layers],
                   )
 
 csw = CrossSectionView(cs=cs)
-
-# tex_layers.fabric = 'default_fabric'
-# tex_layers.fabric = 'test_fabric'
-# tex_layers.ecb_law = 'fbm_different'
-# print tex_layers.ecb_law_
 csw.configure_traits()
-# csw.configure_traits()

@@ -79,6 +79,3 @@ print 'XXXXX'
 if MTMatrixMixture.db.get('default_mixture', None):
     del MTMatrixMixture.db['default_mixture']
 MTMatrixMixture.db['default_mixture'] = MTMatrixMixture()
-
-if __name__ == '__main__':
-    MTMatrixMixture.db.configure_traits()
