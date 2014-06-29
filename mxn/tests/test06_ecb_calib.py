@@ -48,7 +48,7 @@ def test_ecb_law_calib():
     calib = ECBCalib(cs=cs, Mu=Mu)
     test_eps_arr = np.linspace(0.0, 0.005, 10)
     calib_file = get_outfile(folder_name='.mxn',
-                             file_name='test02_calib.pkl')
+                             file_name='test06_calib.pkl')
 
     assert np.allclose(calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
                        np.array([0., 169.56745719, 308.0713995, 426.15150252,
@@ -97,13 +97,13 @@ def test_ecb_law_calib():
                                  955.78175683, 1004.84170587, 1045.86868703],
                                 dtype=float))
 
-#     loaded_calib = pickle.load(open(calib_file, 'rb'))
-#
-#     assert np.allclose(loaded_calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
-#                        np.array([0., 169.56745719, 308.0713995, 426.15150252,
-#                                  528.22368093, 617.57902395, 696.18106351,
-#                                  765.44225452, 826.76851637, 881.07603382],
-#                                 dtype=float))
+    loaded_calib = pickle.load(open(calib_file, 'rb'))
+
+    assert np.allclose(loaded_calib.calibrated_ecb_law.mfn_vct(test_eps_arr),
+                       np.array([0., 169.56745719, 308.0713995, 426.15150252,
+                                 528.22368093, 617.57902395, 696.18106351,
+                                 765.44225452, 826.76851637, 881.07603382],
+                                dtype=float))
 
 if __name__ == '__main__':
     test_ecb_law_calib()

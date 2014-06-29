@@ -57,14 +57,19 @@ class CrossSectionComponent(MxNTreeNode):
     def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
-        state = super(HasStrictTraits, self).__getstate__()
+        state = super(CrossSectionComponent, self).__getstate__()
 
-        for key in [ 'state', 'state_', 'plot_state', 'plot_state_' ]:
+        for key in [ 'state', 'state_']:
             if state.has_key(key):
                 del state[ key ]
 
         return state
 
+    def __setstate__(self, *args, **metadata):
+        '''Overriding __setstate__ to ensure dynamic attributes exist
+        '''
+        self.__init__(*args, **metadata)
+        super(CrossSectionComponent, self).__setstate__(*args, **metadata)
 
     unit_conversion_factor = Constant(1000.0)
 

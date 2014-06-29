@@ -66,11 +66,11 @@ def test_matrix_law_states():
     MTMatrixMixture.db['mixture-test'].f_ck = 53.7
     assert np.allclose([cp.M, cp.N], [1.3140950375716971, 3.8701260913315991])
 
-#     loaded_cp = pickle.load(open(object_file, 'rb'))
-#     assert np.allclose([loaded_cp.M, loaded_cp.N], [1.3140950375716971, 3.8701260913315991])
-#     MatrixMixture.db['mixture-test'].f_ck = 70.0
-#     assert np.allclose([loaded_cp.M, loaded_cp.N], [1.5155334535680236, -5.0522452437834104])
-#     assert np.allclose([cp.M, cp.N], [1.5155334535680236, -5.0522452437834104])
+    loaded_cp = pickle.load(open(object_file, 'rb'))
+    assert np.allclose([loaded_cp.M, loaded_cp.N], [1.3140950375716971, 3.8701260913315991])
+    MTMatrixMixture.db['mixture-test'].f_ck = 70.0
+    assert np.allclose([loaded_cp.M, loaded_cp.N], [1.5155334535680236, -5.0522452437834104])
+    assert np.allclose([cp.M, cp.N], [1.5155334535680236, -5.0522452437834104])
 
 if __name__ == '__main__':
     test_matrix_law_states()

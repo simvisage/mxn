@@ -1,18 +1,17 @@
 '''
-Created on 26. 6. 2014
+Created on 29. 6. 2014
 
-@author: Vancikv
+@author: Vancik
 '''
 
 from traits.api import \
-    Instance, Button, Str
+    Instance, Button, Str, Trait
 
 from traitsui.api import \
     View, Item, HGroup, Handler, spring, UIInfo
 
-class MxNClassExtHandler(Handler):
-    '''Handles adding and removing of ReinfFabric database
-    objects through user interface.
+class MaterialTypeHandler(Handler):
+    '''
     '''
 
     # The UIInfo object associated with the view:
@@ -22,13 +21,14 @@ class MxNClassExtHandler(Handler):
     delete = Button('OK')
     cancel = Button('Cancel')
 
-    material_name = Str
+    law_name = Str
 
     # The pop-up customization view:
     new_view = View(
         HGroup(
             spring,
-            Item('material_name'),
+            Item('law_name'),
+            Item('law_type'),
             Item('ok', show_label=False),
             Item('cancel', show_label=False),
         ),
@@ -46,30 +46,32 @@ class MxNClassExtHandler(Handler):
     )
 
     # Event handlers:
-    def object_new_material_changed (self, info):
+    def object_new_law_changed (self, info):
         if info.initialized:
             self.info = info
-            self._ui = self.edit_traits(parent=info.new_material.control, view='new_view')
+            laws = info.object.possible_laws
+            self.add_trait('law_type', Trait(laws.values()[0], laws))
+            self._ui = self.edit_traits(parent=info.new_law.control, view='new_view')
 
-    def object_del_material_changed (self, info):
+    def object_del_law_changed (self, info):
         if info.initialized:
             self.info = info
-            self._ui = self.edit_traits(parent=info.del_material.control, view='del_view')
+            self._ui = self.edit_traits(parent=info.del_law.control, view='del_view')
 
     def _ok_fired (self):
         object = self.info.object
-        if self.material_name == '':
+        if self.law_name == '':
             print 'Please enter material name!'
-        elif object.get(self.material_name, None):
-            print 'Material name already occupied!'
+        elif object.mtrl_laws.get(self.law_name, None):
+            print 'Law name already occupied!'
         else:
-            object[self.material_name] = object.klass()
+            object.mtrl_laws[self.law_name] = self.law_type_()
             self._ui.dispose()
             self.info.ui.parent.updated = True
 
     def _delete_fired (self):
         object = self.info.object
-        del object[object.chosen_instance]
+        del object.mtrl_laws[object.chosen_law]
         self._ui.dispose()
         self.info.ui.parent.updated = True
 

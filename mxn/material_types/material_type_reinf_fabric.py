@@ -6,10 +6,10 @@ Created on 23. 4. 2014
 
 from traits.api import \
     Property, cached_property, Dict, Str, \
-    Float
+    Float, Trait
 
 from traitsui.api import \
-    View, Item
+    View, Item, EnumEditor
 
 from mxn.view import \
     MxNClassExt
@@ -22,18 +22,8 @@ from reinf_laws import \
 from material_type_base import \
     MaterialTypeBase
 
-basic_laws = { 'bilinear':
-               ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
-                                var_a=0.8, eps_el_fraction=0.0001),
-               'cubic':
-               ReinfLawCubic(sig_tex_u=1216., eps_u=0.016,
-                                var_a=-5e+6),
-               'fbm':
-               ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
-                           m=0.5),
-               'linear':
-               ReinfLawLinear(eps_u=0.014, E_tex=80000.),
-               }
+from material_type_handler import \
+    MaterialTypeHandler
 
 class MTReinfFabric(MaterialTypeBase):
 
@@ -48,7 +38,23 @@ class MTReinfFabric(MaterialTypeBase):
 
     mtrl_laws = Dict((Str, ReinfLawBase))
     def _mtrl_laws_default(self):
+        basic_laws = { 'bilinear':
+               ReinfLawBilinear(sig_tex_u=1216., eps_u=0.014,
+                                var_a=0.8, eps_el_fraction=0.0001),
+               'cubic':
+               ReinfLawCubic(sig_tex_u=1216., eps_u=0.016,
+                                var_a=-5e+6),
+               'fbm':
+               ReinfLawFBM(sig_tex_u=1216., eps_u=0.014,
+                           m=0.5),
+               'linear':
+               ReinfLawLinear(eps_u=0.014, E_tex=80000.),
+               }
+
         return basic_laws
+
+    possible_laws = {'fbm':ReinfLawFBM, 'linear':ReinfLawLinear,
+                    'cubic':ReinfLawCubic, 'bilinear':ReinfLawBilinear}
 
     named_mtrl_laws = Property(depends_on='mtrl_laws')
     @cached_property
@@ -64,6 +70,12 @@ class MTReinfFabric(MaterialTypeBase):
     tree_view = View(Item('A_roving'),
                       Item('s_0'),
                       Item('s_90'),
+                      Item('new_law', show_label=False),
+                      Item('chosen_law',
+                           editor=EnumEditor(name='law_keys'),
+                           show_label=False),
+                      Item('del_law', show_label=False),
+                      handler=MaterialTypeHandler()
                       )
 
 MTReinfFabric.db = MxNClassExt(

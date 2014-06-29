@@ -31,10 +31,9 @@ class ReinfLayoutComponent(CrossSectionComponent):
     def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
-        state = super(HasStrictTraits, self).__getstate__()
+        state = super(ReinfLayoutComponent, self).__getstate__()
 
-        for key in [ 'state', 'state_', 'plot_state',
-                    'plot_state_', 'matrix_cs', 'matrix_cs_' ]:
+        for key in ['matrix_cs', 'matrix_cs_']:
             if state.has_key(key):
                 del state[ key ]
 

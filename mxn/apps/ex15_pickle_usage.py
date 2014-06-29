@@ -31,11 +31,11 @@ from mxn.utils import \
 Mu_pm = 3.11 / 0.20
 
 ge = MCSGeoRect(height=0.06, width=1.0)
-mcs = MatrixCrossSection(geo=ge, n_cj=20,
-                         cc_law_type='constant')
-uni_layers = RLCTexUniform(n_layers=12,
-                           ecb_law_type='fbm')
-uni_layers.fabric_.s_0 = 0.14 / 17
+mcs = MatrixCrossSection(geo=ge, n_cj=20, material='default_mixture',
+                         material_law='constant')
+uni_layers = RLCTexUniform(n_layers=12, material='default_fabric',
+                           material_law='fbm')
+uni_layers.material_.s_0 = 0.14 / 17
 
 cs = CrossSection(matrix_cs=mcs, reinf=[uni_layers])
 calib = ECBCalib(cs=cs, Mu=Mu_pm)

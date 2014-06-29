@@ -6,7 +6,7 @@ Created on 26. 6. 2014
 
 from traits.api import \
     Property, cached_property, Dict, Str, \
-    on_trait_change, List
+    on_trait_change, List, Button
 
 from mxn.view import \
     MxNTreeNode
@@ -55,6 +55,22 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
     #===========================================================================
     # UI-related functionality
     #===========================================================================
+
+    new_law = Button(label='Add new law')
+    def _new_material_fired(self):
+        pass
+
+    del_law = Button(label='Delete law')
+    def _del_material_fired(self):
+        pass
+
+    law_keys = Property
+    def _get_law_keys(self):
+        return self.mtrl_laws.keys()
+
+    chosen_law = Str()
+    def _chosen_law_default(self):
+        return self.mtrl_laws.keys()[0]
 
     tree_node_list = Property(depends_on='mtrl_laws')
     @cached_property

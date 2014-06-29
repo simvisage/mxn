@@ -20,10 +20,6 @@ from mxn.reinf_laws import \
 from material_type_base import \
     MaterialTypeBase
 
-basic_laws = { 'steel':
-               ReinfLawSteel(f_yk=500., E_s=200000., eps_u=0.025),
-               }
-
 class MTReinfBar(MaterialTypeBase):
 
     area = Float(0.0000785, auto_set=False, enter_set=True, geo_input=True)
@@ -31,6 +27,9 @@ class MTReinfBar(MaterialTypeBase):
 
     mtrl_laws = Dict((Str, ReinfLawBase))
     def _mtrl_laws_default(self):
+        basic_laws = { 'steel':
+               ReinfLawSteel(f_yk=500., E_s=200000., eps_u=0.025),
+               }
         return basic_laws
 
     named_mtrl_laws = Property(depends_on='mtrl_laws')

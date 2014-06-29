@@ -22,20 +22,6 @@ from matrix_laws import \
 from material_type_base import \
     MaterialTypeBase
 
-basic_laws = {'bilinear':
-            MatrixLawBilinear(f_ck=55.7, eps_c_u=0.0033),
-            'constant':
-            MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
-                           high_strength_level=50.0, E_c=28e+3),
-            'linear':
-            MatrixLawLinear(),
-            'quad':
-            MatrixLawQuad(f_ck=55.7, eps_c_u=0.0033,
-                          high_strength_level=50.0, E_c=28e+3),
-            'quadratic':
-            MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
-                               high_strength_level=50.0, E_c=28e+3)
-                                     }
 class MTMatrixMixture(MaterialTypeBase):
     '''Base class for concrete constitutive laws.'''
 
@@ -51,6 +37,20 @@ class MTMatrixMixture(MaterialTypeBase):
 
     mtrl_laws = Dict((Str, MatrixLawBase))
     def _mtrl_laws_default(self):
+        basic_laws = {'bilinear':
+            MatrixLawBilinear(f_ck=55.7, eps_c_u=0.0033),
+            'constant':
+            MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
+                           high_strength_level=50.0, E_c=28e+3),
+            'linear':
+            MatrixLawLinear(),
+            'quad':
+            MatrixLawQuad(f_ck=55.7, eps_c_u=0.0033,
+                          high_strength_level=50.0, E_c=28e+3),
+            'quadratic':
+            MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
+                               high_strength_level=50.0, E_c=28e+3)
+                                     }
         return basic_laws
 
     named_mtrl_laws = Property(depends_on='mtrl_laws,+law_input')
