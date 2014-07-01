@@ -1,17 +1,11 @@
 '''
 Created on Sep 4, 2012
 
-@todo: introduce the dock feature for the views
-@todo: classify the state changes and provide examples.
-
-
 @author: rch
 '''
-from traits.api import \
-    HasStrictTraits, WeakRef
 
-from mxn.reinf_laws import \
-    ReinfLawBase
+from traits.api import \
+    WeakRef
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection
@@ -62,7 +56,3 @@ class ReinfLayoutComponent(CrossSectionComponent):
         self.plot_geometry(ax1, clr='red')
         ax2 = fig.add_subplot(1, 2, 2)
         self.material_law_.plot_ax(ax2)
-
-if __name__ == '__main__':
-    ReinfLawBase.db.configure_traits()
-    print ReinfLawBase.db.keys()

@@ -1,10 +1,6 @@
 '''
 Created on Sep 4, 2012
 
-@todo: introduce the dock feature for the views
-@todo: classify the state changes and provide examples.
-
-
 @author: rch
 '''
 from traits.api import \
@@ -129,18 +125,6 @@ class RLCTexUniform(ReinfLayoutComponent):
 
     node_name = 'Uniform textile layers'
 
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric_.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
-
     def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
         for i in range(self.n_layers):
@@ -164,9 +148,6 @@ class RLCTexUniform(ReinfLayoutComponent):
                       Group(
                       Item('material'),
                       Item('material_law'),
-                      Item('save_fabric', show_label=False),
-                      Item('new_fabric', show_label=False),
-                      Item('del_fabric', show_label=False),
                       springy=True,
                       label='Fabric material',
                       ),

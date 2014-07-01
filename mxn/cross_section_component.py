@@ -27,14 +27,19 @@ class CrossSectionComponent(MxNTreeNode):
     '''
 
     def __init__(self, *args, **metadata):
-        '''
-        '''
         default_material = metadata.get('material', None)
         if default_material:
             self.material = default_material
+        else:
+            print 'Warning: material not specified for object %s' % self
+        '''It is necessary to set default value of material here to ensure
+        it has been assigned when its editor is requested by the UI
+        '''
 
         self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
         self.on_trait_change(self._refresh_material_law, 'material,material_changed')
+        '''The scope of material laws is dependent on the chosen material
+        '''
 
         default_material_law = metadata.get('material_law', self.material_.named_mtrl_laws.keys()[0])
         self.material_law = default_material_law
@@ -42,6 +47,8 @@ class CrossSectionComponent(MxNTreeNode):
         super(CrossSectionComponent, self).__init__(**metadata)
 
     def _refresh_material_law(self):
+        '''material_law is redefined upon change of material
+        '''
         val = self.material_law
         self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
         del self.material_law

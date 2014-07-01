@@ -113,18 +113,6 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     node_name = 'Textile layer'
 
-    save_fabric = Button(label='Save current fabric')
-    def _save_fabric_fired(self):
-        self.fabric_.save()
-
-    new_fabric = Button(label='Make new fabric')
-    def _new_fabric_fired(self):
-        pass
-
-    del_fabric = Button(label='Delete current fabric')
-    def _del_fabric_fired(self):
-        pass
-
     def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
         width = self.matrix_cs.geo.get_width(self.z_coord)
@@ -158,9 +146,6 @@ class RLCTexLayer(ReinfLayoutComponent):
                       Group(
                       Item('material'),
                       Item('material_law'),
-                      Item('save_fabric', show_label=False),
-                      Item('new_fabric', show_label=False),
-                      Item('del_fabric', show_label=False),
                       label='Fabric material',
                       ),
                       springy=True,
