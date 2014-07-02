@@ -28,10 +28,10 @@ from mxn.utils import \
     get_outfile
 
 ge = MCSGeoRect(height=0.06, width=0.14)
-mcs = MatrixCrossSection(geo=ge, n_cj=20, cc_law_type='constant')
-uni_layers = RLCTexUniform(n_layers=12, ecb_law_type='fbm')
+mcs = MatrixCrossSection(geo=ge, n_cj=20, material='default_mixture', material_law='constant')
+uni_layers = RLCTexUniform(n_layers=12, material='default_fabric', material_law='fbm')
 
-uni_layers.ecb_law.sig_tex_u = 1200.13
+uni_layers.material_law_.sig_tex_u = 1200.13
 '''
 N = 103 kN
 sig_tex_u = N / A_tex_tot = 103000 / (12 * 16 * 0.447) = 1200.13 N/mm2
@@ -45,13 +45,13 @@ fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
 canvas = FigureCanvasAgg(fig)
 ax = fig.add_subplot(1, 1, 1)
 
-mxn.plot_MN_custom(ax, color='black', linestyle='-', linewidth=2.0, label='fbm')
-uni_layers.ecb_law_type = 'bilinear'
-mxn.plot_MN_custom(ax, color='black', linestyle='--', linewidth=2.0, label='bilinear')
-uni_layers.ecb_law_type = 'linear'
-mxn.plot_MN_custom(ax, color='black', linestyle='-.', linewidth=2.0, label='linear')
-uni_layers.ecb_law_type = 'cubic'
-mxn.plot_MN_custom(ax, color='black', linestyle=':', linewidth=2.0, label='cubic')
+mxn.plot_custom(ax, color='black', linestyle='-', linewidth=2.0, label='fbm')
+uni_layers.material_law = 'bilinear'
+mxn.plot_custom(ax, color='black', linestyle='--', linewidth=2.0, label='bilinear')
+uni_layers.material_law = 'linear'
+mxn.plot_custom(ax, color='black', linestyle='-.', linewidth=2.0, label='linear')
+uni_layers.material_law = 'cubic'
+mxn.plot_custom(ax, color='black', linestyle=':', linewidth=2.0, label='cubic')
 
 ax.legend()
 ax.set_xlabel('M[kNm]')

@@ -29,7 +29,7 @@ from matplotlib.figure import \
     Figure
 
 from traitsui.menu import \
-    Menu
+    Menu, MenuBar
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction
@@ -45,9 +45,9 @@ tree_node = TreeNode(node_for=[MxNTreeNode],
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(NewAction, DeleteAction, plot_self),
-                                     move=[MxNTreeNode, MxNLeafNode],
-                                     add=[MxNTreeNode, MxNLeafNode]
+                                     menu=Menu(DeleteAction, plot_self),
+#                                      move=[MxNTreeNode, MxNLeafNode],
+#                                      add=[MxNTreeNode, MxNLeafNode]
                                      )
 
 leaf_node = TreeNode(node_for=[MxNLeafNode],
@@ -109,7 +109,10 @@ class MxNTreeView(HasStrictTraits):
                     height=0.4,
                     buttons=['OK', 'Cancel'],
                     resizable=True,
-                    handler=MxNTreeViewHandler())
+                    handler=MxNTreeViewHandler(),
+                    menubar=MenuBar(Menu(menu_save, menu_open,
+                                    name='File'))
+                    )
 
 if __name__ == '__main__':
 

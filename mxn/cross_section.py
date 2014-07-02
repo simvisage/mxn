@@ -70,7 +70,7 @@ class CrossSection(CrossSectionState):
     # State management
     #===========================================================================
 
-    notify_change_ext = Callable(None)
+    notify_change_ext = Callable(None, transient=True)
     '''Notifier of component changes for external clients
     '''
 

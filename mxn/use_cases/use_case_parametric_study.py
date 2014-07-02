@@ -150,4 +150,3 @@ class UCParametricStudy(MxNTreeNode):
         for node in self.tree_node_list:
             node.plot_ax(ax=ax)
         ax.legend()
-
