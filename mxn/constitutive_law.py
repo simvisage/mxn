@@ -47,6 +47,9 @@ class CLBase(HasStrictTraits):
     def plot_ax(self, ax):
         ax.plot(*self.arr)
 
+    def plot_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
+        ax.plot(*self.arr, lw=linewidth, color=color, ls=linestyle, label=label)
+
     #===========================================================================
     # Management of backward links
     #===========================================================================

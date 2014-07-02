@@ -21,6 +21,9 @@ import numpy as np
 from view import \
     MxNTreeNode
 
+from matrix_cross_section import \
+    MatrixCrossSection, MCSGeoRect
+
 class MxNDiagram(MxNTreeNode):
 
     modified = Event
@@ -30,7 +33,11 @@ class MxNDiagram(MxNTreeNode):
     # cross section
     cs = Instance(CrossSection)
     def _cs_default(self):
-        return CrossSection(notify_change_ext=self.set_modified)
+        return CrossSection(notify_change_ext=self.set_modified,
+                            reinf=[RLCTexUniform(n_layers=12, material='default_fabric')],
+                            matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
+                                        height=0.06), n_cj=20, material='default_mixture',
+                                                            material_law='constant'))
     def _cs_changed(self):
         self.cs.notify_change_ext = self.set_modified
 
@@ -48,7 +55,7 @@ class MxNDiagram(MxNTreeNode):
                 eps = r.material_law_.eps_u
         return eps
 
-    n_eps = Int(5, auto_set=False, enter_set=True)
+    n_eps = Int(20, auto_set=False, enter_set=True)
     eps_range = Property(depends_on='n_eps,modified')
     @cached_property
     def _get_eps_range(self):
@@ -137,7 +144,7 @@ class MxNDiagram(MxNTreeNode):
         x1, x2, z1, z2 = ax.axis()
         ax.axis([0, x2, z1, z2])
 
-    def plot_MN_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
+    def plot_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
         ax.plot(self.MN_arr[0], -self.MN_arr[1], lw=linewidth, color=color, ls=linestyle, label=label)
 
         ax.spines['left'].set_position('zero')

@@ -2,15 +2,16 @@
 Created on 14. 4. 2014
 
 @author: Vancikv
+
+This example shows tree view of the material database
+which is the sole default subnode of UseCaseContainer
 '''
 
 from mxn.view import \
-    MxNTreeView, MxNTreeNode
+    MxNTreeView
 
-from mxn.material_types import \
-    MTMatrixMixture, MTReinfFabric, MTReinfBar
+from mxn.use_cases import \
+    UseCaseContainer
 
-database_root_node = MxNTreeNode(tree_node_list=[MTMatrixMixture.db, MTReinfFabric.db,
-                                                 MTReinfBar.db], node_name='Material database')
-database_view = MxNTreeView(root=database_root_node)
-database_view.configure_traits()
+uc_view = MxNTreeView(root=UseCaseContainer())
+uc_view.configure_traits()

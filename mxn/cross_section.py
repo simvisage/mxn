@@ -39,7 +39,7 @@ class CrossSection(CrossSectionState):
     '''
     matrix_cs = Instance(MatrixCrossSection)
     def _matrix_cs_default(self):
-        return MatrixCrossSection()
+        return MatrixCrossSection(material='default_mixture')
 
     reinf = List(Instance(ReinfLayoutComponent))
     '''Components of the cross section including the matrix and reinforcement.

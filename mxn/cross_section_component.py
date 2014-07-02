@@ -14,10 +14,10 @@ from etsproxy.traits.api import \
 from cross_section_state import \
     CrossSectionState
 
-from mxn.view import \
+from view import \
     MxNTreeNode
 
-from mxn.utils import \
+from utils import \
     KeyRef
 
 COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'

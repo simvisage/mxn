@@ -69,10 +69,10 @@ class MxNDescription(HasStrictTraits):
 
     def plot(self, fig):
         ax = fig.add_subplot(1, 1, 1)
-        self.mxn.plot_MN_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
+        self.mxn.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
 
     def plot_ax(self, ax):
-        self.mxn.plot_MN_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
+        self.mxn.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
 
 
 class MxNParametricStudy(HasStrictTraits):
