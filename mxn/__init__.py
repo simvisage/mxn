@@ -25,12 +25,6 @@ from mxn_diagram import \
 from mxn_diagram_view import \
     MxNDiagramView
 
-from mxn_parametric_study import \
-    MxNParametricStudy
-
-from mxn_parametric_study_view import \
-    MxNPSView
-
 from matrix_laws import \
     MatrixLawBase
 
