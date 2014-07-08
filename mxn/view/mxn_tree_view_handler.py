@@ -39,9 +39,11 @@ class MxNTreeViewHandler(Handler):
         info.object.data_changed = True
 
     def menu_save(self, info):
-        file_name = save_file()  # file_name=get_outfile(folder_name='.mxn', file_name='')
-        pickle.dump(info.object.root, open(file_name, 'wb'), 1)
+        file_name = get_outfile(folder_name='.mxn', file_name='')
+        file_ = save_file(file_name=file_name)
+        pickle.dump(info.object.root, open(file_, 'wb'), 1)
 
     def menu_open(self, info):
-        file_name = open_file()
-        info.object.root = pickle.load(open(file_name, 'rb'))
+        file_name = get_outfile(folder_name='.mxn', file_name='')
+        file_ = open_file(file_name=file_name)
+        info.object.root = pickle.load(open(file_, 'rb'))
