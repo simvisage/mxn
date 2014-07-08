@@ -9,7 +9,7 @@ from traits.api import \
     List, Str, Trait, Button, cached_property
 
 from traitsui.api import \
-    View, Item, VGroup
+    View, Item, VGroup, HGroup
 
 from mxn import \
     MxNDiagram, CrossSectionComponent
@@ -57,10 +57,12 @@ class UCPStudyElement(MxNTreeNode):
 
     def plot(self, fig):
         ax = fig.add_subplot(1, 1, 1)
-        self.content.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
+        self.content.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_,
+                                 label=self.node_name)
 
     def plot_ax(self, ax):
-        self.content.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_, label=self.node_name)
+        self.content.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_,
+                                 label=self.node_name)
 
 class UCPStudyElementMxN(UCPStudyElement):
     node_name = '<unnamed mxn diagram>'
@@ -138,8 +140,8 @@ class UCParametricStudy(MxNTreeNode):
     def _add_element_fired(self):
         self.tree_node_list.append(self.element_to_add_())
 
-    tree_view = View(Item('element_to_add', show_label=False),
-                     Item('add_element'))
+    tree_view = View(HGroup(Item('element_to_add', show_label=False),
+                            Item('add_element', show_label=False), springy=True))
 
     tree_node_list = List(Instance(MxNTreeNode))
     def _tree_node_list_default(self):

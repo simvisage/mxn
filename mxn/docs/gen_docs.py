@@ -22,7 +22,7 @@ from os.path import expanduser
 
 HOME_DIR = expanduser("~")
 # build directory
-BUILD_DIR = os.path.join(HOME_DIR, '.mntrcshell', 'docs')
+BUILD_DIR = os.path.join(HOME_DIR, '.mxn', 'docs')
 # output directory for the documentation
 DOCS_DIR = os.path.join('..', 'docs',)
 # output directory for the example documentation
@@ -173,4 +173,4 @@ if __name__ == '__main__':
 
     gd = GenDoc(build_mode='global')
     gd.generate_html()
-    #gd.push_html()
+    # gd.push_html()

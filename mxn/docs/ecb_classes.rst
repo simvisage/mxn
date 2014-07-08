@@ -1,26 +1,26 @@
 
-Classes defining the reshaping process
-=======================================================
+Classes describing the cross sectional layout
+=============================================
 
-.. currentmodule:: ecb_cross_section_geo
+.. currentmodule:: mxn
 
 ECBCrossSectionGeo
 ------------------
 
-.. inheritance-diagram:: ECBCrossSectionGeo
+.. inheritance-diagram:: CrossSectionComponent
 	:parts: 1
 
-.. autoclass:: ECBCrossSectionGeo
+.. autoclass:: CrossSectionComponent
    :members:  
    :undoc-members:
 
 ECBCrossSection
 ---------------
 
-.. inheritance-diagram:: ECBCrossSection
+.. inheritance-diagram:: CrossSection
 	:parts: 1
 
-.. autoclass:: ECBCrossSection
+.. autoclass:: CrossSection
    :members:  
    :undoc-members:
 
