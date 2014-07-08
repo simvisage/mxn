@@ -17,10 +17,7 @@ from traits.api import \
     Property, Button
 
 from traitsui.api import \
-     View, Item, EnumEditor, CompoundEditor
-
-from mxn.reinf_laws import \
-     ReinfLawBase, ReinfLawFBM
+     View, Item, EnumEditor
 
 class KeyRef(TraitType):
 
@@ -104,6 +101,9 @@ class KeyRef(TraitType):
         return EnumEditor(name=self.keys_name)
 
 if __name__ == '__main__':
+
+    from mxn.reinf_laws import \
+         ReinfLawBase, ReinfLawFBM
 
     class UseKeyRef(HasStrictTraits):
         '''Testclass containing attribute of type KeyRef

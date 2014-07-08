@@ -13,8 +13,8 @@ from traitsui.menu import \
 from traitsui.file_dialog import \
     open_file, save_file
 
-# from mxn.utils import \
-#     get_outfile
+from mxn.utils import \
+    get_outfile
 
 import pickle
 
