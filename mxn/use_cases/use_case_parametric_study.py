@@ -9,7 +9,7 @@ from traits.api import \
     List, Str, Trait, Button, cached_property
 
 from traitsui.api import \
-    View, Item, VGroup, HGroup
+    View, Item, UItem, VGroup, HGroup, spring
 
 from mxn import \
     MxNDiagram, CrossSectionComponent
@@ -138,10 +138,12 @@ class UCParametricStudy(MxNTreeNode):
 
     add_element = Button('Add')
     def _add_element_fired(self):
-        self.tree_node_list.append(self.element_to_add_())
+        self.append_node(self.element_to_add_())
 
-    tree_view = View(HGroup(Item('element_to_add', show_label=False),
-                            Item('add_element', show_label=False), springy=True))
+    tree_view = View(HGroup(UItem('element_to_add', springy=True),
+                            UItem('add_element')),
+                     spring
+                     )
 
     tree_node_list = List(Instance(MxNTreeNode))
     def _tree_node_list_default(self):

@@ -31,6 +31,7 @@ class MxNTreeNode(HasStrictTraits):
     '''Allows for passing a reference to cross section
     to reinforcement layout node for purposes of plotting
     '''
+
     def __getstate__ (self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
@@ -42,7 +43,15 @@ class MxNTreeNode(HasStrictTraits):
 
         return state
 
+    def append_node(self, node):
+        '''Add a new subnode to the current node.
+        Inform the tree view to select the new node within the view.
+        '''
+        self.tree_node_list.append(node)
+
     def plot(self, fig):
+        '''Plot the content of the current node.
+        '''
         if self.plot_state:
             ax = fig.add_subplot(1, 1, 1)
             self.plot_state.plot_geometry(ax)

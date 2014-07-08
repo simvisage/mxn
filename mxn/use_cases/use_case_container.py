@@ -9,7 +9,7 @@ from traits.api import \
     Trait, Instance
 
 from traitsui.api import \
-    View, Item, VGroup
+    View, Item, VGroup, HGroup, UItem, spring
 
 from mxn.view import \
     MxNTreeNode
@@ -36,12 +36,13 @@ class UseCaseContainer(MxNTreeNode):
                                        'prognosis'   :   MxNDiagram}
                             )
 
-    add_use_case = Button('Add use case')
+    add_use_case = Button('Add')
     def _add_use_case_fired(self):
         self.tree_node_list.append(self.use_case_to_add_())
 
-    tree_view = View(Item('use_case_to_add', show_label=False),
-                Item('add_use_case'))
+    tree_view = View(HGroup(UItem('use_case_to_add', springy=True),
+                            UItem('add_use_case')),
+                            spring)
 
     tree_node_list = List(Instance(MxNTreeNode))
     def _tree_node_list_default(self):

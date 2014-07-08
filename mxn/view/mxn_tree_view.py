@@ -107,7 +107,7 @@ class MxNTreeView(HasStrictTraits):
                     id='mxntreeview_id',
                     width=0.7,
                     height=0.4,
-                    buttons=['OK', 'Cancel'],
+                    title='MxN',
                     resizable=True,
                     handler=MxNTreeViewHandler(),
                     menubar=MenuBar(Menu(menu_save, menu_open,
