@@ -23,7 +23,7 @@ class MaterialTypeHandler(Handler):
 
     law_name = Str
 
-    # The pop-up customization view:
+    # The customization view:
     new_view = View(
         HGroup(
             spring,
@@ -32,7 +32,7 @@ class MaterialTypeHandler(Handler):
             Item('ok', show_label=False),
             Item('cancel', show_label=False),
         ),
-        kind='popup'
+        kind='live'
     )
 
     del_view = View(
@@ -61,7 +61,7 @@ class MaterialTypeHandler(Handler):
     def _ok_fired (self):
         object = self.info.object
         if self.law_name == '':
-            print 'Please enter material name!'
+            print 'Please enter law name!'
         elif object.mtrl_laws.get(self.law_name, None):
             print 'Law name already occupied!'
         else:

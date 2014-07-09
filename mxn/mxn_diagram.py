@@ -106,12 +106,12 @@ class MxNDiagram(MxNTreeNode):
 
     current_eps_idx = Int(1)  # , auto_set = False, enter_set = True)
 
-    current_eps = Property(depends_on='current_eps_idx')
+    current_eps = Property(depends_on='current_eps_idx,modified')
     @cached_property
     def _get_current_eps(self):
         return self.eps_range[(0, 1), self.current_eps_idx - 1]
 
-    current_MN = Property(depends_on='current_eps_idx')
+    current_MN = Property(depends_on='current_eps_idx,modified')
     @cached_property
     def _get_current_MN(self):
         return self._get_MN_fn(*self.current_eps)

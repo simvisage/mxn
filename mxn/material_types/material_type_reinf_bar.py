@@ -9,7 +9,7 @@ from traits.api import \
     Float
 
 from traitsui.api import \
-    View, Item
+    View, Item, EnumEditor
 
 from mxn.view import \
     MxNClassExt
@@ -19,6 +19,9 @@ from mxn.reinf_laws import \
 
 from material_type_base import \
     MaterialTypeBase
+
+from material_type_handler import \
+    MaterialTypeHandler
 
 class MTReinfBar(MaterialTypeBase):
 
@@ -32,6 +35,8 @@ class MTReinfBar(MaterialTypeBase):
                }
         return basic_laws
 
+    possible_laws = {'steel':ReinfLawSteel}
+
     named_mtrl_laws = Property(depends_on='mtrl_laws')
     @cached_property
     def _get_named_mtrl_laws(self):
@@ -44,6 +49,12 @@ class MTReinfBar(MaterialTypeBase):
     #===========================================================================
 
     tree_view = View(Item('area'),
+                      Item('new_law', show_label=False),
+                      Item('chosen_law',
+                           editor=EnumEditor(name='law_keys'),
+                           show_label=False),
+                      Item('del_law', show_label=False),
+                      handler=MaterialTypeHandler()
                       )
 
 MTReinfBar.db = MxNClassExt(
