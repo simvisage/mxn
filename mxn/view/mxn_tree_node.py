@@ -5,7 +5,8 @@ Created on 14. 4. 2014
 '''
 
 from traits.api import \
-    HasStrictTraits, Str, List, WeakRef, HasTraits
+    HasStrictTraits, Str, List, WeakRef, \
+    Property, cached_property
 
 from traitsui.api import \
     View
@@ -27,22 +28,6 @@ class MxNTreeNode(HasStrictTraits):
 
     tree_view = View()
 
-    plot_state = WeakRef(transient=True)
-    '''Allows for passing a reference to cross section
-    to reinforcement layout node for purposes of plotting
-    '''
-
-    def __getstate__ (self):
-        '''Overriding __getstate__ because of WeakRef usage
-        '''
-        state = super(HasStrictTraits, self).__getstate__()
-
-        for key in [ 'plot_state', 'plot_state_' ]:
-            if state.has_key(key):
-                del state[ key ]
-
-        return state
-
     def append_node(self, node):
         '''Add a new subnode to the current node.
         Inform the tree view to select the new node within the view.
@@ -52,7 +37,32 @@ class MxNTreeNode(HasStrictTraits):
     def plot(self, fig):
         '''Plot the content of the current node.
         '''
-        if self.plot_state:
-            ax = fig.add_subplot(1, 1, 1)
-            self.plot_state.plot_geometry(ax)
         return
+
+class ReinfLayoutTreeNode(MxNTreeNode):
+    '''Class accommodating the list of all reinforcement components.
+    '''
+    node_name = Str('Reinforcement layout')
+
+    cs_state = WeakRef(HasStrictTraits)
+
+    def __getstate__ (self):
+        '''Overriding __getstate__ because of WeakRef usage
+        '''
+        state = super(HasStrictTraits, self).__getstate__()
+
+        for key in [ 'cs_state', 'cs_state_' ]:
+            if state.has_key(key):
+                del state[ key ]
+
+        return state
+
+
+    def plot(self, fig):
+        ax = fig.add_subplot(1, 1, 1)
+        self.cs_state.plot_geometry(ax)
+
+    tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
+    @cached_property
+    def _get_tree_node_list(self):
+        return self.cs_state.reinf_components_with_state

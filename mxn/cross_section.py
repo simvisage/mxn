@@ -29,7 +29,7 @@ from reinf_layout import \
     ReinfLayoutComponent, RLCTexUniform
 
 from view import \
-    MxNTreeNode
+    ReinfLayoutTreeNode
 
 import numpy as np
 
@@ -161,9 +161,7 @@ class CrossSection(CrossSectionState):
     @cached_property
     def _get_tree_node_list(self):
         return [self.matrix_cs_with_state,
-                MxNTreeNode(tree_node_list=self.reinf_components_with_state,
-                            node_name='Reinforcement layout',
-                            plot_state=self)]
+                ReinfLayoutTreeNode(cs_state=self)]
 
     tree_view = View(VGroup(Item('eps_up'),
                        Item('eps_lo'),

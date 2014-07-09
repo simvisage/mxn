@@ -31,6 +31,11 @@ import numpy as np
 
 class RLCTexUniform(ReinfLayoutComponent):
 
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'default_fabric'
+        super(RLCTexUniform, self).__init__(**metadata)
+
     n_layers = Int(12, auto_set=False, enter_set=True, geo_input=True)
     '''Total number of reinforcement layers [-]
     '''

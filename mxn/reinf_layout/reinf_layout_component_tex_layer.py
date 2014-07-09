@@ -30,6 +30,10 @@ from reinf_fabric_handler import \
 class RLCTexLayer(ReinfLayoutComponent):
     '''single layer of textile reinforcement
     '''
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'default_fabric'
+        super(RLCTexLayer, self).__init__(**metadata)
 
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
     '''distance of the layer from the top'''

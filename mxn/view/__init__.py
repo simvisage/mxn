@@ -4,7 +4,7 @@ from mxn_tree_view import \
     leaf_node
 
 from mxn_tree_node import \
-    MxNTreeNode, MxNLeafNode
+    MxNTreeNode, MxNLeafNode, ReinfLayoutTreeNode
 
 from mxn_class_extension import \
     MxNClassExt

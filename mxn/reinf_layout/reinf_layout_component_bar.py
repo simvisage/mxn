@@ -24,6 +24,10 @@ from mxn.material_types import \
 class RLCBar(ReinfLayoutComponent):
     '''base class for bar reinforcement
     '''
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'bar_d10'
+        super(RLCBar, self).__init__(**metadata)
 
     x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)
     z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)
