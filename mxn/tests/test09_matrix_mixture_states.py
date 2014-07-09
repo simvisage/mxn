@@ -14,7 +14,7 @@ from mxn.reinf_layout import \
     RLCTexUniform
 
 from mxn.matrix_laws import \
-    MatrixLawBase, MatrixLawBlock, MatrixLawQuadratic
+    MatrixLawBase, MatrixLawBlock, MatrixLawQuad
 
 from mxn.material_types import \
     MTMatrixMixture
@@ -33,13 +33,12 @@ MTMatrixMixture.db['mixture-test'] = MTMatrixMixture(f_ck=53.7,
                                                 mtrl_laws={'constant':
                                                                 MatrixLawBlock(f_ck=55.7, eps_c_u=0.0033,
                                                                     high_strength_level=50.0, E_c=28e+3),
-                                                                'quadratic':
-                                                                MatrixLawQuadratic(f_ck=55.7, eps_c_u=0.0033,
+                                                                'quad':
+                                                                MatrixLawQuad(f_ck=55.7, eps_c_u=0.0033,
                                                                     high_strength_level=50.0, E_c=28e+3),
                                          })
-MTMatrixMixture.db['mixture-test'].key = 'mixture-test'
 
-def test_matrix_law_states():
+def test_matrix_mixture_states():
     '''Test the moment and normal force calculated for a cross section
     with changing matrix law.
     '''
@@ -66,11 +65,22 @@ def test_matrix_law_states():
     MTMatrixMixture.db['mixture-test'].f_ck = 53.7
     assert np.allclose([cp.M, cp.N], [1.3140950375716971, 3.8701260913315991])
 
+    cp.matrix_cs_with_state.material_law = 'quad'
+    assert np.allclose([cp.M, cp.N], [0.98987130205727225, 19.838093373553274])
+    MTMatrixMixture.db['mixture-test'].mtrl_laws['quad'].E_c = 20000.
+    assert np.allclose([cp.M, cp.N], [0.90521419096946409, 24.022573435893499])
+    MTMatrixMixture.db['mixture-test'].mtrl_laws['quad'].f_ck = 60.0
+    assert np.allclose([cp.M, cp.N], [0.95059541049994045, 22.016807281563626])
+
     loaded_cp = pickle.load(open(object_file, 'rb'))
     assert np.allclose([loaded_cp.M, loaded_cp.N], [1.3140950375716971, 3.8701260913315991])
     MTMatrixMixture.db['mixture-test'].f_ck = 70.0
     assert np.allclose([loaded_cp.M, loaded_cp.N], [1.5155334535680236, -5.0522452437834104])
+
+    cp.matrix_cs_with_state.material_law = 'constant'
     assert np.allclose([cp.M, cp.N], [1.5155334535680236, -5.0522452437834104])
+    cp.matrix_cs_with_state.material_law = 'quad'
+    assert np.allclose([cp.M, cp.N], [1.0226290922943471, 18.833051481040023])
 
 if __name__ == '__main__':
-    test_matrix_law_states()
+    test_matrix_mixture_states()
