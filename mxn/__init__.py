@@ -10,8 +10,8 @@ from cross_section_component import \
 from cross_section import \
     CrossSection
 
-from cross_section_view import \
-    CrossSectionView
+# from cross_section_view import \
+#     CrossSectionView
 
 from ecb_calib import \
     ECBCalib

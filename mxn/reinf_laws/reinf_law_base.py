@@ -12,7 +12,7 @@ from constitutive_law import CLBase
 from mxn_tree_node import \
     MxNLeafNode
 
-from mxn.view import \
+from mxn_class_extension import \
     MxNClassExt
 
 from matresdev.db.simdb import \

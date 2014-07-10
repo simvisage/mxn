@@ -11,7 +11,7 @@ from traits.api import \
 from traitsui.api import \
     View, Item, EnumEditor
 
-from mxn.view import \
+from mxn_class_extension import \
     MxNClassExt
 
 from reinf_laws import \
