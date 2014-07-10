@@ -41,6 +41,9 @@ from mxn_tree_view_handler import \
     MxNTreeViewHandler, plot_self, menu_save, \
     menu_open, menu_exit
 
+from mxn_tree_customized_nodes import \
+    mxn_diagram_container_node, mxn_diagram_node
+
 tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=False,
                                      children='tree_node_list',
