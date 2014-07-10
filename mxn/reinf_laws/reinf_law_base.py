@@ -9,7 +9,7 @@ from traits.api import \
 
 from constitutive_law import CLBase
 
-from mxn.view import \
+from mxn_tree_node import \
     MxNLeafNode
 
 from mxn.view import \

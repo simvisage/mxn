@@ -14,7 +14,7 @@ from traitsui.api import \
 from mxn import \
     MxNDiagram, CrossSectionComponent
 
-from mxn.view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from mxn.utils import \

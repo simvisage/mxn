@@ -34,7 +34,7 @@ from matrix_cross_section import \
 from matresdev.db.simdb import SimDB
 simdb = SimDB()
 
-from view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 class ECBCalib(MxNTreeNode):

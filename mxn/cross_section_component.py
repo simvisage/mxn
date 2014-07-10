@@ -14,7 +14,7 @@ from etsproxy.traits.api import \
 from cross_section_state import \
     CrossSectionState
 
-from view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from utils import \

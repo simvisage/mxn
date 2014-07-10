@@ -24,8 +24,11 @@ from util.traits.editors.mpl_figure_editor import \
 from matplotlib.figure import \
     Figure
 
+from mxn_tree_node import \
+    MxNTreeNode
+
 from mxn.view import \
-    tree_node, MxNTreeNode, plot_self, \
+    tree_node, plot_self, \
     MxNTreeViewHandler, leaf_node
 
 from traitsui.menu import \

@@ -4,7 +4,7 @@ Created on 1. 7. 2014
 @author: Vancikv
 '''
 
-from mxn.view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from mxn.material_types import \

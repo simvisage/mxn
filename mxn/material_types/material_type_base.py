@@ -8,7 +8,7 @@ from traits.api import \
     Property, cached_property, Dict, Str, \
     on_trait_change, List, Button
 
-from mxn.view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from matresdev.db.simdb import \

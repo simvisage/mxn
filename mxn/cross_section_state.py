@@ -10,7 +10,7 @@ Created on Sep 4, 2012
 from etsproxy.traits.api import \
     HasStrictTraits, Float
 
-from view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 class CrossSectionState(MxNTreeNode):

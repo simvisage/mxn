@@ -18,7 +18,7 @@ from reinf_layout import \
 
 import numpy as np
 
-from view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from matrix_cross_section import \

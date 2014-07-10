@@ -31,5 +31,8 @@ from matrix_laws import \
 from reinf_laws import \
     ReinfLawBase, ReinfLawFBM
 
+from mxn_tree_node import \
+    MxNTreeNode
+
 from view import \
-    MxNTreeView, MxNTreeNode
+    MxNTreeView

@@ -28,7 +28,7 @@ from matrix_cross_section import \
 from reinf_layout import \
     ReinfLayoutComponent, RLCTexUniform
 
-from view import \
+from mxn_tree_node import \
     ReinfLayoutTreeNode
 
 import numpy as np

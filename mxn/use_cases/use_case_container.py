@@ -11,7 +11,7 @@ from traits.api import \
 from traitsui.api import \
     View, Item, VGroup, HGroup, UItem, spring
 
-from mxn.view import \
+from mxn_tree_node import \
     MxNTreeNode
 
 from use_case_parametric_study import \

@@ -10,7 +10,7 @@ from traits.api import \
 from matresdev.db.simdb import \
     SimDBClassExt
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
 from traitsui.api import \

@@ -11,8 +11,11 @@ import numpy as np
 
 from constitutive_law import CLBase
 
+from mxn_tree_node import \
+    MxNLeafNode
+
 from mxn.view import \
-    MxNLeafNode, MxNClassExt
+    MxNClassExt
 
 from matresdev.db.simdb import \
     SimDBClass, SimDBClassExt
