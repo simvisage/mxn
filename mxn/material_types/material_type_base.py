@@ -14,7 +14,7 @@ from mxn_tree_node import \
 from matresdev.db.simdb import \
     SimDBClass
 
-from mxn.constitutive_law import \
+from constitutive_law import \
     CLBase
 
 import weakref

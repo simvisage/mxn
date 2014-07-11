@@ -10,7 +10,7 @@ from traits.api import \
 from traitsui.api import \
     View, Item, HGroup, Handler, spring, UIInfo
 
-from mxn.material_types import \
+from material_types import \
     MTReinfFabric
 
 class FabricHandler(Handler):

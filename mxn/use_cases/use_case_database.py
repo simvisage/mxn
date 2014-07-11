@@ -7,7 +7,7 @@ Created on 1. 7. 2014
 from mxn_tree_node import \
     MxNTreeNode
 
-from mxn.material_types import \
+from material_types import \
     MTMatrixMixture, MTReinfFabric, MTReinfBar
 
 class UCDatabase(MxNTreeNode):

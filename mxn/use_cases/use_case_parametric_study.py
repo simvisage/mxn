@@ -11,16 +11,19 @@ from traits.api import \
 from traitsui.api import \
     View, Item, UItem, VGroup, HGroup, spring
 
-from mxn import \
-    MxNDiagram, CrossSectionComponent
+from mxn_diagram import \
+    MxNDiagram
+    
+from cross_section_component import \
+    CrossSectionComponent
 
 from mxn_tree_node import \
     MxNTreeNode
 
-from mxn.utils import \
+from utils import \
     KeyRef
 
-from mxn.material_types import \
+from material_types import \
     MTReinfBar, MTReinfFabric, MTMatrixMixture
 
 class UCPStudyElement(MxNTreeNode):

@@ -27,7 +27,7 @@ from matplotlib.figure import \
 from mxn_tree_node import \
     MxNTreeNode
 
-from mxn.view import \
+from view import \
     tree_node, plot_self, \
     MxNTreeViewHandler, leaf_node
 

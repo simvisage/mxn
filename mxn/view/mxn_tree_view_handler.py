@@ -17,7 +17,7 @@ from traitsui.file_dialog import \
 from traits.api import \
     Button, Instance
 
-from mxn.utils import \
+from utils import \
     get_outfile
 
 import pickle

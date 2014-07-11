@@ -14,7 +14,7 @@ from traitsui.api import \
 from mxn_class_extension import \
     MxNClassExt
 
-from mxn.reinf_laws import \
+from reinf_laws import \
     ReinfLawBase, ReinfLawSteel
 
 from material_type_base import \

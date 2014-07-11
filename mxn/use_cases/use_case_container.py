@@ -17,8 +17,11 @@ from mxn_tree_node import \
 from use_case_parametric_study import \
     UCParametricStudy
 
-from mxn import \
-    MxNDiagram, ECBCalib
+from mxn_diagram import \
+    MxNDiagram
+
+from ecb_calib import \
+    ECBCalib
 
 from use_case_database import \
     UCDatabase

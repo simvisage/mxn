@@ -4,13 +4,16 @@ Created on 26. 2. 2014
 @author: Vancikv
 '''
 
-from mxn import \
-    CrossSection, CrossSectionView
+from cross_section import \
+    CrossSection
+    
+from cross_section_view import \
+    CrossSectionView
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from mxn.reinf_layout import \
+from reinf_layout import \
     RLCBar
 
 bar = RLCBar(x=0.1, z=0.45, material='bar_d10')

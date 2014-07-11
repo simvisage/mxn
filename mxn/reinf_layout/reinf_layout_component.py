@@ -7,10 +7,10 @@ Created on Sep 4, 2012
 from traits.api import \
     WeakRef
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection
 
-from mxn import \
+from cross_section_component import \
     CrossSectionComponent
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,matrix_cs.geo.changed'
