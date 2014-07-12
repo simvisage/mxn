@@ -42,7 +42,7 @@ from mxn_tree_view_handler import \
     menu_open, menu_exit
 
 from mxn_tree_customized_nodes import \
-    mxn_diagram_container_node, mxn_diagram_node
+    custom_node_list
 
 tree_node = TreeNode(node_for=[MxNTreeNode],
                                      auto_open=False,
@@ -50,8 +50,6 @@ tree_node = TreeNode(node_for=[MxNTreeNode],
                                      label='node_name',
                                      view='tree_view',
                                      menu=Menu(DeleteAction, plot_self),
-#                                      move=[MxNTreeNode, MxNLeafNode],
-#                                      add=[MxNTreeNode, MxNLeafNode]
                                      )
 
 leaf_node = TreeNode(node_for=[MxNLeafNode],
@@ -63,7 +61,7 @@ leaf_node = TreeNode(node_for=[MxNLeafNode],
                                      )
 
 tree_editor = TreeEditor(
-                    nodes=[ tree_node, leaf_node ],
+                    nodes=custom_node_list + [ tree_node, leaf_node],
                     selected='selected_node',
                     orientation='vertical'
                              )

@@ -22,19 +22,29 @@ from use_cases import \
 
 from mxn_diagram import \
     MxNDiagram
+    
+class SingleChildTreeNode(TreeNode):
+    def append_child ( self, object, child ):
+        """ Appends a child to the object's children.
+        """
+        setattr( object, self.children , [child])
 
-mxn_diagram_container_node = TreeNode(node_for=[UCPStudyElementMxN],
+mxn_diagram_container_node = SingleChildTreeNode(node_for=[UCPStudyElementMxN],
                                      auto_open=False,
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
                                      menu=Menu(DeleteAction, PasteAction),
+                                     add=[MxNDiagram],
+                                     delete=False
                                      )
 
-mxn_diagram_node = TreeNode(node_for=[MxNDiagram],
+mxn_diagram_node = SingleChildTreeNode(node_for=[MxNDiagram],
                                      auto_open=False,
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
                                      menu=Menu(DeleteAction, CopyAction),
                                      )
+
+custom_node_list = [mxn_diagram_container_node, mxn_diagram_node]
