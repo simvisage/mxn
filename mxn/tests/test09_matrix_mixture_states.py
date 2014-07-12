@@ -4,26 +4,26 @@ Created on 23. 4. 2014
 @author: Vancikv
 '''
 
-from mxn import \
+from cross_section import \
     CrossSection
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from mxn.reinf_layout import \
+from reinf_layout import \
     RLCTexUniform
 
-from mxn.matrix_laws import \
+from matrix_laws import \
     MatrixLawBase, MatrixLawBlock, MatrixLawQuad
 
-from mxn.material_types import \
+from material_types import \
     MTMatrixMixture
 
 import numpy as np
 
 import pickle
 
-from mxn.utils import \
+from utils import \
     get_outfile
 
 if MTMatrixMixture.db.get('mixture-test', None):

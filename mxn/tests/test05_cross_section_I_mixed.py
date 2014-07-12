@@ -4,13 +4,13 @@ Created on 15. 2. 2014
 @author: Vancikv
 '''
 
-from mxn import \
+from cross_section import \
     CrossSection
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect, MCSGeoI
 
-from mxn.reinf_layout import \
+from reinf_layout import \
     RLCBar, RLCTexLayer
 
 import numpy as np

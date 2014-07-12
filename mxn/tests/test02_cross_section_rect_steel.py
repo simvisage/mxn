@@ -4,20 +4,20 @@ Created on 15. 2. 2014
 @author: Vancikv
 '''
 
-from mxn import \
+from cross_section import \
     CrossSection
 
-from mxn.matrix_cross_section import \
+from matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from mxn.reinf_layout import \
+from reinf_layout import \
     RLCSteelBar
 
 import numpy as np
 
 import pickle
 
-from mxn.utils import \
+from utils import \
     get_outfile
 
 def test_cross_section_mn():
