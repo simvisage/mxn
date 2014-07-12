@@ -32,11 +32,17 @@ class UCPStudyElement(MxNTreeNode):
     '''
     node_name = Str('<unnamed>')
 
-    content = Instance(MxNTreeNode)
+    tree_node_list = List(Instance(MxNTreeNode))
+    def append_node(self, node):
+        '''Add a new subnode to the current node.
+        Inform the tree view to select the new node within the view.
+        '''
+        print "appending node"
+        self.tree_node_list = [node]
 
-    tree_node_list = Property(depends_on='content')
-    def _get_tree_node_list(self):
-        return [self.content]
+    content = Property(depends_on='tree_node_list')
+    def _get_content(self):
+        return self.tree_node_list[0]
 
     color = Trait('black', dict(black='k',
                                 cyan='c',
@@ -69,8 +75,8 @@ class UCPStudyElement(MxNTreeNode):
 
 class UCPStudyElementMxN(UCPStudyElement):
     node_name = '<unnamed mxn diagram>'
-    def _content_default(self):
-        return MxNDiagram()
+    def _tree_node_list_default(self):
+        return [MxNDiagram()]
 
 class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
     node_name = '<unnamed fabric law>'
