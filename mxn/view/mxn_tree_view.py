@@ -50,8 +50,6 @@ tree_node = TreeNode(node_for=[MxNTreeNode],
                                      label='node_name',
                                      view='tree_view',
                                      menu=Menu(DeleteAction, plot_self),
-#                                      move=[MxNTreeNode, MxNLeafNode],
-#                                      add=[MxNTreeNode, MxNLeafNode]
                                      )
 
 leaf_node = TreeNode(node_for=[MxNLeafNode],
