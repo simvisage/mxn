@@ -4,11 +4,13 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    HasTraits, Int, Instance, Property, cached_property, DelegatesTo, \
-    Event, Button
+    HasTraits, Int, Instance, Property, \
+    cached_property, DelegatesTo, \
+    Event, Button, List
 
 from etsproxy.traits.ui.api import \
-    View, Item, Group, HSplit, VGroup, HGroup, RangeEditor, InstanceEditor
+    View, Item, Group, HSplit, VGroup, \
+    HGroup, RangeEditor, InstanceEditor
 
 from cross_section import \
     CrossSection
@@ -30,16 +32,21 @@ class MxNDiagram(MxNTreeNode):
     def set_modified(self):
         self.modified = True
 
-    # cross section
-    cs = Instance(CrossSection)
-    def _cs_default(self):
-        return CrossSection(notify_change_ext=self.set_modified,
+    tree_node_list = List(Instance(CrossSection))
+    def _tree_node_list_default(self):
+        return [CrossSection(notify_change_ext=self.set_modified,
                             reinf=[RLCTexUniform(n_layers=12, material='default_fabric')],
                             matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
                                         height=0.06), n_cj=20, material='default_mixture',
-                                                            material_law='constant'))
-    def _cs_changed(self):
-        self.cs.notify_change_ext = self.set_modified
+                                                            material_law='constant'))]
+
+    cs = Property(depends_on='tree_node_list')
+    def _get_cs(self):
+        val = self.tree_node_list[0]
+        val.notify_change_ext = self.set_modified
+        return self.tree_node_list[0]
+    def _set_cs(self, val):
+        self.tree_node_list = [val]
 
     eps_cu = Property()
     def _get_eps_cu(self):
@@ -170,11 +177,6 @@ class MxNDiagram(MxNTreeNode):
         self.plot_MN(ax2)
 
     node_name = 'MxN diagram'
-
-    tree_node_list = Property
-    @cached_property
-    def _get_tree_node_list(self):
-        return [self.cs]
 
     traits_view = View(HSplit(Group(
                 HGroup(

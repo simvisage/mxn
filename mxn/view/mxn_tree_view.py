@@ -15,8 +15,7 @@ inherit from the MxNTreeNode and supply the attributes
 '''
 
 from traits.api import \
-    HasStrictTraits, Instance, Button, Event, \
-    Str, List, WeakRef, Property, cached_property
+    HasStrictTraits, Instance, Button, Event
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \

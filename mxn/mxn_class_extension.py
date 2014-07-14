@@ -40,7 +40,7 @@ class MxNClassExt(SimDBClassExt, MxNTreeNode):
         for inst in self.instances.values():
             inst.save()
 
-    tree_node_list = Property()
+    tree_node_list = Property(depends_on='instances')
     def _get_tree_node_list(self):
         for inst in self.inst_list:
             inst.node_name = inst.key

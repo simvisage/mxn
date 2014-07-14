@@ -13,7 +13,7 @@ from traitsui.api import \
 
 from mxn_diagram import \
     MxNDiagram
-    
+
 from cross_section_component import \
     CrossSectionComponent
 
@@ -33,16 +33,12 @@ class UCPStudyElement(MxNTreeNode):
     node_name = Str('<unnamed>')
 
     tree_node_list = List(Instance(MxNTreeNode))
-    def append_node(self, node):
-        '''Add a new subnode to the current node.
-        Inform the tree view to select the new node within the view.
-        '''
-        print "appending node"
-        self.tree_node_list = [node]
 
     content = Property(depends_on='tree_node_list')
     def _get_content(self):
         return self.tree_node_list[0]
+    def _set_content(self, val):
+        self.tree_node_list = [val]
 
     color = Trait('black', dict(black='k',
                                 cyan='c',

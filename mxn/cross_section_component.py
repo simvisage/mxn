@@ -9,7 +9,7 @@ Created on Sep 4, 2012
 from etsproxy.traits.api import \
     HasStrictTraits, Property, \
     Event, on_trait_change, WeakRef, \
-    Constant, cached_property
+    Constant, cached_property, Bool
 
 from cross_section_state import \
     CrossSectionState
@@ -20,12 +20,13 @@ from mxn_tree_node import \
 from utils import \
     KeyRef
 
+import copy
+
 COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'
 
 class CrossSectionComponent(MxNTreeNode):
     '''Cross section component supplying the normal force and moment..
     '''
-
     def __init__(self, *args, **metadata):
         default_material = metadata.get('material', None)
         if default_material:
