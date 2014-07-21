@@ -10,6 +10,9 @@ from traits.api import \
 from traitsui.api import \
     View, Item, HGroup, Handler, spring, UIInfo
 
+from traitsui.menu import \
+    Action
+
 class MxNClassExtHandler(Handler):
     '''Handles adding and removing of ReinfFabric database
     objects through user interface.
@@ -46,6 +49,7 @@ class MxNClassExtHandler(Handler):
     )
 
     # Event handlers:
+
     def object_new_material_changed (self, info):
         if info.initialized:
             self.info = info

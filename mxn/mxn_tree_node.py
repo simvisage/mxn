@@ -12,7 +12,7 @@ from traitsui.api import \
     View
 
 class MxNLeafNode(HasStrictTraits):
-    '''Base class of all model classes that can appear in a tree node.
+    '''Base class of all model classes that can appear in a tree view.
     '''
     node_name = Str('<unnamed>')
 
@@ -20,7 +20,7 @@ class MxNLeafNode(HasStrictTraits):
         return
 
 class MxNTreeNode(HasStrictTraits):
-    '''Base class of all model classes that can appear in a tree node.
+    '''Base class of all model classes that can appear in a tree view.
     '''
     node_name = Str('<unnamed>')
 

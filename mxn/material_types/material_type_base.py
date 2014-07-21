@@ -76,3 +76,8 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
     @cached_property
     def _get_tree_node_list(self):
         return self.named_mtrl_laws.values()
+
+    @on_trait_change('node_name')
+    def update_key(self):
+        self.key = self.node_name
+        self.save()

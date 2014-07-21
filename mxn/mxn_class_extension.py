@@ -23,9 +23,9 @@ class MxNClassExt(SimDBClassExt, MxNTreeNode):
     node_name = 'Material database'
 
     def __setitem__(self, key, value):
+        value.key = key
+        value.node_name = key
         super(MxNClassExt, self).__setitem__(key, value)
-        self.instances[key].key = key
-        self.instances[key].node_name = key
 
     new_material = Button(label='Add new material')
     def _new_material_fired(self):

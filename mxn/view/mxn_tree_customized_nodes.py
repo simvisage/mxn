@@ -11,13 +11,13 @@ from traitsui.menu import \
     Menu, MenuBar, Separator, Action
 
 from mxn_tree_view_handler import \
-    plot_self
+    plot_self, new_material, del_material
 
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction, CopyAction, PasteAction
 
 from use_cases import \
-    UCPStudyElementMxN
+    UCPStudyElementMxN, UCDatabase
 
 from mxn_diagram import \
     MxNDiagram
@@ -36,6 +36,9 @@ from mxn_tree_node import \
 
 from reinf_layout import \
     RLCTexLayer, RLCTexUniform, RLCBar
+
+from mxn_class_extension import \
+    MxNClassExt
 
 import pickle, os
 
@@ -88,6 +91,21 @@ mxn_diagram_node = SingleChildTreeNode(node_for=[MxNDiagram],
                                                plot_self),
                                      )
 
+database_node = TreeNode(node_for=[UCDatabase],
+                                     auto_open=False,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view='tree_view',
+                                     menu=Menu(),
+                                     )
+
+database_subnode = TreeNode(node_for=[MxNClassExt],
+                                     auto_open=True,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view='tree_view',
+                                     menu=Menu(new_material),
+                                     )
 cross_section_node = TreeNode(node_for=[CrossSection],
                               auto_open=True,
                               children='tree_node_list',
@@ -101,7 +119,7 @@ material_type_node = TreeNode(node_for=[MaterialTypeBase],
                               children='tree_node_list',
                               label='node_name',
                               view='tree_view',
-                              menu=Menu(),
+                              menu=Menu(del_material),
                               )
 
 reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
@@ -142,4 +160,5 @@ reinf_bar_node = TreeNode(node_for=[RLCBar],
 custom_node_list = [mxn_diagram_container_node, mxn_diagram_node,
                     cross_section_node, material_type_node,
                     reinf_layout_node, reinf_tex_uniform_node,
-                    reinf_tex_layer_node, reinf_bar_node]
+                    reinf_tex_layer_node, reinf_bar_node,
+                    database_node, database_subnode]

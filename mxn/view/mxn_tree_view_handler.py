@@ -5,8 +5,8 @@ Created on 14. 4. 2014
 '''
 
 from traitsui.api import \
-    TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, Handler, UIInfo
+    View, Item, Group, HGroup, Handler, \
+    UIInfo, spring
 
 from traitsui.menu import \
     Action
@@ -15,7 +15,7 @@ from traitsui.file_dialog import \
     open_file, save_file
 
 from traits.api import \
-    Button, Instance
+    Button, Instance, WeakRef, HasTraits
 
 from utils import \
     get_outfile
@@ -23,7 +23,13 @@ from utils import \
 import pickle
 
 plot_self = Action(name='Plot', action='plot_node')
-'''Menu action for plotting tree nodes
+'''Context menu action for plotting tree nodes
+'''
+new_material = Action(name='New material', action='new_material')
+'''Context menu action for adding a new database member
+'''
+del_material = Action(name='Delete', action='del_material')
+'''Context menu action for deleting a database member
 '''
 menu_save = Action(name='Save', action='menu_save')
 '''Menubar action for saving the root node to file
@@ -40,9 +46,11 @@ class MxNTreeViewHandler(Handler):
     '''
     # The UIInfo object associated with the view:
     info = Instance(UIInfo)
+    node = WeakRef
 
     ok = Button('OK')
     cancel = Button('Cancel')
+    delete = Button('OK')
     exit_dialog = ('Do you really wish to end '
                    'the session? Any unsaved data '
                    'will be lost.')
@@ -54,6 +62,29 @@ class MxNTreeViewHandler(Handler):
                      title='Exit dialog',
                      kind='live'
                      )
+
+    del_view = View(
+        HGroup(
+            spring,
+            Item(name='', label='Really delete?'),
+            Item('delete', show_label=False),
+            Item('cancel', show_label=False),
+        ),
+        kind='popup'
+    )
+
+    def new_material(self, info, node):
+        mat_name = 'new_material_1'
+        count = 1
+        while node.get(mat_name, None):
+            count += 1
+            mat_name = 'new_material_' + str(count)
+        node[mat_name] = node.klass()
+
+    def del_material(self, info, node):
+        if info.initialized:
+            self.node = node
+            self._ui = self.edit_traits(view='del_view')
 
     def plot_node(self, info, node):
         '''Handles context menu action Plot for tree nodes
@@ -78,6 +109,10 @@ class MxNTreeViewHandler(Handler):
         if info.initialized:
             self.info = info
             self._ui = self.edit_traits(view='exit_view')
+
+    def _delete_fired (self):
+        del self.node.db[self.node.key]
+        self._ui.dispose()
 
     def _ok_fired (self):
         self._ui.dispose()
