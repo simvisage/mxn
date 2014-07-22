@@ -8,7 +8,7 @@ from traits.api import \
     Float, Property, cached_property, \
     Button
 
-from material_types import \
+from mxn.material_types import \
     MTReinfFabric
 
 from traitsui.api import \
@@ -21,7 +21,7 @@ from reinf_layout_component import \
 
 import numpy as np
 
-from utils import \
+from mxn.utils import \
     KeyRef
 
 from reinf_fabric_handler import \

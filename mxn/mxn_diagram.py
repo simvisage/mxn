@@ -12,18 +12,18 @@ from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, \
     HGroup, RangeEditor, InstanceEditor
 
-from cross_section import \
+from mxn.mxn_tree_node import \
+    MxNTreeNode, ReinfLayoutTreeNode
+
+from mxn.cross_section import \
     CrossSection
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexUniform
 
 import numpy as np
 
-from mxn_tree_node import \
-    MxNTreeNode
-
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 class MxNDiagram(MxNTreeNode):

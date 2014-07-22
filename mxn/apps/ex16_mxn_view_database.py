@@ -7,10 +7,10 @@ This example shows tree view of the material database
 which is the sole default subnode of UseCaseContainer
 '''
 
-from view import \
+from mxn.view import \
     MxNTreeView
 
-from use_cases import \
+from mxn.use_cases import \
     UseCaseContainer
 
 uc_view = MxNTreeView(root=UseCaseContainer())

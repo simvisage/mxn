@@ -11,13 +11,13 @@ from etsproxy.traits.ui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, \
     ModelView, VGroup, HGroup
 
-from cross_section import \
+from mxn.cross_section import \
     CrossSection
 
-from reinf_laws import \
+from mxn.reinf_laws import \
     ReinfLawBase
 
-from ecb_calib import \
+from mxn.ecb_calib import \
     ECBCalib
 
 from util.traits.editors.mpl_figure_editor import  \

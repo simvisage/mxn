@@ -7,7 +7,7 @@ Created on 25. 2. 2014
 from reinf_layout_component_bar import \
     RLCBar
 
-from reinf_laws import \
+from mxn.reinf_laws import \
     ReinfLawBase
 
 from etsproxy.traits.api import \

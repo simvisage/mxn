@@ -7,6 +7,9 @@ Created on Jan 17, 2014
 from cross_section_component import \
     CrossSectionComponent
 
+from cross_section_state import \
+    CrossSectionState
+
 from cross_section import \
     CrossSection
 

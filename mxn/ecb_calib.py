@@ -19,22 +19,22 @@ import copy
 
 from scipy.optimize import fsolve
 
-from cross_section import \
+from mxn.cross_section import \
     CrossSection
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
 
-from reinf_laws import \
+from mxn.reinf_laws import \
     ReinfLawBase
 
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from matresdev.db.simdb import SimDB
 simdb = SimDB()
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
 class ECBCalib(MxNTreeNode):

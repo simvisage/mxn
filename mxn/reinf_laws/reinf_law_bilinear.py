@@ -7,7 +7,7 @@ Created on 26. 2. 2014
 from etsproxy.traits.api import \
     Float, Property, cached_property, Array, Int, List
 
-from constitutive_law import CLBase
+from mxn.constitutive_law import CLBase
 
 import numpy as np
 

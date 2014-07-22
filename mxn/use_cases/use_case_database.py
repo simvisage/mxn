@@ -4,10 +4,10 @@ Created on 1. 7. 2014
 @author: Vancikv
 '''
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
-from material_types import \
+from mxn.material_types import \
     MTMatrixMixture, MTReinfFabric, MTReinfBar
 
 class UCDatabase(MxNTreeNode):

@@ -8,7 +8,7 @@ from traitsui.api import \
     TreeNode
 
 from traitsui.menu import \
-    Menu, MenuBar, Separator, Action
+    Menu
 
 from mxn_tree_view_handler import \
     plot_self, new_material, del_material
@@ -16,28 +16,31 @@ from mxn_tree_view_handler import \
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction, CopyAction, PasteAction
 
-from use_cases import \
-    UCPStudyElementMxN, UCDatabase
-
-from mxn_diagram import \
+from mxn.mxn_diagram import \
     MxNDiagram
 
-from cross_section import \
+from mxn.cross_section import \
     CrossSection
 
-from utils import \
+from mxn.use_cases.use_case_database import \
+    UCDatabase
+
+from mxn.use_cases.use_case_parametric_study import \
+    UCPStudyElementMxN
+
+from mxn.utils import \
     get_outfile
 
-from material_types import \
+from mxn.material_types import \
     MaterialTypeBase
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     ReinfLayoutTreeNode
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexLayer, RLCTexUniform, RLCBar
 
-from mxn_class_extension import \
+from mxn.mxn_class_extension import \
     MxNClassExt
 
 import pickle, os

@@ -10,12 +10,15 @@ from traits.api import \
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup
+    HSplit, HGroup, Menu
 
-from cross_section import \
+from traitsui.wx.tree_editor import \
+    NewAction, DeleteAction
+
+from mxn.cross_section import \
     CrossSection
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexUniform, RLCTexLayer, RLCSteelBar
 
 from util.traits.editors.mpl_figure_editor import \
@@ -24,18 +27,12 @@ from util.traits.editors.mpl_figure_editor import \
 from matplotlib.figure import \
     Figure
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
-from view import \
+from mxn.view import \
     tree_node, plot_self, \
     MxNTreeViewHandler, leaf_node
-
-from traitsui.menu import \
-    Menu
-
-from traitsui.wx.tree_editor import \
-    NewAction, DeleteAction
 
 class CrossSectionTreeNode(MxNTreeNode):
     '''Proxy class for the cross section node returning the two subnotes.

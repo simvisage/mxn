@@ -9,12 +9,12 @@ from etsproxy.traits.api import \
 
 import numpy as np
 
-from constitutive_law import CLBase
+from mxn.constitutive_law import CLBase
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNLeafNode
 
-from mxn_class_extension import \
+from mxn.mxn_class_extension import \
     MxNClassExt
 
 from matresdev.db.simdb import \

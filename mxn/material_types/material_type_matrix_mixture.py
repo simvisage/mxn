@@ -11,10 +11,10 @@ from traits.api import \
 from traitsui.api import \
     View, Item, EnumEditor
 
-from mxn_class_extension import \
+from mxn.mxn_class_extension import \
     MxNClassExt
 
-from matrix_laws import \
+from mxn.matrix_laws import \
     MatrixLawBilinear, MatrixLawBlock, \
     MatrixLawLinear, MatrixLawQuad, \
     MatrixLawQuadratic, MatrixLawBase

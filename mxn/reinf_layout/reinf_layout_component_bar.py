@@ -15,10 +15,10 @@ from reinf_layout_component import \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
 
-from utils import \
+from mxn.utils import \
     KeyRef
 
-from material_types import \
+from mxn.material_types import \
     MTReinfBar
 
 class RLCBar(ReinfLayoutComponent):

@@ -5,25 +5,25 @@ Created on 1. 7. 2014
 '''
 
 from traits.api import \
-    HasStrictTraits, Instance, Property, \
+    Instance, Property, \
     List, Str, Trait, Button, cached_property
 
 from traitsui.api import \
     View, Item, UItem, VGroup, HGroup, spring
 
-from mxn_diagram import \
+from mxn.mxn_diagram import \
     MxNDiagram
 
-from cross_section_component import \
+from mxn.cross_section_component import \
     CrossSectionComponent
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
-from utils import \
+from mxn.utils import \
     KeyRef
 
-from material_types import \
+from mxn.material_types import \
     MTReinfBar, MTReinfFabric, MTMatrixMixture
 
 class UCPStudyElement(MxNTreeNode):

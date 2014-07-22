@@ -17,10 +17,7 @@ from matplotlib.figure import \
 from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, HGroup, RangeEditor, InstanceEditor
 
-from ecb_calib import \
-    ECBCalib
-
-from mxn_diagram import \
+from mxn.mxn_diagram import \
     MxNDiagram
 
 class MxNDiagramView(HasStrictTraits):
@@ -32,7 +29,7 @@ class MxNDiagramView(HasStrictTraits):
         self._replot_fired()
 
     n_eps_range = DelegatesTo('mxn')
-    
+
     figure = Instance(Figure)
     def _figure_default(self):
         figure = Figure(facecolor='white')
@@ -67,7 +64,7 @@ class MxNDiagramView(HasStrictTraits):
 
         self.data_changed = True
 
-    view = View(HSplit(Item('mxn@',show_label=False,springy=True),
+    view = View(HSplit(Item('mxn@', show_label=False, springy=True),
                 Group(HGroup(
                              Item('replot', show_label=False),
                              Item('clear', show_label=False),

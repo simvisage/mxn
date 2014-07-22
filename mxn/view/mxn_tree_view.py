@@ -19,7 +19,7 @@ from traits.api import \
 
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
-    HSplit, HGroup, Handler
+    HSplit, HGroup
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -31,9 +31,9 @@ from traitsui.menu import \
     Menu, MenuBar, Separator
 
 from traitsui.wx.tree_editor import \
-    NewAction, DeleteAction
+    DeleteAction
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode, MxNLeafNode
 
 from mxn_tree_view_handler import \

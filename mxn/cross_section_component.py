@@ -11,16 +11,14 @@ from etsproxy.traits.api import \
     Event, on_trait_change, WeakRef, \
     Constant, cached_property, Bool
 
-from cross_section_state import \
+from mxn.cross_section_state import \
     CrossSectionState
 
-from mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
 from utils import \
     KeyRef
-
-import copy
 
 COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'
 
