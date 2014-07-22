@@ -75,15 +75,17 @@ class UCPStudyElementMxN(UCPStudyElement):
         return [MxNDiagram()]
 
 class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'default_fabric'
+        super(UCPStudyElementFabricLaw, self).__init__(**metadata)
+
     node_name = '<unnamed fabric law>'
     material = KeyRef('default_fabric', db=MTReinfFabric.db)
 
-    content = Property(depends_on='material_law')
-    @cached_property
-    def _get_content(self):
-        val = self.material
-        self.material = val
-        return self.material_law_
+    tree_node_list = Property(depends_on='material,material_law')
+    def _get_tree_node_list(self):
+        return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
                        Item('linestyle'),
@@ -94,15 +96,17 @@ class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
                        label='Law options'))
 
 class UCPStudyElementBarLaw(UCPStudyElement, CrossSectionComponent):
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'bar_d10'
+        super(UCPStudyElementBarLaw, self).__init__(**metadata)
+
     node_name = '<unnamed bar law>'
     material = KeyRef('bar_d10', db=MTReinfBar.db)
 
-    content = Property(depends_on='material_law')
-    @cached_property
-    def _get_content(self):
-        val = self.material
-        self.material = val
-        return self.material_law_
+    tree_node_list = Property(depends_on='material,material_law')
+    def _get_tree_node_list(self):
+        return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
                        Item('linestyle'),
@@ -113,15 +117,17 @@ class UCPStudyElementBarLaw(UCPStudyElement, CrossSectionComponent):
                        label='Law options'))
 
 class UCPStudyElementMatrixLaw(UCPStudyElement, CrossSectionComponent):
+    def __init__(self, *args, **metadata):
+        if not metadata.get('material', None):
+            metadata['material'] = 'default_mixture'
+        super(UCPStudyElementMatrixLaw, self).__init__(**metadata)
+
     node_name = '<unnamed matrix law>'
     material = KeyRef('default_mixture', db=MTMatrixMixture.db)
 
-    content = Property(depends_on='material_law')
-    @cached_property
-    def _get_content(self):
-        val = self.material
-        self.material = val
-        return self.material_law_
+    tree_node_list = Property(depends_on='material,material_law')
+    def _get_tree_node_list(self):
+        return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
                        Item('linestyle'),

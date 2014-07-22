@@ -44,7 +44,7 @@ class MxNDiagram(MxNTreeNode):
     def _get_cs(self):
         val = self.tree_node_list[0]
         val.notify_change_ext = self.set_modified
-        return self.tree_node_list[0]
+        return val
     def _set_cs(self, val):
         self.tree_node_list = [val]
 

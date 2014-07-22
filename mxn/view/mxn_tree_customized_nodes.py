@@ -22,11 +22,9 @@ from mxn.mxn_diagram import \
 from mxn.cross_section import \
     CrossSection
 
-from mxn.use_cases.use_case_database import \
-    UCDatabase
-
-from mxn.use_cases.use_case_parametric_study import \
-    UCPStudyElementMxN
+from mxn.use_cases import \
+    UCDatabase, UCPStudyElementMxN, UCParametricStudy, \
+    UseCaseContainer
 
 from mxn.utils import \
     get_outfile
@@ -42,6 +40,9 @@ from mxn.reinf_layout import \
 
 from mxn.mxn_class_extension import \
     MxNClassExt
+
+from mxn.ecb_calib import \
+    ECBCalib
 
 import pickle, os
 
@@ -71,15 +72,36 @@ class SingleChildTreeNode(TreeNode):
         """
         pass
 
+use_case_container_node = TreeNode(
+                                     node_for=[UseCaseContainer],
+                                     auto_open=True,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view='tree_view',
+                                     menu=Menu(NewAction),
+                                     add=[MxNDiagram, UCParametricStudy,
+                                          ECBCalib],
+                                     )
+
+parametric_study_node = TreeNode(
+                                     node_for=[UCParametricStudy],
+                                     auto_open=True,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view='tree_view',
+                                     menu=Menu(NewAction),
+                                     add=[],
+                                     )
+
 mxn_diagram_container_node = SingleChildTreeNode(
                                      node_for=[UCPStudyElementMxN],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(DeleteAction,
+                                     menu=Menu(plot_self,
                                                PasteAction,
-                                                plot_self),
+                                               DeleteAction),
                                      add=[MxNDiagram],
                                      )
 
@@ -89,10 +111,29 @@ mxn_diagram_node = SingleChildTreeNode(node_for=[MxNDiagram],
                                      label='node_name',
                                      view='tree_view',
                                      add=[CrossSection],
-                                     menu=Menu(CopyAction,
+                                     menu=Menu(plot_self,
+                                               CopyAction,
                                                PasteAction,
-                                               plot_self),
+                                               DeleteAction),
                                      )
+
+ecb_calib_node = SingleChildTreeNode(node_for=[ECBCalib],
+                                     auto_open=True,
+                                     children='tree_node_list',
+                                     label='node_name',
+                                     view='tree_view',
+                                     add=[CrossSection],
+                                     menu=Menu(plot_self,
+                                               CopyAction,
+                                               PasteAction,
+                                               DeleteAction),
+                                     )
+#===============================================================================
+# Database and subordinates
+#===============================================================================
+
+''' Generic nodes are used for constitutive laws
+'''
 
 database_node = TreeNode(node_for=[UCDatabase],
                                      auto_open=False,
@@ -109,13 +150,6 @@ database_subnode = TreeNode(node_for=[MxNClassExt],
                                      view='tree_view',
                                      menu=Menu(new_material),
                                      )
-cross_section_node = TreeNode(node_for=[CrossSection],
-                              auto_open=True,
-                              children='tree_node_list',
-                              label='node_name',
-                              view='tree_view',
-                              menu=Menu(CopyAction, plot_self),
-                              )
 
 material_type_node = TreeNode(node_for=[MaterialTypeBase],
                               auto_open=False,
@@ -123,6 +157,21 @@ material_type_node = TreeNode(node_for=[MaterialTypeBase],
                               label='node_name',
                               view='tree_view',
                               menu=Menu(del_material),
+                              )
+
+#===============================================================================
+# Cross section and subordinates
+#===============================================================================
+
+''' Generic nodes are used for MatrixCrossSection and for constitutive laws
+'''
+
+cross_section_node = TreeNode(node_for=[CrossSection],
+                              auto_open=True,
+                              children='tree_node_list',
+                              label='node_name',
+                              view='tree_view',
+                              menu=Menu(CopyAction, plot_self),
                               )
 
 reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
@@ -160,8 +209,13 @@ reinf_bar_node = TreeNode(node_for=[RLCBar],
                               menu=Menu(plot_self, DeleteAction),
                               )
 
+#===============================================================================
+# List of all custom nodes
+#===============================================================================
+
 custom_node_list = [mxn_diagram_container_node, mxn_diagram_node,
                     cross_section_node, material_type_node,
                     reinf_layout_node, reinf_tex_uniform_node,
                     reinf_tex_layer_node, reinf_bar_node,
-                    database_node, database_subnode]
+                    database_node, database_subnode, ecb_calib_node,
+                    use_case_container_node, parametric_study_node]

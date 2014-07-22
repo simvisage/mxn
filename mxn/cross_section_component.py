@@ -48,9 +48,9 @@ class CrossSectionComponent(MxNTreeNode):
     def _refresh_material_law(self):
         '''material_law is redefined upon change of material
         '''
+        named_laws = self.material_.named_mtrl_laws
         val = self.material_law
-        self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
-        del self.material_law
+        self.add_trait('material_law', KeyRef(db=named_laws))
         try:
             self.material_law = val
         except:
