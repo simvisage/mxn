@@ -11,7 +11,7 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCSteelBar, RLCTexLayer
+    RLCTexLayer
 
 import numpy as np
 
@@ -20,10 +20,8 @@ def test_cross_section_mn():
     Rectangular cross section with spread textile reinforcement.
     '''
 
-    from mxn import ReinfLawBase
-
-    tl1 = RLCTexLayer(z_coord=0.4, material='default_fabric', material_law='fbm')
-    tl2 = RLCTexLayer(z_coord=0.45, material='default_fabric', material_law='fbm')
+    tl1 = RLCTexLayer(z_coord=0.1, material='default_fabric', material_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.05, material='default_fabric', material_law='fbm')
     ge = MCSGeoRect(height=0.5, width=0.3)
     cs = CrossSection(reinf=[tl1, tl2],
                          matrix_cs=MatrixCrossSection(geo=ge,
@@ -37,7 +35,7 @@ def test_cross_section_mn():
     tl1.material_.set(s_0=0.018, A_roving=0.461)
 
     assert np.allclose([cs.M, cs.N], [433.45620169134492, -2247.2883277004325])
-    tl1.z_coord = 0.1
+    tl1.z_coord = 0.4
     assert np.allclose([cs.M, cs.N], [432.39449649331749, -2254.3663623539496])
     ge.width = 0.15
     assert np.allclose([cs.M, cs.N], [216.14717747037844, -1127.4335350583763])

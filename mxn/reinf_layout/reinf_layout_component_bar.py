@@ -31,7 +31,7 @@ class RLCBar(ReinfLayoutComponent):
 
     x = Float(0.1, auto_set=False, enter_set=True, geo_input=True)
     z = Float(0.45, auto_set=False, enter_set=True, geo_input=True)
-    '''position of the bar with respect to upper left
+    '''position of the bar with respect to lower left
     corner of reinforced cross section
     '''
 
@@ -50,7 +50,7 @@ class RLCBar(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         # strain at the height of reinforcement bar [-]:
         #
-        return eps_up + (eps_lo - eps_up) * self.z / height
+        return eps_lo + (eps_up - eps_lo) * self.z / height
 
     sig = Property(depends_on=STATE_LAW_AND_GEOMETRY_CHANGE)
     '''Stress of the bar
@@ -80,19 +80,19 @@ class RLCBar(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_M(self):
-        return self.f * self.z
+        height = self.matrix_cs.geo.height
+        return self.f * (height - self.z)
 
     def plot_geometry(self, ax, clr='DarkOrange'):
         '''Plot geometry'''
-        ax.plot(self.x, self.matrix_cs.geo.height - self.z, 'o', color=clr)
+        ax.plot(self.x, self.z, 'o', color=clr)
 
     def plot_eps(self, ax):
-        h = self.matrix_cs.geo.height
-        ax.hlines([h - self.z], [0], [-self.eps], lw=4, color='DarkOrange')
+        ax.hlines([self.z], [0], [-self.eps], lw=4, color='DarkOrange')
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([h - self.z], [0], [-self.f], lw=4, color='DarkOrange')
+        ax.hlines([self.z], [0], [-self.f], lw=4, color='DarkOrange')
 
     node_name = 'Reinforcement Bar'
 

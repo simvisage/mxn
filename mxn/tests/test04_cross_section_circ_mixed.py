@@ -44,8 +44,8 @@ def test_cross_section_mn():
         bar_lst.append(RLCBar(x=x_bar_arr[i], z=z_bar_arr[i], material='bar_d10'))
     bar_lst[0].material_.area = bar_area
 
-    tl1 = RLCTexLayer(z_coord=0.45, material='default_fabric', material_law='fbm')
-    tl2 = RLCTexLayer(z_coord=0.44, material='default_fabric', material_law='fbm')
+    tl1 = RLCTexLayer(z_coord=0.15, material='default_fabric', material_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.16, material='default_fabric', material_law='fbm')
     '''Two layers of textile reinforcement
     '''
 
@@ -64,9 +64,9 @@ def test_cross_section_mn():
     bar_lst[0].material_.area = 0.0004
     assert np.allclose([cs.M, cs.N], [1349.182793672938, -9534.1983257666307])
     ge.radius = 0.33
-    assert np.allclose([cs.M, cs.N], [1716.5986624495654, -11627.673868608799])
+    assert np.allclose([cs.M, cs.N], [1702.868895888816, -11299.173023898555])
     cs.eps_lo = 0.004
-    assert np.allclose([cs.M, cs.N], [1630.7198301717485, -7187.7797872872561])
+    assert np.allclose([cs.M, cs.N], [1626.2468647131818, -6796.3926837363797])
 
 if __name__ == '__main__':
     test_cross_section_mn()

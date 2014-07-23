@@ -5,7 +5,7 @@ Created on Sep 4, 2012
 '''
 from traits.api import \
     Property, cached_property, Int, \
-    on_trait_change, Button
+    on_trait_change
 
 from traitsui.api import \
     View, Item, VGroup, Group
@@ -93,7 +93,7 @@ class RLCTexUniform(ReinfLayoutComponent):
         lst = []
         for i in range(self.n_layers):
             lst.append(RLCTexLayer(state=self.state, matrix_cs=self.matrix_cs,
-                                     z_coord=self.z_ti_arr[i],
+                                     z_coord=self.zz_ti_arr[i],
                                      material=self.material,
                                      material_law=self.material_law,
                                      ))

@@ -26,16 +26,16 @@ def test_cross_section_mn():
     '''Cross section geometry + matrix
     '''
 
-    bar1 = RLCBar(x=0.025, z=0.375, material='bar_d10')
-    bar2 = RLCBar(x=0.125, z=0.375, material='bar_d10')
-    bar3 = RLCBar(x=0.225, z=0.375, material='bar_d10')
-    bar4 = RLCBar(x=0.325, z=0.375, material='bar_d10')
+    bar1 = RLCBar(x=0.025, z=0.025, material='bar_d10')
+    bar2 = RLCBar(x=0.125, z=0.025, material='bar_d10')
+    bar3 = RLCBar(x=0.225, z=0.025, material='bar_d10')
+    bar4 = RLCBar(x=0.325, z=0.025, material='bar_d10')
     bar1.material_.area = 0.00005
     '''Four steel reinforcement bars in lower flange
     '''
 
-    tl1 = RLCTexLayer(z_coord=0.39, material='default_fabric', material_law='fbm')
-    tl2 = RLCTexLayer(z_coord=0.01, material='default_fabric', material_law='fbm')
+    tl1 = RLCTexLayer(z_coord=0.01, material='default_fabric', material_law='fbm')
+    tl2 = RLCTexLayer(z_coord=0.39, material='default_fabric', material_law='fbm')
     '''Two layers of textile reinforcement
     '''
 

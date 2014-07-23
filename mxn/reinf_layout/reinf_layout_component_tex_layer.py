@@ -36,7 +36,7 @@ class RLCTexLayer(ReinfLayoutComponent):
         super(RLCTexLayer, self).__init__(**metadata)
 
     z_coord = Float(0.2, auto_set=False, enter_set=True, geo_input=True)
-    '''distance of the layer from the top'''
+    '''distance of the layer from the bottom'''
 
     material = KeyRef('default_fabric', db=MTReinfFabric.db, law_input=True)
 
@@ -64,7 +64,7 @@ class RLCTexLayer(ReinfLayoutComponent):
         eps_up = self.state.eps_up
         # strain at the height of each reinforcement layer [-]:
         #
-        return eps_up + (eps_lo - eps_up) * self.z_coord / height
+        return eps_lo + (eps_up - eps_lo) * self.z_coord / height
 
     eps_t = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
     '''Tension strain at the level of the layer of the fabrics
@@ -109,7 +109,8 @@ class RLCTexLayer(ReinfLayoutComponent):
     '''
     @cached_property
     def _get_M(self):
-        return self.f_t * self.z_coord
+        height = self.matrix_cs.geo.height
+        return self.f_t * (height - self.z_coord)
 
     #===========================================================================
     # UI-related functionality
@@ -121,26 +122,23 @@ class RLCTexLayer(ReinfLayoutComponent):
         '''Plot geometry'''
         width = self.matrix_cs.geo.get_width(self.z_coord)
         w_max = self.matrix_cs.geo.width
-        ax.hlines(self.matrix_cs.geo.height - self.z_coord, (w_max - width) / 2,
+        ax.hlines(self.z_coord, (w_max - width) / 2,
                   (w_max + width) / 2, lw=2, color=clr, linestyle='dashed')
 
     def plot_eps(self, ax):
-        h = self.matrix_cs.geo.height
         eps_lo = self.state.eps_lo
         eps_up = self.state.eps_up
 
         # eps t
-        ax.hlines([h - self.z_coord], [0], [-self.eps_t], lw=4, color='DarkOrange')
+        ax.hlines([self.z_coord], [0], [-self.eps_t], lw=4, color='DarkOrange')
 
         # reinforcement layer
-        ax.hlines([h - self.z_coord], [min(0.0, -eps_lo, -eps_up)],
+        ax.hlines([self.z_coord], [min(0.0, -eps_lo, -eps_up)],
                   [max(0.0, -eps_lo, -eps_up)], lw=1, color='black', linestyle='--')
 
     def plot_sig(self, ax):
-        h = self.matrix_cs.geo.height
-
         # sig t
-        ax.hlines([h - self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
+        ax.hlines([self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
 
     tree_view = View(VGroup(
                       Group(

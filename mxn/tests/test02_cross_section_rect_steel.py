@@ -11,7 +11,7 @@ from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCSteelBar
+    RLCBar
 
 import numpy as np
 
@@ -25,7 +25,7 @@ def test_cross_section_mn():
     Rectangular cross section with steel reinforcement.
     '''
 
-    bar = RLCSteelBar(x=0.1, z=0.45, material='bar_d10')
+    bar = RLCBar(x=0.1, z=0.05, material='bar_d10')
     bar.material_.area = 0.0002
 
     ge = MCSGeoRect(height=0.5, width=0.3)
@@ -43,7 +43,7 @@ def test_cross_section_mn():
     pickle.dump(cs, open(cs_file, 'wb'), 1)
 
     bar.x = 0.15
-    bar.z = 0.35
+    bar.z = 0.15
     assert np.allclose([cs.M, cs.N], [595.51085561046102, -4806.0924290168105])
     cs.eps_lo = 0.010
     assert np.allclose([cs.M, cs.N], [393.29047407596528, -1821.7451022853184])

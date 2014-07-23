@@ -64,7 +64,7 @@ class MatrixCrossSection(CrossSectionComponent):
             return (abs(eps_up) / (abs(eps_up - eps_lo)) * height)
 
     z_ti_arr = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
-    '''Discretizaton of the  compressive zone
+    '''Discretization of the  compressive zone
     '''
     @cached_property
     def _get_z_ti_arr(self):
@@ -122,7 +122,7 @@ class MatrixCrossSection(CrossSectionComponent):
     '''
     @cached_property
     def _get_w_ti_arr(self):
-        return self.geo.width_vct(self.z_ti_arr)
+        return self.geo.width_vct(self.geo.height - self.z_ti_arr)
 
     #===========================================================================
     # Calculation of compressive stresses and forces

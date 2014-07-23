@@ -57,31 +57,31 @@ class MCSGeoI(MCSGeo):
         A_up, z_up = self.width_up * self.height_up, self.height_up / 2
         A_lo, z_lo = self.width_lo * self.height_lo, self.height - self.height_lo / 2
         A_st, z_st = self.width_st * (self.height - self.height_up - self.height_lo), (self.height + self.height_up - self.height_lo) / 2
-        return (A_up*z_up + A_lo*z_lo + A_st*z_st) / (A_up + A_lo + A_st)
-    
+        return (A_up * z_up + A_lo * z_lo + A_st * z_st) / (A_up + A_lo + A_st)
+
     def get_width(self, z):
-        '''returns width of cross section for different vertical coordinates
+        '''Returns width of cross section for different vertical coordinates
         '''
-        width = self.width_up + (np.sign(z-self.height_up)+1)/2 * (self.width_st - self.width_up) + \
-        (np.sign(z-self.height + self.height_lo)+1)/2 * (self.width_lo - self.width_st)
+        width = self.width_lo + (np.sign(z - self.height_lo) + 1) / 2 * (self.width_st - self.width_lo) + \
+        (np.sign(z - self.height + self.height_up) + 1) / 2 * (self.width_up - self.width_st)
         return width
 
     width_vct = Property()
     @cached_property
     def _get_width_vct(self):
-        return np.vectorize(self.get_width, otypes = [np.float])
-        
+        return np.vectorize(self.get_width, otypes=[np.float])
+
     def plot_geometry(self, ax):
         '''Plot geometry'''
         w_max = self.width
-       
+
         dx, dz = 0.0, 0.0
 
-        xdata = np.array([- self.width_lo / 2, self.width_lo / 2, self.width_lo / 2, self.width_st / 2,
-                          self.width_st / 2, self.width_up / 2, self.width_up / 2, - self.width_up / 2,
-                          - self.width_up / 2, - self.width_st / 2, - self.width_st / 2,
-                          - self.width_lo / 2, - self.width_lo / 2], dtype=float) + w_max / 2
-                          
+        xdata = np.array([-self.width_lo / 2, self.width_lo / 2, self.width_lo / 2, self.width_st / 2,
+                          self.width_st / 2, self.width_up / 2, self.width_up / 2, -self.width_up / 2,
+                          - self.width_up / 2, -self.width_st / 2, -self.width_st / 2,
+                          - self.width_lo / 2, -self.width_lo / 2], dtype=float) + w_max / 2
+
         zdata = np.array([0, 0, self.height_lo, self.height_lo, self.height - self.height_up,
                           self.height - self.height_up, self.height, self.height, self.height - self.height_up,
                           self.height - self.height_up, self.height_lo, self.height_lo, 0], dtype=float)
