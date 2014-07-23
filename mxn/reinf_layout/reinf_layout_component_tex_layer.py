@@ -40,6 +40,22 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     material = KeyRef('default_fabric', db=MTReinfFabric.db, law_input=True)
 
+    converted_eps_u_2_lo = Property()
+    def _get_converted_eps_u_2_lo(self):
+        h = self.matrix_cs.geo.height
+        eps_u = self.material_law_.eps_u
+        eps_up = -self.matrix_cs.material_law_.eps_c_u
+        eps_lo = eps_up + (eps_u - eps_up) / (h - self.z_coord) * h
+        return eps_lo
+
+    converted_eps_u_2_up = Property()
+    def _get_converted_eps_u_2_up(self):
+        h = self.matrix_cs.geo.height
+        eps_u = self.material_law_.eps_u
+        eps_lo = -self.matrix_cs.material_law_.eps_c_u
+        eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
+        return eps_up
+
     #===========================================================================
     # Discretization conform to the tex layers
     #===========================================================================
