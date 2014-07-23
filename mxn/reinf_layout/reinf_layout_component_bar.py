@@ -103,8 +103,9 @@ class RLCBar(ReinfLayoutComponent):
                        label='Position'
                        ),
                        Group(
-                       Item('material_law', show_label=False),
-                       label='Reinforcement law'
+                       Item('material', show_label=True),
+                       Item('material_law', show_label=True),
+                       label='Bar material'
                        ),
                        springy=True
                        ),

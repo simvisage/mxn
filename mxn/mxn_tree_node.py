@@ -65,4 +65,5 @@ class ReinfLayoutTreeNode(MxNTreeNode):
     tree_node_list = Property(depends_on='cs_state.reinf_components_with_state')
     @cached_property
     def _get_tree_node_list(self):
+        self.cs_state.changed = True
         return self.cs_state.reinf_components_with_state

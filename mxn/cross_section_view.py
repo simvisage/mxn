@@ -19,7 +19,7 @@ from mxn.cross_section import \
     CrossSection
 
 from mxn.reinf_layout import \
-    RLCTexUniform, RLCTexLayer, RLCSteelBar
+    RLCTexUniform, RLCTexLayer, RLCBar
 
 from util.traits.editors.mpl_figure_editor import \
     MPLFigureEditor
@@ -70,10 +70,10 @@ reinf_layout_node = TreeNode(node_for=[ReinfLayoutTreeNode],
                                      label='node_name',
                                      view=View(),
                                      menu=Menu(NewAction, plot_self),
-                                     add=[RLCTexUniform, RLCTexLayer, RLCSteelBar]
+                                     add=[RLCTexUniform, RLCTexLayer, RLCBar]
                                      )
 
-reinf_layout_node_steel = TreeNode(node_for=[RLCSteelBar],
+reinf_layout_node_steel = TreeNode(node_for=[RLCBar],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',

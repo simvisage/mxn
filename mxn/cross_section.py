@@ -84,7 +84,7 @@ class CrossSection(CrossSectionState):
         for c in self.reinf:
             c.eps_changed = True
 
-    @on_trait_change('changed,reinf_components_with_state')
+    @on_trait_change('changed')
     def _notify_component_change(self):
         if self.notify_change_ext != None:
             self.notify_change_ext()

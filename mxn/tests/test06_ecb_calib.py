@@ -4,23 +4,23 @@ Created on Nov 21, 2013
 @author: rch
 '''
 
-from cross_section import \
+from mxn.cross_section import \
     CrossSection
 
-from ecb_calib import \
+from mxn.ecb_calib import \
     ECBCalib
 
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexUniform
 
 import numpy as np
 
 import pickle
 
-from utils import \
+from mxn.utils import \
     get_outfile
 
 def test_ecb_law_calib():

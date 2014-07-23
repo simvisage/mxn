@@ -51,6 +51,7 @@ class CrossSectionComponent(MxNTreeNode):
         named_laws = self.material_.named_mtrl_laws
         val = self.material_law
         self.add_trait('material_law', KeyRef(db=named_laws))
+        del self.material_law
         try:
             self.material_law = val
         except:
@@ -114,7 +115,7 @@ class CrossSectionComponent(MxNTreeNode):
     #===========================================================================
     # Auxiliary methods for tree editor
     #===========================================================================
-    tree_node_list = Property(depends_on='material_law')
+    tree_node_list = Property(depends_on='material,material_law')
     @cached_property
     def _get_tree_node_list(self):
         return [ self.material_law_ ]

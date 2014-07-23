@@ -6,16 +6,13 @@ Created on Jun 23, 2010
 
 from etsproxy.traits.api import \
     Float, Instance, Array, Property, cached_property, \
-    HasStrictTraits, Int, Event, Callable, Button, \
-    on_trait_change, Bool
+    Int
 
 from etsproxy.traits.ui.api import \
-    TreeEditor, TreeNode, View, Item, Group, \
+    View, Item, Group, \
     InstanceEditor, VGroup
 
 import numpy as np
-import pylab as p
-import copy
 
 from scipy.optimize import fsolve
 
@@ -23,7 +20,7 @@ from mxn.cross_section import \
     CrossSection
 
 from mxn.reinf_layout import \
-    RLCTexUniform, RLCTexLayer, RLCSteelBar
+    RLCTexUniform
 
 from mxn.reinf_laws import \
     ReinfLawBase

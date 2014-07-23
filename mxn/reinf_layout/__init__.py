@@ -9,6 +9,3 @@ from reinf_layout_component_tex_uniform import \
 
 from reinf_layout_component_bar import \
     RLCBar
-
-from reinf_layout_component_bar_steel import \
-    RLCSteelBar
