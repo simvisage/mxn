@@ -17,7 +17,7 @@ from matresdev.db.simdb import \
 from mxn.constitutive_law import \
     CLBase
 
-import weakref
+import weakref, copy
 
 class MaterialTypeBase(MxNTreeNode, SimDBClass):
 
@@ -79,7 +79,9 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
 
     @on_trait_change('node_name')
     def update_key(self):
-#         if self.key != self.node_name:
-#             self.key = self.node_name
-#             self.save()
-        pass
+        if self.key != self.node_name and self.key != '':
+            old_key = self.key
+            self.key = self.node_name
+            self.db[self.node_name] = self
+            self.save()
+            del self.db[old_key]
