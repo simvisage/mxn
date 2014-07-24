@@ -80,7 +80,8 @@ def test_matrix_mixture_states():
     cp.matrix_cs_with_state.material_law = 'constant'
     assert np.allclose([cp.M, cp.N], [1.5155334535680236, -5.0522452437834104])
     cp.matrix_cs_with_state.material_law = 'quad'
-    assert np.allclose([cp.M, cp.N], [1.0226290922943471, 18.833051481040023])
+    MTMatrixMixture.db['mixture-test'].f_ck = 53.7
+    assert np.allclose([cp.M, cp.N], [0.98987130205727203, 19.838093373553281])
 
 if __name__ == '__main__':
     test_matrix_mixture_states()

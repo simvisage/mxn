@@ -89,7 +89,9 @@ parametric_study_node = TreeNode(
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(NewAction),
+                                     menu=Menu(plot_self,
+                                               DeleteAction,
+                                               ),
                                      add=[],
                                      )
 
@@ -140,7 +142,7 @@ database_node = TreeNode(node_for=[UCDatabase],
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(),
+                                     menu=Menu(DeleteAction),
                                      )
 
 database_subnode = TreeNode(node_for=[MxNClassExt],

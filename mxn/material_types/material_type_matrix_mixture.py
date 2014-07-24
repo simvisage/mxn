@@ -38,6 +38,9 @@ class MTMatrixMixture(MaterialTypeBase):
     '''Strain at failure of the matrix in compression [-]
     '''
 
+    E_c = Float(28e+3, auto_set=False, enter_set=True,
+                 law_input=True)
+
     mtrl_laws = Dict((Str, MatrixLawBase))
     def _mtrl_laws_default(self):
         basic_laws = {'bilinear':
@@ -67,6 +70,7 @@ class MTMatrixMixture(MaterialTypeBase):
             mtrl_law.node_name = key
             mtrl_law.f_ck = self.f_ck
             mtrl_law.eps_c_u = self.eps_c_u
+            mtrl_law.E_c = self.E_c
         return self.mtrl_laws
 
     #===========================================================================
@@ -75,6 +79,7 @@ class MTMatrixMixture(MaterialTypeBase):
 
     tree_view = View(Item('f_ck'),
                       Item('eps_c_u'),
+                      Item('E_c'),
                       Item('new_law', show_label=False),
                       Item('chosen_law',
                            editor=EnumEditor(name='law_keys'),

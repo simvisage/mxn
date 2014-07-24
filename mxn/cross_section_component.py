@@ -72,11 +72,10 @@ class CrossSectionComponent(MxNTreeNode):
 
         return state
 
-    def __setstate__(self, *args, **metadata):
-        '''Overriding __setstate__ to ensure dynamic attributes exist
+    def __setstate__(self, state):
+        '''Overriding __setstate__ to ensure dynamic attributes exist.
         '''
-        self.__init__(*args, **metadata)
-        super(CrossSectionComponent, self).__setstate__(*args, **metadata)
+        self.__init__(**state)
 
     unit_conversion_factor = Constant(1000.0)
 

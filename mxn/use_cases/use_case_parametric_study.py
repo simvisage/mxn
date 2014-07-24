@@ -32,14 +32,6 @@ class UCPStudyElement(MxNTreeNode):
     '''
     node_name = Str('<unnamed>')
 
-    tree_node_list = List(Instance(MxNTreeNode))
-
-    content = Property(depends_on='tree_node_list')
-    def _get_content(self):
-        return self.tree_node_list[0]
-    def _set_content(self, val):
-        self.tree_node_list = [val]
-
     color = Trait('black', dict(black='k',
                                 cyan='c',
                                 green='g',
@@ -71,8 +63,16 @@ class UCPStudyElement(MxNTreeNode):
 
 class UCPStudyElementMxN(UCPStudyElement):
     node_name = '<unnamed mxn diagram>'
+
+    tree_node_list = List(Instance(MxNTreeNode))
     def _tree_node_list_default(self):
         return [MxNDiagram()]
+
+    content = Property(depends_on='tree_node_list')
+    def _get_content(self):
+        return self.tree_node_list[0]
+    def _set_content(self, val):
+        self.tree_node_list = [val]
 
 class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
     def __init__(self, *args, **metadata):

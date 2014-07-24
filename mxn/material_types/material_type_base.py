@@ -79,5 +79,7 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
 
     @on_trait_change('node_name')
     def update_key(self):
-        self.key = self.node_name
-        self.save()
+#         if self.key != self.node_name:
+#             self.key = self.node_name
+#             self.save()
+        pass
