@@ -4,16 +4,15 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from etsproxy.traits.api import \
-    HasTraits, Int, Instance, Property, \
-    cached_property, DelegatesTo, \
-    Event, Button, List
+    Int, Instance, Property, \
+    cached_property, Event, List
 
 from etsproxy.traits.ui.api import \
     View, Item, Group, HSplit, VGroup, \
     HGroup, RangeEditor, InstanceEditor
 
 from mxn.mxn_tree_node import \
-    MxNTreeNode, ReinfLayoutTreeNode
+    MxNTreeNode
 
 from mxn.cross_section import \
     CrossSection
@@ -54,10 +53,9 @@ class MxNDiagram(MxNTreeNode):
 
     eps_tu = Property()
     def _get_eps_tu(self):
-        if len(self.cs.reinf_components_with_state) == 1 and self.cs.reinf_components_with_state[0].__class__ == RLCTexUniform:
-            return self.cs.reinf_components_with_state[0].convert_eps_tex_u_2_lo(self.cs.reinf_components_with_state[0].material_law_.eps_u)
         eps_lo_arr = [r.converted_eps_u_2_lo for r in self.cs.reinf_components_with_state]
-        return np.max([0] + eps_lo_arr)
+        eps_tu = np.max(np.hstack([[0], eps_lo_arr]))
+        return eps_tu
 
     n_eps = Int(20, auto_set=False, enter_set=True)
     eps_range = Property(depends_on='n_eps,modified')

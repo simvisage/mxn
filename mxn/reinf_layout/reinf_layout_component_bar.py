@@ -42,7 +42,10 @@ class RLCBar(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
         eps_up = -self.matrix_cs.material_law_.eps_c_u
-        eps_lo = eps_up + (eps_u - eps_up) / (h - self.z) * h
+        if self.z < h / 2:
+            eps_lo = eps_up + (eps_u - eps_up) / (h - self.z) * h
+        else:
+            eps_lo = 0.0
         return eps_lo
 
     converted_eps_u_2_up = Property()
@@ -50,7 +53,10 @@ class RLCBar(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
         eps_lo = -self.matrix_cs.material_law_.eps_c_u
-        eps_up = eps_lo + (eps_u - eps_lo) / self.z * h
+        if self.z > h / 2:
+            eps_up = eps_lo + (eps_u - eps_lo) / self.z * h
+        else:
+            eps_up = 0.0
         return eps_up
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)

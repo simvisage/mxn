@@ -45,7 +45,10 @@ class RLCTexLayer(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
         eps_up = -self.matrix_cs.material_law_.eps_c_u
-        eps_lo = eps_up + (eps_u - eps_up) / (h - self.z_coord) * h
+        if self.z_coord < h / 2:
+            eps_lo = eps_up + (eps_u - eps_up) / (h - self.z_coord) * h
+        else:
+            eps_lo = 0.0
         return eps_lo
 
     converted_eps_u_2_up = Property()
@@ -53,7 +56,10 @@ class RLCTexLayer(ReinfLayoutComponent):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
         eps_lo = -self.matrix_cs.material_law_.eps_c_u
-        eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
+        if self.z_coord > h / 2:
+            eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
+        else:
+            eps_up = 0.0
         return eps_up
 
     #===========================================================================

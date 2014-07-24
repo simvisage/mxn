@@ -85,7 +85,10 @@ class KeyRef(TraitType):
             (self.map.keys(), self._default_key)
 
     def mapped_value (self, key):
-        return self.map[ key ]
+        try:
+            return self.map[ key ]
+        except:
+            return None
 
     def post_setattr (self, object, name, value):
         val = self.mapped_value(value)

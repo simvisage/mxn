@@ -22,10 +22,11 @@ from mxn.reinf_layout import \
 import numpy as np
 
 def test_mxn_diagram():
-    '''Test the calibrated crack bridge law.
+    '''Test the mxn diagram with calibrated crack bridge law.
     '''
     rf = RLCTexUniform(n_layers=12, material='default_fabric', material_law='fbm')
     rf.material_.set(s_0=0.0083, A_roving=0.461)
+    rf.material_law_.set(sig_tex_u=1216., eps_u=0.014, m=0.5)
 
     mx = MatrixCrossSection(geo=MCSGeoRect(width=0.2, \
             height=0.06), n_cj=20, material='default_mixture', material_law='quadratic')
