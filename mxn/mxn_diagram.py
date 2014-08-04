@@ -3,11 +3,12 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     Int, Instance, Property, \
-    cached_property, Event, List
+    cached_property, Event, List, \
+    on_trait_change
 
-from etsproxy.traits.ui.api import \
+from traitsui.api import \
     View, Item, Group, HSplit, VGroup, \
     HGroup, RangeEditor, InstanceEditor
 
@@ -38,6 +39,10 @@ class MxNDiagram(MxNTreeNode):
                             matrix_cs=MatrixCrossSection(geo=MCSGeoRect(width=0.2,
                                         height=0.06), n_cj=20, material='default_mixture',
                                                             material_law='constant'))]
+
+    @on_trait_change('tree_node_list')
+    def cs_changed(self):
+        self.modified = True
 
     cs = Property(depends_on='tree_node_list')
     def _get_cs(self):

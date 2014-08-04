@@ -8,14 +8,14 @@ Created on 2. 2. 2014
 reinforcement of textile layers and steel bars
 '''
 
-from mxn import \
+from mxn.cross_section import \
     CrossSection
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoCirc
 
 from mxn.reinf_layout import \
-    RLCTexLayer, RLCSteelBar
+    RLCTexLayer, RLCBar
 
 from matplotlib.figure import \
     Figure
@@ -35,7 +35,6 @@ ge = MCSGeoCirc(radius=0.3)
 
 n_bars = 10
 radius_bars = 0.26
-bar_area = 0.0002
 '''Specifications of bar reinforcement
 '''
 
@@ -51,8 +50,8 @@ bar_lst = []
 '''List of bars
 '''
 for i in range(n_bars):
-    bar_lst.append(RLCSteelBar(x=x_bar_arr[i],
-                            z=z_bar_arr[i], area=bar_area))
+    bar_lst.append(RLCBar(x=x_bar_arr[i],
+                          z=z_bar_arr[i], material='bar_d10'))
 
 tl1 = RLCTexLayer(z_coord=0.45)
 tl2 = RLCTexLayer(z_coord=0.44)

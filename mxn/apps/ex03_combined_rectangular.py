@@ -8,13 +8,13 @@ Created on 2. 2. 2014
 of textile layers and steel bars
 '''
 
-from cross_section import \
+from mxn.cross_section import \
     CrossSection
 
-from matrix_cross_section import \
+from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from reinf_layout import \
+from mxn.reinf_layout import \
     RLCTexLayer, RLCBar
 
 from matplotlib.figure import \
@@ -23,7 +23,7 @@ from matplotlib.figure import \
 from matplotlib.backends.backend_agg import \
     FigureCanvasAgg
 
-from utils import \
+from mxn.utils import \
     get_outfile
 
 tl1 = RLCTexLayer(z_coord=0.39, material='default_fabric', material_law='fbm')

@@ -46,6 +46,30 @@ from mxn.ecb_calib import \
 
 import pickle, os
 
+#===============================================================================
+# Special TreeNode classes
+#===============================================================================
+
+class UCCTreeNode(TreeNode):
+    def append_child (self, object, child):
+        """ Overriding this method ensures that upon dropping an
+        object merely its copy is appended. Necessary to avoid
+        multiple references to the same object in tree structure
+        that would occur upon drag-n-dropping a child of
+        SingleChildTreeNode onto the use case container.
+        """
+        copy_file = get_outfile(folder_name='.mxn',
+                          file_name='temp.pkl')
+        file = open(copy_file, 'wb')
+        pickle.dump(child, file, 1)
+        file.close()
+        file = open(copy_file, 'rb')
+        new_child = pickle.load(file)
+        file.close()
+        os.remove(copy_file)
+
+        getattr(object, self.children).append(new_child)
+
 class SingleChildTreeNode(TreeNode):
     def append_child (self, object, child):
         """ Overriding this method ensures that there is
@@ -72,13 +96,17 @@ class SingleChildTreeNode(TreeNode):
         """
         pass
 
-use_case_container_node = TreeNode(
+#===============================================================================
+# Use cases and enveloping nodes
+#===============================================================================
+
+use_case_container_node = UCCTreeNode(
                                      node_for=[UseCaseContainer],
                                      auto_open=True,
                                      children='tree_node_list',
                                      label='node_name',
                                      view='tree_view',
-                                     menu=Menu(NewAction),
+                                     menu=Menu(NewAction, PasteAction),
                                      add=[MxNDiagram, UCParametricStudy,
                                           ECBCalib],
                                      )
@@ -131,7 +159,7 @@ ecb_calib_node = SingleChildTreeNode(node_for=[ECBCalib],
                                                DeleteAction),
                                      )
 #===============================================================================
-# Database and subordinates
+# Database and subordinate nodes
 #===============================================================================
 
 ''' Generic nodes are used for constitutive laws
@@ -162,7 +190,7 @@ material_type_node = TreeNode(node_for=[MaterialTypeBase],
                               )
 
 #===============================================================================
-# Cross section and subordinates
+# Cross section and subordinate nodes
 #===============================================================================
 
 ''' Generic nodes are used for MatrixCrossSection and for constitutive laws

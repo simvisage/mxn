@@ -2,6 +2,9 @@
 Created on 6. 4. 2014
 
 @author: Vancikv
+
+Standard tree view with the default database node
+and added parametric study node
 '''
 
 from mxn.view import \

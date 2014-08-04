@@ -36,7 +36,7 @@ class UseCaseContainer(MxNTreeNode):
 
     use_case_to_add = Trait('pstudy', {'pstudy'      :   UCParametricStudy,
                                        'calibration' :   ECBCalib,
-                                       'prognosis'   :   MxNDiagram}
+                                       'prediction'   :   MxNDiagram}
                             )
 
     add_use_case = Button('Add')

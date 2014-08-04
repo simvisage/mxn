@@ -8,14 +8,14 @@ Created on 6. 2. 2014
 of textile layers and steel bars
 '''
 
-from mxn import \
+from mxn.cross_section import \
     CrossSection
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoI
 
 from mxn.reinf_layout import \
-    RLCTexLayer, RLCSteelBar
+    RLCTexLayer, RLCBar
 
 from matplotlib.figure import \
     Figure
@@ -34,10 +34,10 @@ mcs = MatrixCrossSection(geo=ge, n_cj=20)
 '''Cross section geometry + matrix
 '''
 
-bar1 = RLCSteelBar(x=0.025, z=0.375, area=0.00005)
-bar2 = RLCSteelBar(x=0.125, z=0.375, area=0.00005)
-bar3 = RLCSteelBar(x=0.225, z=0.375, area=0.00005)
-bar4 = RLCSteelBar(x=0.325, z=0.375, area=0.00005)
+bar1 = RLCBar(x=0.025, z=0.375, material='bar_d10')
+bar2 = RLCBar(x=0.125, z=0.375, material='bar_d10')
+bar3 = RLCBar(x=0.225, z=0.375, material='bar_d10')
+bar4 = RLCBar(x=0.325, z=0.375, material='bar_d10')
 '''Four steel reinforcement bars in lower flange
 '''
 
