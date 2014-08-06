@@ -4,13 +4,11 @@ Created on Sep 4, 2012
 @author: rch
 '''
 from traits.api import \
-    Int, Instance, Property, \
-    cached_property, Event, List, \
-    on_trait_change
+    Int, Instance, Property, List, \
+    cached_property, Event, on_trait_change
 
 from traitsui.api import \
-    View, Item, Group, HSplit, VGroup, \
-    HGroup, RangeEditor, InstanceEditor
+    View, Item, Group, HGroup, RangeEditor
 
 from mxn.mxn_tree_node import \
     MxNTreeNode
@@ -58,13 +56,6 @@ class MxNDiagram(MxNTreeNode):
     eps_cu = Property()
     def _get_eps_cu(self):
         return -self.cs.matrix_cs_with_state.material_law_.eps_c_u
-
-    eps_tu = Property()
-    def _get_eps_tu(self):
-        eps_lo_arr = [r.convert_eps_u_2_lo(eps_up=self.eps_cu)
-                      for r in self.cs.reinf_components_with_state]
-        eps_tu = np.max(np.hstack([[0], eps_lo_arr]))
-        return eps_tu
 
     strain_env_reinf = Property()
     '''Contains the reinforcement element that determines the strain envelope.

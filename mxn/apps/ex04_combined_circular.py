@@ -2,9 +2,8 @@
 Created on 2. 2. 2014
 
 @author: Vancikv
-'''
 
-'''Circular concrete cross section with combined
+Circular concrete cross section with combined
 reinforcement of textile layers and steel bars
 '''
 
@@ -46,21 +45,30 @@ z_bar_arr = radius - np.sin(fi_bar_arr) * radius_bars
 circumference
 '''
 
-bar_lst = []
+bar_lst = [RLCBar(x=x_bar_arr[i],
+                  z=z_bar_arr[i],
+                  material='bar_d10',
+                  material_law='steel'
+                  ) for i in range(n_bars)]
 '''List of bars
 '''
-for i in range(n_bars):
-    bar_lst.append(RLCBar(x=x_bar_arr[i],
-                          z=z_bar_arr[i], material='bar_d10'))
 
-tl1 = RLCTexLayer(z_coord=0.45)
-tl2 = RLCTexLayer(z_coord=0.44)
+tl1 = RLCTexLayer(z_coord=0.15, material='default_fabric',
+                  material_law='fbm')
+tl2 = RLCTexLayer(z_coord=0.16, material='default_fabric',
+                  material_law='fbm')
 '''Two layers of textile reinforcement
 '''
 
+mcs = MatrixCrossSection(geo=ge,
+                         n_cj=20,
+                         material='default_mixture',
+                         material_law='constant')
+'''Matrix cross section
+'''
+
 cs = CrossSection(reinf=[tl1, tl2] + bar_lst,
-                  matrix_cs=MatrixCrossSection(geo=ge,
-                                               n_cj=20),
+                  matrix_cs=mcs,
                   eps_lo=0.002,
                   eps_up=-0.0033,
                   )

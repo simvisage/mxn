@@ -4,7 +4,7 @@ Created on 14. 4. 2014
 @author: Vancikv
 
 This example shows tree view of the material database
-which is the sole default subnode of UseCaseContainer
+which is the sole default subnode of UseCaseContainer.
 '''
 
 from mxn.view import \
