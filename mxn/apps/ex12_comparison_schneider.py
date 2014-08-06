@@ -63,6 +63,8 @@ MTReinfBar.db['ex12_bar'] = MTReinfBar(area=0.001564,
                                           mtrl_laws={'steel_design':
                                                     ReinfLawSteel(f_yk=500 / 1.15)
                                          })
+'''Defining materials
+'''
 
 ge = MCSGeoRect(height=0.4, width=0.4)
 mcs = MatrixCrossSection(geo=MCSGeoRect(height=0.4, width=0.4),
@@ -167,6 +169,8 @@ cs20 = CrossSection(reinf=[RLCBar(x=0.05, z=0.36,
                          material='ex12_C30-37',
                          material_law='constant')
                     )
+'''Defining cross sections with different reinforcement ratios
+'''
 
 mxn_ps = UCParametricStudy()
 mxn_ps.element_to_add = 'mxndiagram'
@@ -189,6 +193,9 @@ mxn_ps.tree_node_list[-1].content = MxNDiagram(cs=cs15, n_eps=40)
 mxn_ps.add_element = True
 mxn_ps.tree_node_list[-1].node_name = 'omega = 2.0'
 mxn_ps.tree_node_list[-1].content = MxNDiagram(cs=cs20, n_eps=40)
+'''Defining a parametric study object and feeding it MxN diagrams
+with the designated cross sections
+'''
 
 ucc = UseCaseContainer()
 ucc.tree_node_list.append(mxn_ps)

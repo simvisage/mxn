@@ -80,4 +80,4 @@ ax.set_xlabel('M[kNm]')
 ax.set_ylabel('N[kN]')
 
 canvas.print_figure(get_outfile(folder_name='.mxn',
-                                file_name='ex10.png'))
+                                file_name='ex11.png'))

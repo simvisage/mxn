@@ -104,7 +104,7 @@ class RLCBar(ReinfLayoutComponent):
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([self.z], [0], [-self.f], lw=4, color='DarkOrange')
+        ax.hlines([self.z], [0], [-self.sig], lw=4, color='DarkOrange')
 
     node_name = 'Reinforcement Bar'
 

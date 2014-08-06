@@ -150,7 +150,7 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     def plot_sig(self, ax):
         # sig t
-        ax.hlines([self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
+        ax.hlines([self.z_coord], [0], [-self.sig_t], lw=4, color='DarkOrange')
 
     tree_view = View(VGroup(
                       Group(
