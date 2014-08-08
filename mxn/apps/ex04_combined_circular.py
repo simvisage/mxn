@@ -3,8 +3,9 @@ Created on 2. 2. 2014
 
 @author: Vancikv
 
-Circular concrete cross section with combined
-reinforcement of textile layers and steel bars
+Example of cross section assembly - Circular concrete
+cross section with combined reinforcement of textile
+layers and steel bars
 '''
 
 from mxn.cross_section import \

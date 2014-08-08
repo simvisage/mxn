@@ -3,8 +3,9 @@ Created on 1. 2. 2014
 
 @author: Vancikv
 
-Rectangular concrete cross section with textile
-reinforcement input as single layers
+Example of cross section assembly - Rectangular concrete
+cross section with textile reinforcement input as
+single layers
 '''
 
 from traits.api import \

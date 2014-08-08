@@ -68,7 +68,7 @@ tree_editor = TreeEditor(
 class MxNTreeView(HasStrictTraits):
     '''View object for a cross section state.
     '''
-    root = Instance(HasStrictTraits)
+    root = Instance(MxNTreeNode)
 
     selected_node = Instance(HasStrictTraits)
 

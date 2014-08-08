@@ -3,8 +3,8 @@ Created on 2. 2. 2014
 
 @author: Vancikv
 
-Rectangular concrete cross section with
-uniformly distributed textile layers
+Example of cross section assembly - Rectangular concrete
+ cross section with uniformly distributed textile layers
 '''
 
 from mxn.cross_section import \

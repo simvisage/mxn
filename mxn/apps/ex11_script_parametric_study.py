@@ -1,10 +1,10 @@
 '''
 Created on 19. 3. 2014
 
-@author: Vancik
+@author: Vancikv
 
 An example of a parameter study script - an alternative
-to the tree view interface.
+to the tree view interface in creating a pstudy.
 '''
 
 from mxn import \

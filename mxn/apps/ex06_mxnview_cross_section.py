@@ -3,7 +3,12 @@ Created on 26. 2. 2014
 
 @author: Vancikv
 
-Cross section from ex01 shown in a tree view
+Cross section from ex01 shown in a tree view.
+
+Note that you can pass any tree node as root to the MxNTreeView
+object. However, the standard case that allows for the whole
+functionality to be used is the case when an instance of
+UseCaseContainer is passed as root - as shown in examples 07-10.
 '''
 
 from mxn.cross_section import \

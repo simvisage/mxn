@@ -3,7 +3,8 @@ Created on Jan 30, 2014
 
 @author: rch
 
-Rectangular concrete cross section with steel reinforcement
+Example of cross section assembly - Rectangular concrete
+cross section with steel reinforcement
 '''
 
 from mxn import \

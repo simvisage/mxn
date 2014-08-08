@@ -3,8 +3,9 @@ Created on 6. 2. 2014
 
 @author: Vancikv
 
-I-shaped concrete cross section with combined reinforcement
-of textile layers and steel bars
+Example of cross section assembly - I-shaped concrete
+cross section with combined reinforcement of textile
+layers and steel bars
 '''
 
 from mxn.cross_section import \
