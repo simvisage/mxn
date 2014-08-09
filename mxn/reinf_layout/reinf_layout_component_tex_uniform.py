@@ -42,12 +42,10 @@ class RLCTexUniform(ReinfLayoutComponent):
 
     material = KeyRef('default_fabric', db=MTReinfFabric.db)
 
-    converted_eps_u_2_lo = Property()
-    def _get_converted_eps_u_2_lo(self):
+    def convert_eps_u_2_lo(self, eps_up):
         '''Convert the strain in the lowest reinforcement layer at failure
         to the strain at the bottom of the cross section'''
         eps_tex_u = self.material_law_.eps_u
-        eps_up = -self.matrix_cs.material_law_.eps_c_u
         height = self.matrix_cs.geo.height
         return eps_up + (eps_tex_u - eps_up) / self.z_ti_arr[0] * height
 

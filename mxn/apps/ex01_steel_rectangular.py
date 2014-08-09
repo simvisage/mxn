@@ -2,9 +2,9 @@
 Created on Jan 30, 2014
 
 @author: rch
-'''
 
-'''Rectangular concrete cross section with steel reinforcement
+Example of cross section assembly - Rectangular concrete
+cross section with steel reinforcement
 '''
 
 from mxn import \
@@ -25,7 +25,8 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-bar = RLCBar(x=0.1, z=0.45, material='bar_d10')
+bar = RLCBar(x=0.1, z=0.05, material='bar_d10',
+             material_law='steel')
 '''Single steel reinforcement bar
 '''
 
@@ -33,12 +34,18 @@ ge = MCSGeoRect(height=0.5, width=0.3)
 '''Cross section geometry
 '''
 
+mcs = MatrixCrossSection(geo=ge,
+                         n_cj=20,
+                         material='default_mixture',
+                         material_law='constant')
+'''Matrix cross section
+'''
+
 cs = CrossSection(reinf=[bar],
-                         matrix_cs=MatrixCrossSection(geo=ge,
-                                                      n_cj=20),
-                         eps_lo=0.002,
-                         eps_up=-0.0033
-                         )
+                  matrix_cs=mcs,
+                  eps_lo=0.002,
+                  eps_up=-0.0033
+                  )
 
 print 'normal force', cs.N
 print 'moment', cs.M

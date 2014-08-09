@@ -2,6 +2,11 @@
 Created on 9. 7. 2014
 
 @author: Vancikv
+
+This module contains tree nodes defined for specific classes
+as oposed to the two generic node types defined in mxn_tree_view
+that are sufficient for displaying the tree structure but
+don't provide different classes with specific node behaviour.
 '''
 
 from traitsui.api import \

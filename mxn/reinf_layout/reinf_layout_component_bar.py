@@ -37,26 +37,16 @@ class RLCBar(ReinfLayoutComponent):
 
     material = KeyRef('bar_d10', db=MTReinfBar.db)
 
-    converted_eps_u_2_lo = Property()
-    def _get_converted_eps_u_2_lo(self):
+    def convert_eps_u_2_lo(self, eps_up):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
-        eps_up = -self.matrix_cs.material_law_.eps_c_u
-        if self.z < h / 2:
-            eps_lo = eps_up + (eps_u - eps_up) / (h - self.z) * h
-        else:
-            eps_lo = 0.0
+        eps_lo = eps_up + (eps_u - eps_up) / (h - self.z) * h
         return eps_lo
 
-    converted_eps_u_2_up = Property()
-    def _get_converted_eps_u_2_up(self):
+    def convert_eps_u_2_up(self, eps_lo):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
-        eps_lo = -self.matrix_cs.material_law_.eps_c_u
-        if self.z > h / 2:
-            eps_up = eps_lo + (eps_u - eps_lo) / self.z * h
-        else:
-            eps_up = 0.0
+        eps_up = eps_lo + (eps_u - eps_lo) / self.z * h
         return eps_up
 
     eps = Property(depends_on=STATE_AND_GEOMETRY_CHANGE)
@@ -114,7 +104,7 @@ class RLCBar(ReinfLayoutComponent):
 
     def plot_sig(self, ax):
         h = self.matrix_cs.geo.height
-        ax.hlines([self.z], [0], [-self.f], lw=4, color='DarkOrange')
+        ax.hlines([self.z], [0], [-self.sig], lw=4, color='DarkOrange')
 
     node_name = 'Reinforcement Bar'
 

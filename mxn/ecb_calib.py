@@ -61,7 +61,7 @@ class ECBCalib(MxNTreeNode):
         u0 = self.cs.reinf_components_with_state[0].material_law_.u0
 
         eps_up = -self.cs.matrix_cs.material_law_.eps_c_u
-        eps_lo = self.cs.reinf_components_with_state[0].converted_eps_u_2_lo
+        eps_lo = self.cs.reinf_components_with_state[0].convert_eps_u_2_lo(eps_up=eps_up)
 
         print 'eps_up', eps_up
         print 'eps_lo', eps_lo

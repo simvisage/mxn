@@ -11,6 +11,11 @@
 # Thanks for using Simvisage open source!
 #
 # Created on Aug 7, 2009 by: rchx
+'''
+A trait type with shadow attribute that allows database referencing -
+database keys are allowed as values, the shadow attribute is then the
+appropriate database member.
+'''
 
 from traits.api import \
     TraitType, HasStrictTraits, TraitError, \
@@ -47,6 +52,9 @@ class KeyRef(TraitType):
             prechange_mapped_val = getattr(obj, name + '_')
             try:
                 prechange_mapped_val.del_link(obj)
+                '''Management of backward links - erase the link to an object that has
+                stopped using me.
+                '''
             except AttributeError:
                 print ('Warning: Unable to remove reference to object from '
                 'mapped value of type %s (Backwards link management not implemented'
@@ -54,6 +62,9 @@ class KeyRef(TraitType):
             postchange_mapped_val = self.mapped_value(key)
             try:
                 postchange_mapped_val.add_link(obj)
+                '''Management of backward links - add the link to an object that has
+                started using me.
+                '''
             except AttributeError:
                 print ('Warning: Unable to pass reference to object to mapped '
                 'value of type %s (Backwards link management not implemented '

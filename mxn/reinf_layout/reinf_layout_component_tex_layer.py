@@ -40,26 +40,16 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     material = KeyRef('default_fabric', db=MTReinfFabric.db, law_input=True)
 
-    converted_eps_u_2_lo = Property()
-    def _get_converted_eps_u_2_lo(self):
+    def convert_eps_u_2_lo(self, eps_up):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
-        eps_up = -self.matrix_cs.material_law_.eps_c_u
-        if self.z_coord < h / 2:
-            eps_lo = eps_up + (eps_u - eps_up) / (h - self.z_coord) * h
-        else:
-            eps_lo = 0.0
+        eps_lo = eps_up + (eps_u - eps_up) / (h - self.z_coord) * h
         return eps_lo
 
-    converted_eps_u_2_up = Property()
-    def _get_converted_eps_u_2_up(self):
+    def convert_eps_u_2_up(self, eps_lo):
         h = self.matrix_cs.geo.height
         eps_u = self.material_law_.eps_u
-        eps_lo = -self.matrix_cs.material_law_.eps_c_u
-        if self.z_coord > h / 2:
-            eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
-        else:
-            eps_up = 0.0
+        eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
         return eps_up
 
     #===========================================================================
@@ -160,7 +150,7 @@ class RLCTexLayer(ReinfLayoutComponent):
 
     def plot_sig(self, ax):
         # sig t
-        ax.hlines([self.z_coord], [0], [-self.f_t], lw=4, color='DarkOrange')
+        ax.hlines([self.z_coord], [0], [-self.sig_t], lw=4, color='DarkOrange')
 
     tree_view = View(VGroup(
                       Group(

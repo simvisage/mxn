@@ -181,7 +181,7 @@ class MatrixCrossSection(CrossSectionComponent):
         h = self.geo.height
 
         # sig ti
-        ec = np.hstack([self.f_ti_arr * self.x / self.n_cj] + [0, 0])
+        ec = np.hstack([self.sig_ti_arr] + [0, 0])
         zz = np.hstack([self.zz_ti_arr] + [0, h ])
         ax.fill(-ec, zz, color='DodgerBlue')
 

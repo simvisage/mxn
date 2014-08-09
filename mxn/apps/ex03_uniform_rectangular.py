@@ -1,24 +1,20 @@
 '''
-Created on 1. 2. 2014
+Created on 2. 2. 2014
 
 @author: Vancikv
 
 Example of cross section assembly - Rectangular concrete
-cross section with textile reinforcement input as
-single layers
+ cross section with uniformly distributed textile layers
 '''
 
-from traits.api import \
-    Int
-
-from mxn import \
+from mxn.cross_section import \
     CrossSection
 
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
 from mxn.reinf_layout import \
-    RLCTexLayer
+    RLCTexUniform
 
 from matplotlib.figure import \
     Figure
@@ -29,12 +25,13 @@ from matplotlib.backends.backend_agg import \
 from mxn.utils import \
     get_outfile
 
-tl1 = RLCTexLayer(z_coord=0.1, material='default_fabric', material_law='fbm')
-tl2 = RLCTexLayer(z_coord=0.05, material='default_fabric', material_law='fbm')
-'''Two layers of textile reinforcement
+uni_layers = RLCTexUniform(n_layers=10,
+                           material='default_fabric',
+                           material_law='fbm')
+'''Uniformly distributed textile layers
 '''
 
-ge = MCSGeoRect(height=0.5, width=0.3)
+ge = MCSGeoRect(height=0.4, width=0.3)
 '''Cross section geometry
 '''
 
@@ -45,9 +42,9 @@ mcs = MatrixCrossSection(geo=ge,
 '''Matrix cross section
 '''
 
-cs = CrossSection(reinf=[tl1, tl2],
+cs = CrossSection(reinf=[uni_layers],
                   matrix_cs=mcs,
-                  eps_lo=0.008,
+                  eps_lo=0.002,
                   eps_up=-0.0033,
                   )
 
@@ -60,4 +57,4 @@ ax = fig.add_subplot(1, 1, 1)
 cs.plot_geometry(ax)
 
 canvas.print_figure(get_outfile(folder_name='.mxn',
-                                file_name='ex02.png'))
+                                file_name='ex03.png'))
