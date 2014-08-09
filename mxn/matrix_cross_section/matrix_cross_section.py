@@ -102,6 +102,15 @@ class MatrixCrossSection(CrossSectionComponent):
     # Cross section geometry and related parameters
     #===========================================================================
 
+    # Implementation remark:
+    # Multiple choice value with memory for values that have already been editted.
+    # Once a choice is modified to a previously edited geometric objects,
+    # its parameters are still available.
+    #
+    # @todo: is there a possibility to display self-explaining labels of the
+    # choice options (they might be a part of the class implementation)
+    # This is a candidate for a separate Trait implementation.
+    #
     geo = Instance(MCSGeo)
     '''Geometry of the cross section
     '''
