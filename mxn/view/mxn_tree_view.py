@@ -43,29 +43,32 @@ from mxn_tree_view_handler import \
 from mxn_tree_customized_nodes import \
     custom_node_list
 
+
 tree_node = TreeNode(node_for=[MxNTreeNode],
-                                     auto_open=False,
-                                     children='tree_node_list',
-                                     label='node_name',
-                                     view='tree_view',
-                                     menu=Menu(plot_self, DeleteAction),
-                                     )
+                     auto_open=False,
+                     children='tree_node_list',
+                     label='node_name',
+                     view='tree_view',
+                     menu=Menu(plot_self, DeleteAction),
+                     )
 
 leaf_node = TreeNode(node_for=[MxNLeafNode],
-                                     auto_open=True,
-                                     children='',
-                                     label='node_name',
-                                     view='tree_view',
-                                     menu=Menu(plot_self)
-                                     )
+                     auto_open=True,
+                     children='',
+                     label='node_name',
+                     view='tree_view',
+                     menu=Menu(plot_self)
+                     )
 
 tree_editor = TreeEditor(
-                    nodes=custom_node_list + [ tree_node, leaf_node],
-                    selected='selected_node',
-                    orientation='vertical'
-                             )
+    nodes=custom_node_list + [tree_node, leaf_node],
+    selected='selected_node',
+    orientation='vertical'
+)
+
 
 class MxNTreeView(HasStrictTraits):
+
     '''View object for a cross section state.
     '''
     root = Instance(MxNTreeNode)
@@ -73,6 +76,7 @@ class MxNTreeView(HasStrictTraits):
     selected_node = Instance(HasStrictTraits)
 
     figure = Instance(Figure)
+
     def _figure_default(self):
         figure = Figure(facecolor='white')
         figure.add_axes([0.08, 0.13, 0.85, 0.74])
@@ -81,40 +85,42 @@ class MxNTreeView(HasStrictTraits):
     data_changed = Event
 
     replot = Button
+
     def _replot_fired(self):
         self.figure.clear()
         self.selected_node.plot(self.figure)
         self.data_changed = True
 
     clear = Button()
+
     def _clear_fired(self):
         self.figure.clear()
         self.data_changed = True
 
     view = View(HSplit(Group(Item('root',
-                            editor=tree_editor,
-                            resizable=True,
-                            show_label=False),
-                           ),
+                                  editor=tree_editor,
+                                  resizable=True,
+                                  show_label=False),
+                             ),
                        Group(HGroup(Item('replot', show_label=False),
                                     Item('clear', show_label=False),
-                                   ),
+                                    ),
                              Item('figure', editor=MPLFigureEditor(),
-                             resizable=True, show_label=False),
+                                  resizable=True, show_label=False),
                              label='plot sheet',
                              dock='tab',
                              )
-                    ),
-                    id='mxntreeview_id',
-                    width=0.7,
-                    height=0.4,
-                    title='MxN',
-                    resizable=True,
-                    handler=MxNTreeViewHandler(),
-                    menubar=MenuBar(Menu(menu_exit, Separator(),
-                                         menu_save, menu_open,
-                                    name='File'))
-                    )
+                       ),
+                id='mxntreeview_id',
+                width=0.7,
+                height=0.4,
+                title='MxN',
+                resizable=True,
+                handler=MxNTreeViewHandler(),
+                menubar=MenuBar(Menu(menu_exit, Separator(),
+                                     menu_save, menu_open,
+                                     name='File'))
+                )
 
 if __name__ == '__main__':
 
