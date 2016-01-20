@@ -4,7 +4,7 @@ Created on Aug 23, 2012
 @author: rch
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Float, Property, cached_property
 
 import numpy as np

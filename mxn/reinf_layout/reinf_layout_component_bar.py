@@ -4,10 +4,10 @@ Created on 31. 1. 2014
 @author: Vancikv
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Float, Property, cached_property
 
-from etsproxy.traits.ui.api import \
+from traitsui.api import \
     View, Item, VGroup, Group
 
 from reinf_layout_component import \

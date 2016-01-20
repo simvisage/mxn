@@ -6,7 +6,7 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Property, \
     Event, on_trait_change, WeakRef, \
     Constant, cached_property, Bool

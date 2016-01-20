@@ -7,7 +7,7 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Float
 
 from mxn.mxn_tree_node import \

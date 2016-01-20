@@ -4,11 +4,11 @@ Created on Aug 23, 2012
 @author: rch
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Property, WeakRef, \
     cached_property, on_trait_change, List
 
-from etsproxy.traits.ui.api import \
+from traitsui.api import \
     View, Item
 
 import numpy as np

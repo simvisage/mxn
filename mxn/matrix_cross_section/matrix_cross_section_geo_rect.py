@@ -7,7 +7,7 @@ Created on 25. 2. 2014
 from traits.api import \
     Float, Property, cached_property
 
-from etsproxy.traits.ui.api import \
+from traitsui.api import \
     View, Item, Group, HGroup
 
 from matrix_cross_section_geo import MCSGeo

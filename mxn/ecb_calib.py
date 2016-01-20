@@ -4,11 +4,11 @@ Created on Jun 23, 2010
 @author: alexander
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Float, Instance, Array, Property, cached_property, \
     Int
 
-from etsproxy.traits.ui.api import \
+from traitsui.api import \
     View, Item, Group, \
     InstanceEditor, VGroup
 
