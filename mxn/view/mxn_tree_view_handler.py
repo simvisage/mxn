@@ -5,7 +5,7 @@ Created on 14. 4. 2014
 '''
 
 from traitsui.api import \
-    View, Item, Group, HGroup, Handler, \
+    View, Item, HGroup, Handler, \
     UIInfo, spring
 
 from traitsui.menu import \
@@ -15,7 +15,7 @@ from traitsui.file_dialog import \
     open_file, save_file
 
 from traits.api import \
-    Button, Instance, WeakRef, HasTraits
+    Button, Instance, WeakRef
 
 from mxn.utils import \
     get_outfile
@@ -41,7 +41,9 @@ menu_exit = Action(name='Exit', action='menu_exit')
 '''Menubar action for terminating the view
 '''
 
+
 class MxNTreeViewHandler(Handler):
+
     '''Handler for MxNTreeView class
     '''
     # The UIInfo object associated with the view:
@@ -110,13 +112,13 @@ class MxNTreeViewHandler(Handler):
             self.info = info
             self._ui = self.edit_traits(view='exit_view')
 
-    def _delete_fired (self):
+    def _delete_fired(self):
         del self.node.db[self.node.key]
         self._ui.dispose()
 
-    def _ok_fired (self):
+    def _ok_fired(self):
         self._ui.dispose()
         self.info.ui.dispose()
 
-    def _cancel_fired (self):
+    def _cancel_fired(self):
         self._ui.dispose()

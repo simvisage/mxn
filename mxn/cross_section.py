@@ -181,4 +181,5 @@ class CrossSection(CrossSectionState):
                 )
 
 if __name__ == '__main__':
-    pass
+    cs = CrossSection()
+    cs.configure_traits()

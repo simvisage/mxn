@@ -4,7 +4,7 @@ Classes describing the cross sectional layout
 
 .. currentmodule:: mxn
 
-CrossSectionGeo
+ECBCrossSectionGeo
 ------------------
 
 .. inheritance-diagram:: CrossSectionComponent
@@ -14,7 +14,7 @@ CrossSectionGeo
    :members:  
    :undoc-members:
 
-CrossSection
+ECBCrossSection
 ---------------
 
 .. inheritance-diagram:: CrossSection
