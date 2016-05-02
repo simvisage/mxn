@@ -7,13 +7,15 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Float
 
 from mxn.mxn_tree_node import \
     MxNTreeNode
 
+
 class CrossSectionState(MxNTreeNode):
+
     '''
     Cross section state is defined by the linear profile of strains
     with eps_up and eps_lo at the top and at the bottom of the cross section,

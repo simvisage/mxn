@@ -4,7 +4,7 @@ Created on 26. 2. 2014
 @author: Vancikv
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Float, Property, cached_property, List, on_trait_change
 
 import numpy as np

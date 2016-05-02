@@ -4,7 +4,7 @@ Created on 26. 2. 2014
 @author: Vancikv
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Property, cached_property
 
 import numpy as np
@@ -14,12 +14,15 @@ from mathkit.mfn import MFnLineArray
 from matrix_law_base import \
     MatrixLawBase
 
+
 class MatrixLawLinear(MatrixLawBase):
+
     '''Effective crack bridge Law based on fiber-bundle-model.'''
     #-----------------------------
     # for bilinear stress-strain-diagram of the concrete (EC2)
     #-----------------------------
     mfn = Property(depends_on='+input')
+
     @cached_property
     def _get_mfn(self):
         '''bilinear stress-strain-diagram of the concrete
@@ -30,7 +33,7 @@ class MatrixLawLinear(MatrixLawBase):
             eps_c3 = 0.00175
             eps_cu3 = self.eps_c_u
         # (for high strength concrete)
-        else :
+        else:
             eps_c3 = (1.75 + 0.55 * (f_ck - 50.) / 40.) / 1000.
             eps_cu3 = self.eps_c_u
         # concrete law with limit for eps_c
@@ -39,4 +42,3 @@ class MatrixLawLinear(MatrixLawBase):
         ydata = np.hstack([0., (f_ck), (f_ck)])
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
-

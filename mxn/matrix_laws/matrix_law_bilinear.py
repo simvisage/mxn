@@ -4,7 +4,7 @@ Created on 26. 2. 2014
 @author: Vancikv
 '''
 
-from etsproxy.traits.api import \
+from traits.api import \
     Property, cached_property
 
 import numpy as np
@@ -14,7 +14,9 @@ from mathkit.mfn import MFnLineArray
 from matrix_law_base import \
     MatrixLawBase
 
+
 class MatrixLawBilinear(MatrixLawBase):
+
     '''Effective crack bridge Law based on fiber-bundle-model.'''
     #-----------------------------
     # for bilinear stress-strain-diagram of the concrete (EC2)

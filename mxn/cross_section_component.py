@@ -6,7 +6,7 @@ Created on Sep 4, 2012
 
 @author: rch
 '''
-from etsproxy.traits.api import \
+from traits.api import \
     HasStrictTraits, Property, \
     Event, on_trait_change, WeakRef, \
     Constant, cached_property, Bool
@@ -22,9 +22,12 @@ from utils import \
 
 COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'
 
+
 class CrossSectionComponent(MxNTreeNode):
+
     '''Cross section component supplying the normal force and moment..
     '''
+
     def __init__(self, *args, **metadata):
         default_material = metadata.get('material', None)
         if default_material:
@@ -35,12 +38,15 @@ class CrossSectionComponent(MxNTreeNode):
         it has been assigned when its editor is requested by the UI
         '''
 
-        self.add_trait('material_law', KeyRef(db=self.material_.named_mtrl_laws))
-        self.on_trait_change(self._refresh_material_law, 'material,material_changed')
+        self.add_trait(
+            'material_law', KeyRef(db=self.material_.named_mtrl_laws))
+        self.on_trait_change(
+            self._refresh_material_law, 'material,material_changed')
         '''The scope of material laws is dependent on the chosen material
         '''
 
-        default_material_law = metadata.get('material_law', self.material_.named_mtrl_laws.keys()[0])
+        default_material_law = metadata.get(
+            'material_law', self.material_.named_mtrl_laws.keys()[0])
         self.material_law = default_material_law
 
         super(CrossSectionComponent, self).__init__(**metadata)
@@ -61,14 +67,14 @@ class CrossSectionComponent(MxNTreeNode):
     '''Strain state of a cross section
     '''
 
-    def __getstate__ (self):
+    def __getstate__(self):
         '''Overriding __getstate__ because of WeakRef usage
         '''
         state = super(CrossSectionComponent, self).__getstate__()
 
-        for key in [ 'state', 'state_']:
+        for key in ['state', 'state_']:
             if state.has_key(key):
-                del state[ key ]
+                del state[key]
 
         return state
 
@@ -99,9 +105,9 @@ class CrossSectionComponent(MxNTreeNode):
         if self.state:
             self.state.changed = True
 
-    #===========================================================================
+    #=========================================================================
     # Cross-sectional stress resultants
-    #===========================================================================
+    #=========================================================================
 
     N = Property()
     '''Resulting normal force.
@@ -111,13 +117,14 @@ class CrossSectionComponent(MxNTreeNode):
     '''Resulting moment.
     '''
 
-    #===========================================================================
+    #=========================================================================
     # Auxiliary methods for tree editor
-    #===========================================================================
+    #=========================================================================
     tree_node_list = Property(depends_on='material,material_law')
+
     @cached_property
     def _get_tree_node_list(self):
-        return [ self.material_law_ ]
+        return [self.material_law_]
 
 if __name__ == '__main__':
     pass
