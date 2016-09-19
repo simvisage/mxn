@@ -11,19 +11,19 @@ from traits.api import \
 from traitsui.api import \
     View, Item, UItem, VGroup, HGroup, spring
 
-from mxn.mxn_diagram import \
+from simple_script.mxn_simple_script.mxn_diagram import \
     MxNDiagram
 
-from mxn.cross_section_component import \
+from simple_script.mxn_simple_script.cross_section_component import \
     CrossSectionComponent
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     MxNTreeNode
 
-from mxn.utils import \
+from simple_script.mxn_simple_script.utils import \
     KeyRef
 
-from mxn.material_types import \
+from simple_script.mxn_simple_script.material_types import \
     MTReinfBar, MTReinfFabric, MTMatrixMixture
 
 class UCPStudyElement(MxNTreeNode):
@@ -62,7 +62,7 @@ class UCPStudyElement(MxNTreeNode):
                                  label=self.node_name)
 
 class UCPStudyElementMxN(UCPStudyElement):
-    node_name = '<unnamed mxn diagram>'
+    node_name = '<unnamed mxn_simple_script diagram>'
 
     tree_node_list = List(Instance(MxNTreeNode))
     def _tree_node_list_default(self):

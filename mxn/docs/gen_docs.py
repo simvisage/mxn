@@ -22,7 +22,7 @@ from os.path import expanduser
 
 HOME_DIR = expanduser("~")
 # build directory
-BUILD_DIR = os.path.join(HOME_DIR, '.mxn', 'docs')
+BUILD_DIR = os.path.join(HOME_DIR, '.mxn_simple_script', 'docs')
 # output directory for the documentation
 DOCS_DIR = os.path.join('..', 'docs',)
 # output directory for the example documentation

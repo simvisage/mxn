@@ -9,12 +9,12 @@ from traits.api import \
 
 import numpy as np
 
-from mxn.constitutive_law import CLBase
+from simple_script.mxn_simple_script.constitutive_law import CLBase
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     MxNLeafNode
 
-from mxn.mxn_class_extension import \
+from simple_script.mxn_simple_script.mxn_class_extension import \
     MxNClassExt
 
 from matresdev.db.simdb import \

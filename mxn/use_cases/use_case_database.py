@@ -6,10 +6,10 @@ Created on 1. 7. 2014
 from traits.api import \
     List, Instance
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     MxNTreeNode
 
-from mxn.material_types import \
+from simple_script.mxn_simple_script.material_types import \
     MTMatrixMixture, MTReinfFabric, MTReinfBar
 
 class UCDatabase(MxNTreeNode):

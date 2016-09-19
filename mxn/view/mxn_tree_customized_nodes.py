@@ -21,32 +21,32 @@ from mxn_tree_view_handler import \
 from traitsui.wx.tree_editor import \
     NewAction, DeleteAction, CopyAction, PasteAction
 
-from mxn.mxn_diagram import \
+from simple_script.mxn_simple_script.mxn_diagram import \
     MxNDiagram
 
-from mxn.cross_section import \
+from simple_script.mxn_simple_script.cross_section import \
     CrossSection
 
-from mxn.use_cases import \
+from simple_script.mxn_simple_script.use_cases import \
     UCDatabase, UCPStudyElementMxN, UCParametricStudy, \
     UseCaseContainer
 
-from mxn.utils import \
+from simple_script.mxn_simple_script.utils import \
     get_outfile
 
-from mxn.material_types import \
+from simple_script.mxn_simple_script.material_types import \
     MaterialTypeBase
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     ReinfLayoutTreeNode
 
-from mxn.reinf_layout import \
+from simple_script.mxn_simple_script.reinf_layout import \
     RLCTexLayer, RLCTexUniform, RLCBar
 
-from mxn.mxn_class_extension import \
+from simple_script.mxn_simple_script.mxn_class_extension import \
     MxNClassExt
 
-from mxn.ecb_calib import \
+from simple_script.mxn_simple_script.ecb_calib import \
     ECBCalib
 
 import pickle
@@ -66,7 +66,7 @@ class UCCTreeNode(TreeNode):
         that would occur upon drag-n-dropping a child of
         SingleChildTreeNode onto the use case container.
         """
-        copy_file = get_outfile(folder_name='.mxn',
+        copy_file = get_outfile(folder_name='.mxn_simple_script',
                                 file_name='temp.pkl')
         file_ = open(copy_file, 'wb')
         pickle.dump(child, file_, 1)
@@ -86,7 +86,7 @@ class SingleChildTreeNode(TreeNode):
         always only one child and that upon dropping an object
         merely its copy is assigned.
         """
-        copy_file = get_outfile(folder_name='.mxn',
+        copy_file = get_outfile(folder_name='.mxn_simple_script',
                                 file_name='temp.pkl')
         file_ = open(copy_file, 'wb')
         pickle.dump(child, file_, 1)

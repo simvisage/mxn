@@ -8,7 +8,7 @@ from traits.api import \
     Float, Property, cached_property, \
     Button
 
-from mxn.material_types import \
+from simple_script.mxn_simple_script.material_types import \
     MTReinfFabric
 
 from traitsui.api import \
@@ -21,15 +21,18 @@ from reinf_layout_component import \
 
 import numpy as np
 
-from mxn.utils import \
+from simple_script.mxn_simple_script.utils import \
     KeyRef
 
 from reinf_fabric_handler import \
     FabricHandler
 
+
 class RLCTexLayer(ReinfLayoutComponent):
+
     '''single layer of textile reinforcement
     '''
+
     def __init__(self, *args, **metadata):
         if not metadata.get('material', None):
             metadata['material'] = 'default_fabric'
@@ -52,11 +55,12 @@ class RLCTexLayer(ReinfLayoutComponent):
         eps_up = eps_lo + (eps_u - eps_lo) / self.z_coord * h
         return eps_up
 
-    #===========================================================================
+    #=========================================================================
     # Discretization conform to the tex layers
-    #===========================================================================
+    #=========================================================================
 
-    n_rovings = Property(depends_on='material,material_changed,matrix_cs.geo.changed')
+    n_rovings = Property(
+        depends_on='material,material_changed,matrix_cs.geo.changed')
     '''Number of rovings in the textile layer
     '''
     @cached_property
@@ -124,9 +128,9 @@ class RLCTexLayer(ReinfLayoutComponent):
         height = self.matrix_cs.geo.height
         return self.f_t * (height - self.z_coord)
 
-    #===========================================================================
+    #=========================================================================
     # UI-related functionality
-    #===========================================================================
+    #=========================================================================
 
     node_name = 'Textile layer'
 
@@ -153,21 +157,21 @@ class RLCTexLayer(ReinfLayoutComponent):
         ax.hlines([self.z_coord], [0], [-self.sig_t], lw=4, color='DarkOrange')
 
     tree_view = View(VGroup(
-                      Group(
-                      Item('z_coord'),
-                      label='Geometry'
-                      ),
-                      Group(
-                      Item('material'),
-                      Item('material_law'),
-                      label='Fabric material',
-                      ),
-                      springy=True,
-                      ),
-                resizable=True,
-                handler=FabricHandler(),
-                buttons=['OK', 'Cancel']
-                )
+        Group(
+            Item('z_coord'),
+            label='Geometry'
+        ),
+        Group(
+            Item('material'),
+            Item('material_law'),
+            label='Fabric material',
+        ),
+        springy=True,
+    ),
+        resizable=True,
+        handler=FabricHandler(),
+        buttons=['OK', 'Cancel']
+    )
 
 if __name__ == '__main__':
     layer = RLCTexLayer()

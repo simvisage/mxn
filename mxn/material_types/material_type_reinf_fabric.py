@@ -11,10 +11,10 @@ from traits.api import \
 from traitsui.api import \
     View, Item, EnumEditor
 
-from mxn.mxn_class_extension import \
+from simple_script.mxn_simple_script.mxn_class_extension import \
     MxNClassExt
 
-from mxn.reinf_laws import \
+from simple_script.mxn_simple_script.reinf_laws import \
     ReinfLawBase, ReinfLawBilinear, \
     ReinfLawCubic, ReinfLawFBM, \
     ReinfLawLinear

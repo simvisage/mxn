@@ -19,16 +19,16 @@ from matplotlib.figure import \
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, HSplit, VGroup, HGroup
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     ReinfLayoutTreeNode
 
-from mxn.cross_section_state import \
+from simple_script.mxn_simple_script.cross_section_state import \
     CrossSectionState
 
-from mxn.matrix_cross_section import \
+from simple_script.mxn_simple_script.matrix_cross_section import \
     MatrixCrossSection
 
-from mxn.reinf_layout import \
+from simple_script.mxn_simple_script.reinf_layout import \
     ReinfLayoutComponent
 
 import numpy as np

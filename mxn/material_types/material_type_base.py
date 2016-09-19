@@ -8,13 +8,13 @@ from traits.api import \
     Property, cached_property, Dict, Str, \
     on_trait_change, List, Button
 
-from mxn.mxn_tree_node import \
+from simple_script.mxn_simple_script.mxn_tree_node import \
     MxNTreeNode
 
 from matresdev.db.simdb import \
     SimDBClass
 
-from mxn.constitutive_law import \
+from simple_script.mxn_simple_script.constitutive_law import \
     CLBase
 
 import weakref, copy
