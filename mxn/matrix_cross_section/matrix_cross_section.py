@@ -25,15 +25,15 @@ from matrix_cross_section_geo_rect import \
 from traitsui.api import \
     View, Item, Group, HGroup, InstanceEditor
 
-from simple_script.mxn_simple_script.material_types import \
+from mxn.material_types import \
     MTMatrixMixture
 
-from simple_script.mxn_simple_script.cross_section_component import \
+from mxn.cross_section_component import \
     CrossSectionComponent
 
 import numpy as np
 
-from simple_script.mxn_simple_script.utils import \
+from mxn.utils import \
     KeyRef
 
 STATE_AND_GEOMETRY_CHANGE = 'eps_changed,+geo_input,geo.changed'

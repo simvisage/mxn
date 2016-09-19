@@ -10,7 +10,7 @@ Created on Sep 4, 2012
 from traits.api import \
     HasStrictTraits, Float
 
-from simple_script.mxn_simple_script.mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
 

@@ -17,7 +17,7 @@ from traitsui.file_dialog import \
 from traits.api import \
     Button, Instance, WeakRef
 
-from simple_script.mxn_simple_script.utils import \
+from mxn.utils import \
     get_outfile
 
 import pickle
@@ -96,13 +96,13 @@ class MxNTreeViewHandler(Handler):
         info.object.data_changed = True
 
     def menu_save(self, info):
-        file_name = get_outfile(folder_name='.mxn_simple_script', file_name='')
+        file_name = get_outfile(folder_name='.mxn', file_name='')
         file_ = save_file(file_name=file_name)
         if file_:
             pickle.dump(info.object.root, open(file_, 'wb'), 1)
 
     def menu_open(self, info):
-        file_name = get_outfile(folder_name='.mxn_simple_script', file_name='')
+        file_name = get_outfile(folder_name='.mxn', file_name='')
         file_ = open_file(file_name=file_name)
         if file_:
             info.object.root = pickle.load(open(file_, 'rb'))

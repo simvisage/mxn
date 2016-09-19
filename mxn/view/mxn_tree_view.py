@@ -33,7 +33,7 @@ from traitsui.menu import \
 from traitsui.wx.tree_editor import \
     DeleteAction
 
-from simple_script.mxn_simple_script.mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode, MxNLeafNode
 
 from mxn_tree_view_handler import \

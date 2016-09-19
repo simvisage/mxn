@@ -11,10 +11,10 @@ from traits.api import \
     Event, on_trait_change, WeakRef, \
     Constant, cached_property, Bool
 
-from simple_script.mxn_simple_script.cross_section_state import \
+from mxn.cross_section_state import \
     CrossSectionState
 
-from simple_script.mxn_simple_script.mxn_tree_node import \
+from mxn.mxn_tree_node import \
     MxNTreeNode
 
 from utils import \
