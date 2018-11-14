@@ -14,35 +14,37 @@ inherit from the MxNTreeNode and supply the attributes
 @author: rch
 '''
 
+from matplotlib.figure import \
+    Figure
+from mxn.mxn_tree_node import \
+    MxNTreeNode, MxNLeafNode
 from traits.api import \
     HasStrictTraits, Instance, Button, Event
-
+from traits.etsconfig.api import ETSConfig
 from traitsui.api import \
     TreeEditor, TreeNode, View, Item, Group, \
     HSplit, HGroup
-
-from util.traits.editors.mpl_figure_editor import \
-    MPLFigureEditor
-
-from matplotlib.figure import \
-    Figure
-
 from traitsui.menu import \
     Menu, MenuBar, Separator
 
-from traitsui.wx.tree_editor import \
-    DeleteAction
-
-from mxn.mxn_tree_node import \
-    MxNTreeNode, MxNLeafNode
-
+from mxn.utils.extra_traits.editors.mpl_figure_editor import \
+    MPLFigureEditor
+from mxn_tree_customized_nodes import \
+    custom_node_list
 from mxn_tree_view_handler import \
     MxNTreeViewHandler, plot_self, menu_save, \
     menu_open, menu_exit
 
-from mxn_tree_customized_nodes import \
-    custom_node_list
 
+if ETSConfig.toolkit == 'wx':
+    from traitsui.wx.tree_editor import \
+        DeleteAction
+if ETSConfig.toolkit == 'qt4':
+    from traitsui.qt4.tree_editor import \
+        DeleteAction
+else:
+    raise ImportError, "tree actions for %s toolkit not availabe" % \
+        ETSConfig.toolkit
 
 tree_node = TreeNode(node_for=[MxNTreeNode],
                      auto_open=False,
@@ -100,20 +102,23 @@ class MxNTreeView(HasStrictTraits):
     view = View(HSplit(Group(Item('root',
                                   editor=tree_editor,
                                   resizable=True,
-                                  show_label=False),
+                                  show_label=False,
+                                  width=400,
+                                  height=400),
                              ),
                        Group(HGroup(Item('replot', show_label=False),
                                     Item('clear', show_label=False),
                                     ),
                              Item('figure', editor=MPLFigureEditor(),
-                                  resizable=True, show_label=False),
+                                  resizable=True, show_label=False,
+                                  springy=True),
                              label='plot sheet',
                              dock='tab',
                              )
                        ),
                 id='mxntreeview_id',
-                width=0.7,
-                height=0.4,
+                width=0.9,
+                height=0.8,
                 title='MxN',
                 resizable=True,
                 handler=MxNTreeViewHandler(),

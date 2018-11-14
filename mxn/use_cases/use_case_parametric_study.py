@@ -6,25 +6,20 @@ Created on 1. 7. 2014
 
 from traits.api import \
     Instance, Property, \
-    List, Str, Trait, Button, cached_property
-
+    List, Str, Trait, Button
 from traitsui.api import \
     View, Item, UItem, VGroup, HGroup, spring
-
-from mxn.mxn_diagram import \
-    MxNDiagram
-
 from mxn.cross_section_component import \
     CrossSectionComponent
-
+from mxn.material_types import \
+    MTReinfBar, MTReinfFabric, MTMatrixMixture
+from mxn.mxn_diagram import \
+    MxNDiagram
 from mxn.mxn_tree_node import \
     MxNTreeNode
-
 from mxn.utils import \
     KeyRef
 
-from mxn.material_types import \
-    MTReinfBar, MTReinfFabric, MTMatrixMixture
 
 class UCPStudyElement(MxNTreeNode):
     '''Class controlling plotting options
@@ -39,7 +34,7 @@ class UCPStudyElement(MxNTreeNode):
                                 yellow='y',
                                 magneta='m',
                                 red='r')
-                      )
+                  )
 
     linestyle = Trait('solid', dict(solid='-',
                                     dashed='--',
@@ -48,9 +43,9 @@ class UCPStudyElement(MxNTreeNode):
                       )
 
     tree_view = View(VGroup(Item('node_name', label='label'),
-                       Item('linestyle'),
-                       Item('color'),
-                       label='Plotting options'))
+                            Item('linestyle'),
+                            Item('color'),
+                            label='Plotting options'))
 
     def plot(self, fig):
         ax = fig.add_subplot(1, 1, 1)
@@ -61,20 +56,26 @@ class UCPStudyElement(MxNTreeNode):
         self.content.plot_custom(ax=ax, color=self.color_, linestyle=self.linestyle_,
                                  label=self.node_name)
 
+
 class UCPStudyElementMxN(UCPStudyElement):
     node_name = '<unnamed mxn diagram>'
 
     tree_node_list = List(Instance(MxNTreeNode))
+
     def _tree_node_list_default(self):
         return [MxNDiagram()]
 
     content = Property(depends_on='tree_node_list')
+
     def _get_content(self):
         return self.tree_node_list[0]
+
     def _set_content(self, val):
         self.tree_node_list = [val]
 
+
 class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
+
     def __init__(self, *args, **metadata):
         if not metadata.get('material', None):
             metadata['material'] = 'default_fabric'
@@ -84,18 +85,21 @@ class UCPStudyElementFabricLaw(UCPStudyElement, CrossSectionComponent):
     material = KeyRef('default_fabric', db=MTReinfFabric.db)
 
     tree_node_list = Property(depends_on='material,material_law')
+
     def _get_tree_node_list(self):
         return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
-                       Item('linestyle'),
-                       Item('color'),
-                       label='Plotting options'),
-                VGroup(Item('material'),
-                       Item('material_law'),
-                       label='Law options'))
+                            Item('linestyle'),
+                            Item('color'),
+                            label='Plotting options'),
+                     VGroup(Item('material'),
+                            Item('material_law'),
+                            label='Law options'))
+
 
 class UCPStudyElementBarLaw(UCPStudyElement, CrossSectionComponent):
+
     def __init__(self, *args, **metadata):
         if not metadata.get('material', None):
             metadata['material'] = 'bar_d10'
@@ -105,18 +109,21 @@ class UCPStudyElementBarLaw(UCPStudyElement, CrossSectionComponent):
     material = KeyRef('bar_d10', db=MTReinfBar.db)
 
     tree_node_list = Property(depends_on='material,material_law')
+
     def _get_tree_node_list(self):
         return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
-                       Item('linestyle'),
-                       Item('color'),
-                       label='Plotting options'),
-                VGroup(Item('material'),
-                       Item('material_law'),
-                       label='Law options'))
+                            Item('linestyle'),
+                            Item('color'),
+                            label='Plotting options'),
+                     VGroup(Item('material'),
+                            Item('material_law'),
+                            label='Law options'))
+
 
 class UCPStudyElementMatrixLaw(UCPStudyElement, CrossSectionComponent):
+
     def __init__(self, *args, **metadata):
         if not metadata.get('material', None):
             metadata['material'] = 'default_mixture'
@@ -126,28 +133,31 @@ class UCPStudyElementMatrixLaw(UCPStudyElement, CrossSectionComponent):
     material = KeyRef('default_mixture', db=MTMatrixMixture.db)
 
     tree_node_list = Property(depends_on='material,material_law')
+
     def _get_tree_node_list(self):
         return [self.material_law_]
 
     tree_view = View(VGroup(Item('node_name', label='label'),
-                       Item('linestyle'),
-                       Item('color'),
-                       label='Plotting options'),
-                VGroup(Item('material'),
-                       Item('material_law'),
-                       label='Law options'))
+                            Item('linestyle'),
+                            Item('color'),
+                            label='Plotting options'),
+                     VGroup(Item('material'),
+                            Item('material_law'),
+                            label='Law options'))
+
 
 class UCParametricStudy(MxNTreeNode):
     node_name = Str('Parametric study')
 
-    element_to_add = Trait('mxndiagram', {'mxndiagram'  :   UCPStudyElementMxN,
-                                          'fabric_law'  :   UCPStudyElementFabricLaw,
-                                          'bar_law'     :   UCPStudyElementBarLaw,
-                                          'matrix_law'  :   UCPStudyElementMatrixLaw,
-                                         }
-                            )
+    element_to_add = Trait('mxndiagram', {'mxndiagram':   UCPStudyElementMxN,
+                                          'fabric_law':   UCPStudyElementFabricLaw,
+                                          'bar_law':   UCPStudyElementBarLaw,
+                                          'matrix_law':   UCPStudyElementMatrixLaw,
+                                          }
+                           )
 
     add_element = Button('Add')
+
     def _add_element_fired(self):
         self.append_node(self.element_to_add_())
 
@@ -157,6 +167,7 @@ class UCParametricStudy(MxNTreeNode):
                      )
 
     tree_node_list = List(Instance(MxNTreeNode))
+
     def _tree_node_list_default(self):
         return []
 

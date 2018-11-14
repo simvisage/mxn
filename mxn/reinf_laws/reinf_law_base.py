@@ -4,19 +4,17 @@ Created on Aug 23, 2012
 @author: rch
 '''
 
+from mxn.constitutive_law import CLBase
+from mxn.mxn_class_extension import \
+    MxNClassExt
+from mxn.mxn_tree_node import \
+    MxNLeafNode
 from traits.api import \
     List
 
-from mxn.constitutive_law import CLBase
-
-from mxn.mxn_tree_node import \
-    MxNLeafNode
-
-from mxn.mxn_class_extension import \
-    MxNClassExt
-
-from matresdev.db.simdb import \
+from mxn.matresdev.db.simdb import \
     SimDBClass, SimDBClassExt
+
 
 class ReinfLawBase(CLBase, MxNLeafNode, SimDBClass):
     '''Base class for Effective Crack Bridge Laws.'''
@@ -25,10 +23,10 @@ class ReinfLawBase(CLBase, MxNLeafNode, SimDBClass):
     node_name = 'Constitutive law'
 
 ReinfLawBase.db = MxNClassExt(
-            klass=ReinfLawBase,
-            verbose='io',
-            node_name='Reinforcement law database'
-            )
+    klass=ReinfLawBase,
+    verbose='io',
+    node_name='Reinforcement law database'
+)
 
 if __name__ == '__main__':
     ReinfLawBase.db.configure_traits()

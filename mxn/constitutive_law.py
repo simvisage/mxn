@@ -13,7 +13,7 @@ from traitsui.api import \
 
 import numpy as np
 
-from mathkit.mfn import MFnLineArray
+from mxn.mfn import MFnLineArray
 
 import weakref
 

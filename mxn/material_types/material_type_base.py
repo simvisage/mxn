@@ -4,32 +4,33 @@ Created on 26. 6. 2014
 @author: Vancikv
 '''
 
+import weakref
+import copy
+
+from mxn.constitutive_law import \
+    CLBase
+from mxn.mxn_tree_node import \
+    MxNTreeNode
 from traits.api import \
     Property, cached_property, Dict, Str, \
     on_trait_change, List, Button
 
-from mxn.mxn_tree_node import \
-    MxNTreeNode
-
-from matresdev.db.simdb import \
+from mxn.matresdev.db.simdb import \
     SimDBClass
 
-from mxn.constitutive_law import \
-    CLBase
-
-import weakref, copy
 
 class MaterialTypeBase(MxNTreeNode, SimDBClass):
 
     mtrl_laws = Dict((Str, CLBase))
 
-    #===========================================================================
+    #=========================================================================
     # Management of backward links
-    #===========================================================================
+    #=========================================================================
 
     state_link_lst = List(transient=True)
     '''List of backward links to objects using the fabric
     '''
+
     def _state_link_lst_default(self):
         return []
 
@@ -50,29 +51,35 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
         '''Removing a backward link from the list - to be called
         from objects using the fabric
         '''
-        self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
+        self.state_link_lst[:] = [
+            link for link in self.state_link_lst if link() != link_to_del]
 
-    #===========================================================================
+    #=========================================================================
     # UI-related functionality
-    #===========================================================================
+    #=========================================================================
 
     new_law = Button(label='Add new law')
+
     def _new_material_fired(self):
         pass
 
     del_law = Button(label='Delete law')
+
     def _del_material_fired(self):
         pass
 
     law_keys = Property
+
     def _get_law_keys(self):
         return self.mtrl_laws.keys()
 
     chosen_law = Str()
+
     def _chosen_law_default(self):
         return self.mtrl_laws.keys()[0]
 
     tree_node_list = Property(depends_on='mtrl_laws')
+
     @cached_property
     def _get_tree_node_list(self):
         return self.named_mtrl_laws.values()

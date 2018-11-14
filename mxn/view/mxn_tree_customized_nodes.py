@@ -9,48 +9,48 @@ that are sufficient for displaying the tree structure but
 don't provide different classes with specific node behaviour.
 '''
 
+import os
+import pickle
+
+from traits.etsconfig.api import ETSConfig
 from traitsui.api import \
     TreeNode
-
 from traitsui.menu import \
     Menu
 
-from mxn_tree_view_handler import \
-    plot_self, new_material, del_material
-
-from traitsui.wx.tree_editor import \
-    NewAction, DeleteAction, CopyAction, PasteAction
-
-from mxn.mxn_diagram import \
-    MxNDiagram
-
 from mxn.cross_section import \
     CrossSection
-
+from mxn.ecb_calib import \
+    ECBCalib
+from mxn.material_types import \
+    MaterialTypeBase
+from mxn.mxn_class_extension import \
+    MxNClassExt
+from mxn.mxn_diagram import \
+    MxNDiagram
+from mxn.mxn_tree_node import \
+    ReinfLayoutTreeNode
+from mxn.reinf_layout import \
+    RLCTexLayer, RLCTexUniform, RLCBar
 from mxn.use_cases import \
     UCDatabase, UCPStudyElementMxN, UCParametricStudy, \
     UseCaseContainer
-
 from mxn.utils import \
     get_outfile
+from mxn_tree_view_handler import \
+    plot_self, new_material, del_material
 
-from mxn.material_types import \
-    MaterialTypeBase
 
-from mxn.mxn_tree_node import \
-    ReinfLayoutTreeNode
+if ETSConfig.toolkit == 'wx':
+    from traitsui.wx.tree_editor import \
+        NewAction, DeleteAction, CopyAction, PasteAction
+if ETSConfig.toolkit == 'qt4':
+    from traitsui.qt4.tree_editor import \
+        NewAction, DeleteAction, CopyAction, PasteAction
+else:
+    raise ImportError, "tree actions for %s toolkit not availabe" % \
+        ETSConfig.toolkit
 
-from mxn.reinf_layout import \
-    RLCTexLayer, RLCTexUniform, RLCBar
-
-from mxn.mxn_class_extension import \
-    MxNClassExt
-
-from mxn.ecb_calib import \
-    ECBCalib
-
-import pickle
-import os
 
 # =========================================================================
 # Special TreeNode classes

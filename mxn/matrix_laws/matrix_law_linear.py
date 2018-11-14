@@ -9,7 +9,7 @@ from traits.api import \
 
 import numpy as np
 
-from mathkit.mfn import MFnLineArray
+from mxn.mfn import MFnLineArray
 
 from matrix_law_base import \
     MatrixLawBase
