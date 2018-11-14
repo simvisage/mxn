@@ -17,7 +17,9 @@ from mxn.mfn import MFnLineArray
 
 import weakref
 
+
 class CLBase(HasStrictTraits):
+
     '''Base class for Effective Crack Bridge Laws.'''
 
     def __init__(self, *args, **kw):
@@ -28,15 +30,18 @@ class CLBase(HasStrictTraits):
             setattr(self, name, value)
 
     arr = Property()
+
     def _get_arr(self):
         return self.eps_arr, self.sig_arr
 
     mfn = Property()
+
     def _get_mfn(self):
         return MFnLineArray(xdata=self.eps_arr,
                             ydata=self.sig_arr)
 
     mfn_vct = Property()
+
     def _get_mfn_vct(self):
         return np.vectorize(self.mfn.get_value, otypes=[np.float])
 
@@ -48,15 +53,17 @@ class CLBase(HasStrictTraits):
         ax.plot(*self.arr)
 
     def plot_custom(self, ax, color='blue', linestyle='-', linewidth=2, label='<unnamed>'):
-        ax.plot(*self.arr, lw=linewidth, color=color, ls=linestyle, label=label)
+        ax.plot(
+            *self.arr, lw=linewidth, color=color, ls=linestyle, label=label)
 
-    #===========================================================================
+    #=========================================================================
     # Management of backward links
-    #===========================================================================
+    #=========================================================================
 
     state_link_lst = List(transient=True)
     '''List of backward links to objects using the fabric
     '''
+
     def _state_link_lst_default(self):
         return []
 
@@ -77,13 +84,14 @@ class CLBase(HasStrictTraits):
         '''Removing a backward link from the list - to be called
         from objects using the law
         '''
-        self.state_link_lst[:] = [link for link in self.state_link_lst if link() != link_to_del]
+        self.state_link_lst[:] = [
+            link for link in self.state_link_lst if link() != link_to_del]
 
     def default_traits_view(self):
 
         input_traits = self.traits(input=lambda x: x != None)
 
-        citems = [Item(name) for name in input_traits ]
+        citems = [Item(name) for name in input_traits]
         return View(*citems,
                     buttons=['OK', 'Cancel']
                     )

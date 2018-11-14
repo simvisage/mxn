@@ -14,14 +14,16 @@ from matrix_cross_section_geo import MCSGeo
 
 import numpy as np
 
+
 class MCSGeoCirc(MCSGeo):
+
     '''Circular shaped cross section
     '''
 
     radius = Float(0.3, auto_set=False, enter_set=True, geo_input=True)
     '''radius of cross section
     '''
-    
+
     height = Property(depends_on='radius')
     '''Height of cross section
     '''
@@ -53,18 +55,21 @@ class MCSGeoCirc(MCSGeo):
         return width
 
     width_vct = Property()
+
     @cached_property
     def _get_width_vct(self):
-        return np.vectorize(self.get_width, otypes = [np.float])
-        
+        return np.vectorize(self.get_width, otypes=[np.float])
+
     def plot_geometry(self, ax):
         '''Plot geometry'''
         dx, dz = self.radius, self.radius
         fi_outline_arr = np.linspace(0, 2 * np.pi, 60)
 
-        ax.plot(np.cos(fi_outline_arr) * self.radius + dx, np.sin(fi_outline_arr) * self.radius + dz, color='blue')
+        ax.plot(np.cos(fi_outline_arr) * self.radius + dx,
+                np.sin(fi_outline_arr) * self.radius + dz, color='blue')
         ax.axis('equal')
-        ax.axis([dx - self.radius * 1.1, dx + self.radius * 1.1, dz - self.radius * 1.1, dz + self.radius * 1.1])
+        ax.axis([dx - self.radius * 1.1, dx + self.radius * 1.1,
+                 dz - self.radius * 1.1, dz + self.radius * 1.1])
 
     view = View(Item('radius'),
                 resizable=True,

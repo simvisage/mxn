@@ -5,7 +5,7 @@ Created on 1. 2. 2014
 
 Example of cross section assembly - Rectangular concrete
 cross section with textile reinforcement input as
-single layers
+single layers. xxx
 '''
 
 from traits.api import \

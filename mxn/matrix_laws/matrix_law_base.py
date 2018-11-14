@@ -17,7 +17,9 @@ from mxn.matresdev.db.simdb import \
 import numpy as np
 
 
+
 class MatrixLawBase(CLBase, MxNLeafNode, SimDBClass):
+
     '''Base class for concrete constitutive laws.'''
     # characteristic compressive stress [MPa]
     #

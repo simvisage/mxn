@@ -14,7 +14,9 @@ from mxn.mfn import MFnLineArray
 from matrix_law_base import \
     MatrixLawBase
 
+
 class MatrixLawBilinear(MatrixLawBase):
+
     '''Effective crack bridge Law based on fiber-bundle-model.'''
     #-----------------------------
     # for bilinear stress-strain-diagram of the concrete (EC2)

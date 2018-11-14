@@ -16,7 +16,9 @@ import sympy as sp
 from matrix_law_base import \
     MatrixLawBase
 
+
 class MatrixLawBlock(MatrixLawBase):
+
     '''Effective crack bridge Law with linear elastic response.'''
 
     #-----------------------------
@@ -24,6 +26,7 @@ class MatrixLawBlock(MatrixLawBase):
     # for simplified constant stress-strain-diagram of the concrete (EC2)
     #-----------------------------
     mfn = Property(depends_on='+input')
+
     @cached_property
     def _get_mfn(self):
         '''simplified constant stress-strain-diagram of the concrete (EC2)
@@ -42,8 +45,8 @@ class MatrixLawBlock(MatrixLawBase):
             lamda = 0.8 - (f_ck - 50.) / 400.
             eps_cu3 = (2.6 + 35. * ((90. - f_ck) / 100) ** 4.) / 1000.
 
-        xdata = np.hstack([0., (1. - lamda) * eps_cu3 - 0.00001, (1 - lamda) * eps_cu3, eps_cu3 ])
+        xdata = np.hstack(
+            [0., (1. - lamda) * eps_cu3 - 0.00001, (1 - lamda) * eps_cu3, eps_cu3])
         ydata = np.hstack([0., 0., eta * (f_ck), eta * (f_ck), ])
 
         return MFnLineArray(xdata=xdata, ydata=ydata)
-
