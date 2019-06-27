@@ -14,7 +14,7 @@
 
 # @todo: introduce the activation of filters - ironing, smoothing
 
-import ConfigParser
+import configparser
 import importlib
 
 import os
@@ -28,9 +28,9 @@ from traits.api import \
     Dict, Bool, implements, Float, Callable, List
 import zipfile
 
-from i_ex_type import \
+from .i_ex_type import \
     IExType
-from loadtxt_novalue import loadtxt_novalue
+from .loadtxt_novalue import loadtxt_novalue
 from matresdev.db import SimDBClass
 from matresdev.db.simdb import SFTPServer
 from matresdev.db.simdb.simdb import simdb
@@ -98,7 +98,7 @@ class ExType(SimDBClass):
     def _set_key(self, value):
         genkey = split(os.path.basename(self.data_file), '.')[0]
         if genkey != value:
-            raise KeyError, 'key mismatch %s != %s' % (genkey, value)
+            raise KeyError('key mismatch %s != %s' % (genkey, value))
 
     def __setstate__(self, state, kw={}):
         if 'key' in state:
@@ -127,7 +127,7 @@ class ExType(SimDBClass):
         '''process the source data and assign
         attributes to the DAT-file channel names.
         '''
-        print '*** process data ***'
+        print('*** process data ***')
         self._import_processor()
         self._apply_data_reader()
         self.processed_data_array = self.data_array
@@ -158,14 +158,14 @@ class ExType(SimDBClass):
         dp_modpath = os.path.join(os.path.dirname(self.data_file),
                                   'data_processor').replace(simdb.pathchar, '.')[1:]
         exdata_dir = simdb.exdata_dir
-        print 'dp_modpath', dp_modpath
-        print 'exdata_dir', exdata_dir
+        print('dp_modpath', dp_modpath)
+        print('exdata_dir', exdata_dir)
         dp_mod = dp_modpath[len(exdata_dir):]
-        print 'dp_mod', dp_mod
-        print 'sys.path', sys.path
+        print('dp_mod', dp_mod)
+        print('sys.path', sys.path)
         if os.path.exists(dp_file):
             mod = importlib.import_module(dp_mod)
-            print 'simdb-data processor used'
+            print('simdb-data processor used')
             if hasattr(mod, 'data_columns'):
                 self.data_columns = mod.data_columns
             if hasattr(mod, 'data_units'):
@@ -229,7 +229,7 @@ class ExType(SimDBClass):
         units = []
         for i in range(len(lines)):
             if lines[i] == '#BEGINCHANNELHEADER':
-                print 'names and units are defined in DAT-file'
+                print('names and units are defined in DAT-file')
                 name = lines[i + 1].split(',')[1]
                 unit = lines[i + 3].split(',')[1]
                 names.append(name)
@@ -241,7 +241,7 @@ class ExType(SimDBClass):
             file_ = open(file_split[0] + '.csv', 'r')
             header_line_1 = file_.readline().strip()
             if header_line_1.split(';')[0] == 'Datum/Uhrzeit':
-                print 'csv-file with header exists'
+                print('csv-file with header exists')
                 header_line_2 = file_.readline().strip()
                 names = header_line_1.split(';')
                 units = header_line_2.split(';')
@@ -282,7 +282,7 @@ class ExType(SimDBClass):
                 names[-1] = names[-1][:-2]
                 units[-1] = units[-1][:-2]
 
-        print 'names, units (default)', names, units
+        print('names, units (default)', names, units)
         return names, units
 
     def _set_array_attribs(self):
@@ -301,19 +301,19 @@ class ExType(SimDBClass):
         '''
         if os.path.exists(self.data_file):
 
-            print 'READ FILE'
+            print('READ FILE')
             # change the file name dat with asc
             file_split = self.data_file.split('.')
             file_name = file_split[0] + '.csv'
 
             # for data exported into a single csv-file
             if os.path.exists(file_name):
-                print 'check csv-file'
+                print('check csv-file')
                 file_ = open(file_name, 'r')
                 header_line_1 = file_.readline().split()
 
                 if header_line_1[0].split(';')[0] == 'Datum/Uhrzeit':
-                    print 'read csv-file'
+                    print('read csv-file')
                     # for data exported into down sampled data array
                     try:
                         _data_array = np.loadtxt(file_name,
@@ -350,7 +350,7 @@ class ExType(SimDBClass):
             if not os.path.exists(file_name):
                 file_name = file_split[0] + '.ASC'
                 if not os.path.exists(file_name):
-                    raise IOError, 'file %s does not exist' % file_name
+                    raise IOError('file %s does not exist' % file_name)
 
                 # for data exported into DAT and ASC-files
                 # try to use loadtxt to read data file
@@ -406,12 +406,12 @@ class ExType(SimDBClass):
         # hook_up an extended file if available.
         aramis_start_offset = 0.0
         if self.hook_up_file:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(self.hook_up_file)
             try:
                 aramis_start_offset = config.get('aramis_data',
                                                  'aramis_start_offset')
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 pass
         return float(aramis_start_offset)
 
@@ -423,7 +423,7 @@ class ExType(SimDBClass):
         # hook_up an extended file if available.
         aramis_files = []
         if self.hook_up_file:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(self.hook_up_file)
             aramis_files = config.get(
                 'aramis_data', 'aramis_files').split(',\n')
@@ -458,13 +458,13 @@ class ExType(SimDBClass):
                 zipfile_server = string.replace(zipfile_server, '\\', '/')
                 zipfile_local = os.path.join(af_local_dir, zip_filename)
 
-                print 'downloading', zipfile_server
-                print 'destination', zipfile_local
+                print('downloading', zipfile_server)
+                print('destination', zipfile_local)
 
                 s.download(zipfile_server, zipfile_local)
                 s.sftp.stat(zipfile_server)
                 s.close()
-        except IOError, e:
+        except IOError as e:
             raise IOError(e)
 
     def uncompress_aramis_file(self, arkey):
@@ -476,7 +476,7 @@ class ExType(SimDBClass):
         if not os.path.exists(zipfile_local):
             self.download_aramis_file(arkey)
 
-        print 'uncompressing'
+        print('uncompressing')
         zf = zipfile.ZipFile(zipfile_local, 'r')
         zf.extractall(af_local_dir)
         zf.close()
@@ -487,8 +487,8 @@ class ExType(SimDBClass):
         '''
         af = self.aramis_dict.get(arkey, None)
         if af is None:
-            print 'Aramis data not available for resolution %s of the'\
-                'test data\n%s' % (arkey, self.data_file)
+            print('Aramis data not available for resolution %s of the'\
+                'test data\n%s' % (arkey, self.data_file))
             return None
         af_path = os.path.join(
             simdb.simdb_cache_dir, self.relative_path, 'aramis', af)

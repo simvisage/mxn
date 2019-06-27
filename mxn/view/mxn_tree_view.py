@@ -29,9 +29,9 @@ from traitsui.menu import \
 
 from mxn.utils.extra_traits.editors.mpl_figure_editor import \
     MPLFigureEditor
-from mxn_tree_customized_nodes import \
+from .mxn_tree_customized_nodes import \
     custom_node_list
-from mxn_tree_view_handler import \
+from .mxn_tree_view_handler import \
     MxNTreeViewHandler, plot_self, menu_save, \
     menu_open, menu_exit
 
@@ -43,8 +43,8 @@ if ETSConfig.toolkit == 'qt4':
     from traitsui.qt4.tree_editor import \
         DeleteAction
 else:
-    raise ImportError, "tree actions for %s toolkit not availabe" % \
-        ETSConfig.toolkit
+    raise ImportError("tree actions for %s toolkit not availabe" % \
+        ETSConfig.toolkit)
 
 tree_node = TreeNode(node_for=[MxNTreeNode],
                      auto_open=False,

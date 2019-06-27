@@ -71,18 +71,18 @@ class MaterialTypeBase(MxNTreeNode, SimDBClass):
     law_keys = Property
 
     def _get_law_keys(self):
-        return self.mtrl_laws.keys()
+        return list(self.mtrl_laws.keys())
 
     chosen_law = Str()
 
     def _chosen_law_default(self):
-        return self.mtrl_laws.keys()[0]
+        return list(self.mtrl_laws.keys())[0]
 
     tree_node_list = Property(depends_on='mtrl_laws')
 
     @cached_property
     def _get_tree_node_list(self):
-        return self.named_mtrl_laws.values()
+        return list(self.named_mtrl_laws.values())
 
     @on_trait_change('node_name')
     def update_key(self):

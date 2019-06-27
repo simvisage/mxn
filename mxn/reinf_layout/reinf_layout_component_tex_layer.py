@@ -14,7 +14,7 @@ from mxn.material_types import \
 from traitsui.api import \
     View, Item, VGroup, Group
 
-from reinf_layout_component import \
+from .reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
@@ -24,7 +24,7 @@ import numpy as np
 from mxn.utils import \
     KeyRef
 
-from reinf_fabric_handler import \
+from .reinf_fabric_handler import \
     FabricHandler
 
 class RLCTexLayer(ReinfLayoutComponent):
@@ -173,5 +173,5 @@ if __name__ == '__main__':
     layer = RLCTexLayer()
     layer.fabric = 'default_fabric'
     layer.fabric_.A_roving = 0.5
-    print layer.fabric_.state_link_lst
+    print(layer.fabric_.state_link_lst)
     layer.configure_traits()

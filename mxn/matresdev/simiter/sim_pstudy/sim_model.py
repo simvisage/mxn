@@ -19,9 +19,9 @@ from traits.api import Array, Bool, Enum, Float, HasTraits, \
                                  Interface, implements, Property, cached_property, \
                                  Self, This
 
-from i_sim_model import ISimModel
+from .i_sim_model import ISimModel
 from numpy import array
-from sim_output import SimOut
+from .sim_output import SimOut
 import time
 
 class SimModel( HasTraits ):
@@ -84,7 +84,7 @@ class SimModel( HasTraits ):
                        dtype = 'float_' )
         
 def run():
-    from sim_pstudy import SimPStudy
+    from .sim_pstudy import SimPStudy
     import pickle
 
     model = SimModel()
@@ -96,7 +96,7 @@ def run():
     tp = open( 'test.pickle', 'r' )
     model = pickle.load( tp )
     tp.close()
-    print 'model.index_1', model.index_1
+    print('model.index_1', model.index_1)
     
 
     yse = SimArray( model = model )

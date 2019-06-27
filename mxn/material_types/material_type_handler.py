@@ -50,7 +50,7 @@ class MaterialTypeHandler(Handler):
         if info.initialized:
             self.info = info
             laws = info.object.possible_laws
-            self.add_trait('law_type', Trait(laws.values()[0], laws))
+            self.add_trait('law_type', Trait(list(laws.values())[0], laws))
             self._ui = self.edit_traits(parent=info.new_law.control, view='new_view')
 
     def object_del_law_changed (self, info):
@@ -61,9 +61,9 @@ class MaterialTypeHandler(Handler):
     def _ok_fired (self):
         object = self.info.object
         if self.law_name == '':
-            print 'Please enter law name!'
+            print('Please enter law name!')
         elif object.mtrl_laws.get(self.law_name, None):
-            print 'Law name already occupied!'
+            print('Law name already occupied!')
         else:
             object.mtrl_laws[self.law_name] = self.law_type_()
             self._ui.dispose()

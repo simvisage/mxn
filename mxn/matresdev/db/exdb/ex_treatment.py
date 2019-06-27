@@ -27,7 +27,7 @@ from traitsui.menu import \
 from traitsui.table_column import \
     ObjectColumn
 
-from ex_run import ExRun
+from .ex_run import ExRun
 
 
 class ExTreatment(HasTraits):

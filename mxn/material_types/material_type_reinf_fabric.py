@@ -16,9 +16,9 @@ from traits.api import \
 from traitsui.api import \
     View, Item, EnumEditor
 
-from material_type_base import \
+from .material_type_base import \
     MaterialTypeBase
-from material_type_handler import \
+from .material_type_handler import \
     MaterialTypeHandler
 
 
@@ -58,7 +58,7 @@ class MTReinfFabric(MaterialTypeBase):
 
     @cached_property
     def _get_named_mtrl_laws(self):
-        for key, mtrl_law in self.mtrl_laws.items():
+        for key, mtrl_law in list(self.mtrl_laws.items()):
             mtrl_law.node_name = key
         return self.mtrl_laws
 

@@ -29,10 +29,10 @@ def loadtxt_novalue(file_name):
         m = 0
         for value in line_split:
             if value == 'NOVALUE':
-                print '---------------------------------------------------------------'
-                print 'NOVALUE entry in line', n, 'position', m, 'found'
-                print 'For faster processing replace values directly in the data file!'
-                print '---------------------------------------------------------------'
+                print('---------------------------------------------------------------')
+                print('NOVALUE entry in line', n, 'position', m, 'found')
+                print('For faster processing replace values directly in the data file!')
+                print('---------------------------------------------------------------')
                 line_split[m] = lines[n - 1].split(';')[m]
             m += 1
         line_array = array(line_split, dtype=float)
@@ -45,5 +45,5 @@ if __name__ == '__main__':
     ex_path = join(
         simdb.exdata_dir, 'plate_tests', 'PT-10a', 'PT11-10a_original.ASC')
     data_array = loadtxt_novalue(ex_path)
-    print '\n'
-    print 'data_array', data_array
+    print('\n')
+    print('data_array', data_array)

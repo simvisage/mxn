@@ -49,12 +49,12 @@ from etsproxy.traits.ui.tabular_adapter \
     import TabularAdapter
 
 from etsproxy.pyface.api import ImageResource, ProgressDialog
-from sim_todo import ToDo
+from .sim_todo import ToDo
 
 from etsproxy.traits.ui.menu import OKButton
-from i_sim_model import ISimModel
-from i_sim_array import ISimArray
-from sim_array_view import SimArrayView
+from .i_sim_model import ISimModel
+from .i_sim_array import ISimArray
+from .sim_array_view import SimArrayView
 
 from etsproxy.traits.ui.file_dialog  \
     import open_file, save_file, FileInfo, TextInfo
@@ -62,9 +62,9 @@ from etsproxy.traits.ui.file_dialog  \
 import pickle
 import os.path as path
     
-from sim_factor import \
+from .sim_factor import \
     SimFactor, SimFloatFactor, SimIntFactor, SimEnumFactor
-from sim_output import SimOut
+from .sim_output import SimOut
 
 from numpy import array, linspace, frompyfunc, zeros, column_stack, \
                     log as ln, append, logspace, hstack, sign, trapz, mgrid, c_, \
@@ -84,6 +84,7 @@ from etsproxy.traits.ui.table_column import \
 
 from etsproxy.traits.ui.tabular_adapter \
     import TabularAdapter, AnITabularAdapter
+from functools import reduce
 
 class RunTableAdapter ( TabularAdapter ):
 
@@ -176,7 +177,7 @@ class SimArray( HasTraits ):
     
     sim_model = Instance( ISimModel )
     def _sim_model_default(self):
-        from sim_model import SimModel
+        from .sim_model import SimModel
         return SimModel()    
     
     #---------------------------------------------------------------
@@ -201,7 +202,7 @@ class SimArray( HasTraits ):
         '''
         traits = self.sim_model.class_traits( ps_levels = lambda x: x != None )
         factor_dict = {}
-        for tname, tval in traits.items():
+        for tname, tval in list(traits.items()):
             if tval.is_trait_type( Int ):
                 min_l, max_l, n_l = tval.ps_levels
                 pt = SimIntFactor( min_level = min_l, max_level = max_l, n_levels = n_l )
@@ -224,7 +225,7 @@ class SimArray( HasTraits ):
     factor_names = Property( depends_on = 'factor_dict' )
     @cached_property
     def _get_factor_names(self):
-        names = self.factor_dict.keys()
+        names = list(self.factor_dict.keys())
         names.sort()
         return names
 
@@ -287,7 +288,7 @@ class SimArray( HasTraits ):
     changed = Event
     @on_trait_change( 'factor_dict.+levels_modified,_output_cache' )
     def _set_changed(self):
-        print 'new values calculated'
+        print('new values calculated')
         self.changed = True
 
     # Get the permutation of all factor levels as an array
@@ -435,7 +436,7 @@ class SimArray( HasTraits ):
             outputs = self._output_cache.get( tuple( run_levels ), None )
             if outputs == None:
 
-                print 'new simulation', sim_idx
+                print('new simulation', sim_idx)
 
                 # Set the factor values of the run in 
                 # the simulation model
@@ -454,7 +455,7 @@ class SimArray( HasTraits ):
                 self._output_cache[ tuple(run_levels) ] = outputs
 
             else:
-                print 'cached simulation', sim_idx
+                print('cached simulation', sim_idx)
 
             # let the progress bar interfere
             #
@@ -577,14 +578,14 @@ class SimArray( HasTraits ):
                         ) 
             
 def run():
-    from sim_model import SimModel
+    from .sim_model import SimModel
     sim_array = SimArray( sim_model = SimModel() )
-    print sim_array.levels2run[ :,0, 0, 0 ]
-    print sim_array[ :,0, 0, 0 ]
-    print  sim_array.run_table[0]
-    print 'array_content', sim_array.output_array[0,0,0,0,:]
+    print(sim_array.levels2run[ :,0, 0, 0 ])
+    print(sim_array[ :,0, 0, 0 ])
+    print(sim_array.run_table[0])
+    print('array_content', sim_array.output_array[0,0,0,0,:])
     sim_array.clear_cache()
-    print 'array_content', sim_array.output_array[0,0,0,0,:]
+    print('array_content', sim_array.output_array[0,0,0,0,:])
     sim_array.configure_traits()
     
 if __name__ == '__main__':

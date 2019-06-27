@@ -63,9 +63,9 @@ class MxNClassExtHandler(Handler):
     def _ok_fired (self):
         object = self.info.object
         if self.material_name == '':
-            print 'Please enter material name!'
+            print('Please enter material name!')
         elif object.get(self.material_name, None):
-            print 'Material name already occupied!'
+            print('Material name already occupied!')
         else:
             object[self.material_name] = object.klass()
             self._ui.dispose()

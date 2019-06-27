@@ -28,7 +28,7 @@ class ReinfLayoutComponent(CrossSectionComponent):
         state = super(ReinfLayoutComponent, self).__getstate__()
 
         for key in ['matrix_cs', 'matrix_cs_']:
-            if state.has_key(key):
+            if key in state:
                 del state[ key ]
 
         return state

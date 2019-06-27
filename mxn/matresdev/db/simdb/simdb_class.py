@@ -12,13 +12,13 @@
 #
 # Created on Apr 15, 2010 by: rch
 
+from functools import reduce
 import os
 import pickle
 import string
 
-from mxn.matresdev.db.simdb.simdb import simdb
 from traits.api import \
-    HasTraits, HasStrictTraits, Dict, Str, Enum, Instance, Int, Class, Type, \
+    HasTraits, HasStrictTraits, Dict, Str, Enum, Instance, Int, Type, \
     Directory, List, Property, Float, cached_property, Constant
 from traitsui.api import \
     View, Item, Tabbed, VGroup, HGroup, ModelView, HSplit, VSplit, \
@@ -27,6 +27,8 @@ from traitsui.menu import Action, CloseAction, HelpAction, Menu, \
     MenuBar, NoButtons, Separator, ToolBar
 from traitsui.table_column import \
     ObjectColumn
+
+from mxn.matresdev.db.simdb.simdb import simdb
 from traitsui.tabular_adapter \
     import TabularAdapter
 from traitsui.tabular_adapter \
@@ -67,6 +69,7 @@ class SimDBTableAdapter (TabularAdapter):
         factor_idx = self.column - 1
         value = self.object.instances[self.row, factor_idx]
         return str(value)
+
 
 simdb_table_editor = TabularEditor(adapter=SimDBTableAdapter(),
                                    selected='selected_instance'
@@ -131,14 +134,14 @@ class SimDBClassExt(HasStrictTraits):
         specifies a float factor with  the levels [0,2,4,6,8,10]
         '''
         traits = self.klass.class_traits(simdb=lambda x: x != None)
-        return traits.keys()
+        return list(traits.keys())
 
     constants = Dict({})
 
     keyed_constants = Property(List)
 
     def _get_keyed_constants(self):
-        for key, c in self.constants.items():
+        for key, c in list(self.constants.items()):
             c.key = key
         return self.constants
 
@@ -177,22 +180,24 @@ class SimDBClassExt(HasStrictTraits):
         '''
         instances = {}
         for obj_file_name in os.listdir(self.dir):
+            print(self.dir)
             # check to see whether the file is pickle or not
             path = os.path.join(self.dir, obj_file_name)
             if not os.path.isfile(path):
                 continue
-            obj_file = open(path, 'r')
-            key_list = string.split(obj_file_name, '.')[:-1]
+            obj_file = open(path, 'rb')
+            key_list = obj_file_name.split('.')[:-1]
             key = reduce(lambda x, y: x + '.' + y, key_list)
 
             if self.verbose == 'io':
-                print '%s.db: reading %s' % (self.klass.__name__, key)
+                print('%s.db: reading %s' % (self.klass.__name__, key))
 
+            print(path)
             try:
                 instances[key] = pickle.load(obj_file)
-            except ImportError, e:
-                print 'file name %s' % obj_file
-                raise ImportError, e
+            except ImportError as e:
+                print('file name %s' % obj_file)
+                raise ImportError(e)
 
             # let the object know its key
             instances[key].key = key
@@ -202,7 +207,7 @@ class SimDBClassExt(HasStrictTraits):
     inst_list = Property
 
     def _get_inst_list(self):
-        return self.keyed_constants.values() + self.instances.values()
+        return list(self.keyed_constants.values()) + list(self.instances.values())
 
     selected_instance = Instance(SimDBClass)
 
@@ -213,7 +218,7 @@ class SimDBClassExt(HasStrictTraits):
             return None
 
     def keys(self):
-        return self.keyed_constants.keys() + self.instances.keys()
+        return list(self.keyed_constants.keys()) + list(self.instances.keys())
 
     def get(self, name, Missing):
         it = self.keyed_constants.get(name, Missing)
@@ -227,12 +232,12 @@ class SimDBClassExt(HasStrictTraits):
         # check if the key corresponds to a constant
         # if yes, report an error
 
-        if key in self.keys():
-            raise IndexError, 'an object with key %s already exists' % key
+        if key in list(self.keys()):
+            raise IndexError('an object with key %s already exists' % key)
 
         it = self.keyed_constants.get(key, None)
         if it:
-            raise ValueError, 'attempting to change a constant %s' % key
+            raise ValueError('attempting to change a constant %s' % key)
         else:
             self.save_item(key, value)
             # register the object in the memory as well
@@ -244,10 +249,10 @@ class SimDBClassExt(HasStrictTraits):
         # write to the database
         # value.key = key
         obj_file_name = os.path.join(self.dir, key + '.pickle')
-        obj_file = open(obj_file_name, 'w')
+        obj_file = open(obj_file_name, 'wb')
 
         if self.verbose == 'io':
-            print '%s.db: writing %s' % (self.klass.__name__, key)
+            print('%s.db: writing %s' % (self.klass.__name__, key))
 
         pickle.dump(value, obj_file, protocol=0)  # slow text mode
         obj_file.close()
@@ -259,8 +264,8 @@ class SimDBClassExt(HasStrictTraits):
         if it == None:
             it = self.instances.get(key, None)
             if it == None:
-                raise ValueError, 'No database object with the key %s for class %s' % (
-                    key, self.classname)
+                raise ValueError('No database object with the key %s for class %s' % (
+                    key, self.classname))
         return it
 
     def __delitem__(self, key):
@@ -268,7 +273,7 @@ class SimDBClassExt(HasStrictTraits):
         # if yes, report an error
         it = self.keyed_constants.get(key, None)
         if it:
-            raise ValueError, 'attempting to delete a constant %s' % key
+            raise ValueError('attempting to delete a constant %s' % key)
         else:
             for x in string.whitespace:
                 key = key.replace(x, "_")
@@ -279,7 +284,7 @@ class SimDBClassExt(HasStrictTraits):
             del self.instances[key]
 
     def delete_instances(self):
-        for key in self.instances.keys():
+        for key in list(self.instances.keys()):
             self.__delitem__(key)
 
     #-------------------------------------------------------------------------

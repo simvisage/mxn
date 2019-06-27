@@ -37,7 +37,7 @@ from mxn.use_cases import \
     UseCaseContainer
 from mxn.utils import \
     get_outfile
-from mxn_tree_view_handler import \
+from .mxn_tree_view_handler import \
     plot_self, new_material, del_material
 
 
@@ -48,8 +48,8 @@ if ETSConfig.toolkit == 'qt4':
     from traitsui.qt4.tree_editor import \
         NewAction, DeleteAction, CopyAction, PasteAction
 else:
-    raise ImportError, "tree actions for %s toolkit not availabe" % \
-        ETSConfig.toolkit
+    raise ImportError("tree actions for %s toolkit not availabe" % \
+        ETSConfig.toolkit)
 
 
 # =========================================================================

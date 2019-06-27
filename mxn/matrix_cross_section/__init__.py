@@ -1,15 +1,15 @@
-from matrix_cross_section_geo import \
+from .matrix_cross_section_geo import \
     MCSGeo
     
-from matrix_cross_section_geo_I import \
+from .matrix_cross_section_geo_I import \
     MCSGeoI
 
-from matrix_cross_section_geo_circ import \
+from .matrix_cross_section_geo_circ import \
     MCSGeoCirc
 
-from matrix_cross_section_geo_rect import \
+from .matrix_cross_section_geo_rect import \
     MCSGeoRect
 
-from matrix_cross_section import \
+from .matrix_cross_section import \
     MatrixCrossSection
 

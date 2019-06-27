@@ -36,7 +36,7 @@ def test_mxn_diagram():
     c.calibrated_ecb_law
 
     mn = MxNDiagram(cs=cs1, n_eps=5)
-    print mn.MN_arr
+    print(mn.MN_arr)
     assert np.allclose(mn.MN_arr, [[  7.10542736e-15, 2.22660238e-01, 1.03819266e+00,
          2.20471968e+00, 3.59406948e+00, 3.59406948e+00,
          5.43778492e+00, 4.74839849e+00, 4.06147239e+00,

@@ -24,8 +24,8 @@ elif platform.system()=='Windows':
 
 try:
     import paramiko
-except ImportError, e:
-    print "Install package >>paramiko<<.\n%s" % e
+except ImportError as e:
+    print("Install package >>paramiko<<.\n%s" % e)
 
 class SFTPServer(object):
     """
@@ -44,9 +44,9 @@ class SFTPServer(object):
             else:
                 self.transport.connect(username=username, password=password)
             self.sftp = paramiko.SFTPClient.from_transport(self.transport)
-        except paramiko.ssh_exception.AuthenticationException, e:
-            print e
-            print 'Check if you have access to remote server over ssh-key'
+        except paramiko.ssh_exception.AuthenticationException as e:
+            print(e)
+            print('Check if you have access to remote server over ssh-key')
 
     def upload(self, local, remote):
         self.sftp.put(local, remote, self._printTotals)
@@ -64,7 +64,7 @@ class SFTPServer(object):
             self.transport.close()
 
     def _printTotals(self, transferred, toBeTransferred):
-        print "Transferred: {0}\tStill to send: {1}\tProcent: {2}".format(transferred, toBeTransferred, transferred / float(toBeTransferred) * 100)
+        print("Transferred: {0}\tStill to send: {1}\tProcent: {2}".format(transferred, toBeTransferred, transferred / float(toBeTransferred) * 100))
         # sys.stdout.write("\r" + "Downloading... %3f%%" % percent)
         # sys.stdout.flush()
 

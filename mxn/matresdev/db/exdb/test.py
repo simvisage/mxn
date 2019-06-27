@@ -37,10 +37,10 @@ from numpy import \
 from math import \
     exp, e, sqrt, log, pi
     
-from ex_run import \
+from .ex_run import \
     ExRun
 
-from ex_run_view import \
+from .ex_run_view import \
     ExRunView
 
 from matresdev.db.simdb import \
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     #----------------------------------------------------------
     # delete the pickle file if it exists:
     #----------------------------------------------------------
-    print 'XXX Delete the pickle file if it exists--------------------'
+    print('XXX Delete the pickle file if it exists--------------------')
     data_file = ex_path_TT_7a_V1
     dir_path = os.path.dirname(data_file)
     file_name = os.path.basename(data_file)
@@ -99,109 +99,109 @@ if __name__ == '__main__':
     pickle_file_name = os.path.join(dir_path, file_split[0] + '.pickle') 
     
     if os.path.exists(pickle_file_name):
-        print '--- pickle file removed: ', pickle_file_name, ' ---'
+        print('--- pickle file removed: ', pickle_file_name, ' ---')
         os.remove(pickle_file_name)
     else:
-        print '--- pickle file does not exist: ', pickle_file_name, ' ---'
+        print('--- pickle file does not exist: ', pickle_file_name, ' ---')
         
     #----------------------------------------------------------
     # construct ExRunView and show attributes
     #----------------------------------------------------------
-    print 'XXX Construct ExRunView and show attributes--------------------'
+    print('XXX Construct ExRunView and show attributes--------------------')
     exrv = ExRunView(data_file = ex_path_TT_7a_V1)
-    print '--- GET: data_file = ', exrv.data_file, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
-    print '--- GET: ccs.flu_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---'
-    print '--- GET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---'
+    print('--- GET: data_file = ', exrv.data_file, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
+    print('--- GET: ccs.flu_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---')
+    print('--- GET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---')
     
     #----------------------------------------------------------
     # save default settings in pickle file
     #----------------------------------------------------------
-    print 'XXX save default settings in pickle file --------------------'
+    print('XXX save default settings in pickle file --------------------')
     exrv.save_run()
-    print '--- SAVE RUN ---'
-    print '--- pickle file saved to:', pickle_file_name, ' ---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SAVE RUN ---')
+    print('--- pickle file saved to:', pickle_file_name, ' ---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     
     #----------------------------------------------------------
     # change attribute in 'ccs' and save changes in pickle file
     #----------------------------------------------------------
-    print 'XXX Change attribute in ccs and save changes in pickle file--------------------'
+    print('XXX Change attribute in ccs and save changes in pickle file--------------------')
     exrv.model.ex_type.ccs.concrete_mixture_key = 'PZ-0708-1'
-    print '--- SET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     exrv.save_run()
-    print '--- SAVE RUN ---'
-    print '--- pickle file saved to:', pickle_file_name, ' ---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SAVE RUN ---')
+    print('--- pickle file saved to:', pickle_file_name, ' ---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     
     #----------------------------------------------------------
     # change data file to another file and then change it back 
     #----------------------------------------------------------
-    print 'XXX Change data file to another file and then change it back--------------------'
-    print '--- GET: data file (old): ', exrv.data_file
+    print('XXX Change data file to another file and then change it back--------------------')
+    print('--- GET: data file (old): ', exrv.data_file)
     exrv.data_file = ex_path_TT_7a_V2
-    print '--- SET: data file (new): ', exrv.data_file
-    print '--- GET: unsaved (new) = ', exrv.unsaved, '---'
+    print('--- SET: data file (new): ', exrv.data_file)
+    print('--- GET: unsaved (new) = ', exrv.unsaved, '---')
     if exrv.unsaved == True:
         exrv.save_run()
-        print '--- SAVE RUN (new) ---'
+        print('--- SAVE RUN (new) ---')
     exrv.data_file = ex_path_TT_7a_V1
-    print '--- SET: data file (back to old): ', exrv.data_file
+    print('--- SET: data file (back to old): ', exrv.data_file)
     
     #----------------------------------------------------------
     # show attributes after reloading 
     #----------------------------------------------------------
-    print 'XXX Show attribute after reloading --------------------'
-    print '--- GET: data_file = ', exrv.data_file, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
-    print '--- GET: ccs.flu_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---'
-    print '--- GET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---'
+    print('XXX Show attribute after reloading --------------------')
+    print('--- GET: data_file = ', exrv.data_file, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
+    print('--- GET: ccs.flu_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---')
+    print('--- GET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---')
     
     #----------------------------------------------------------
     # change attribute in 'ccs' 
     #----------------------------------------------------------
-    print 'XXX Change attribute in ccs --------------------'
+    print('XXX Change attribute in ccs --------------------')
     exrv.model.ex_type.ccs.concrete_mixture_key = 'FIL-10-09'
-    print '--- SET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SET: ccs.cm_key = ', exrv.model.ex_type.ccs.concrete_mixture_key, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     exrv.save_run()
-    print '--- SAVE RUN ---'
-    print '--- pickle file saved to:', pickle_file_name, ' ---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SAVE RUN ---')
+    print('--- pickle file saved to:', pickle_file_name, ' ---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     
     #----------------------------------------------------------
     # change data file to another file and then change it back 
     #----------------------------------------------------------
-    print 'XXX Change data file to another file and then change it back--------------------'
+    print('XXX Change data file to another file and then change it back--------------------')
     exrv.data_file = ex_path_TT_7a_V2
-    print '--- SET: data file (new): ', exrv.data_file
+    print('--- SET: data file (new): ', exrv.data_file)
     exrv.data_file = ex_path_TT_7a_V1
-    print '--- SET: data file (back to old): ', exrv.data_file
+    print('--- SET: data file (back to old): ', exrv.data_file)
     
     #----------------------------------------------------------
     # change attribute in 'ccs.fabric_layup_list' 
     #----------------------------------------------------------
-    print 'XXX change attribute in ccs.fabric_layup_list --------------------'
+    print('XXX change attribute in ccs.fabric_layup_list --------------------')
     exrv.model.ex_type.ccs.fabric_layup_list.append(plain_concrete(0.01))
-    print '--- SET: ccs.fabric_layup_list = ', exrv.model.ex_type.ccs.fabric_layup_list, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SET: ccs.fabric_layup_list = ', exrv.model.ex_type.ccs.fabric_layup_list, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     exrv.save_run()
     
     #----------------------------------------------------------
     # change data file to another file and then change it back 
     #----------------------------------------------------------
-    print 'XXX Change data file to another file and then change it back--------------------'
+    print('XXX Change data file to another file and then change it back--------------------')
     exrv.data_file = ex_path_TT_7a_V2
-    print '--- SET: data file (new): ', exrv.data_file
+    print('--- SET: data file (new): ', exrv.data_file)
     exrv.data_file = ex_path_TT_7a_V1
-    print '--- SET: data file (back to old): ', exrv.data_file
+    print('--- SET: data file (back to old): ', exrv.data_file)
     
     #----------------------------------------------------------
     # change attribute in 'ccs.fabric_layup_list[0].s_tex_z' 
     #----------------------------------------------------------
-    print 'XXX change attribute in ccs.fabric_layup_list[0].s_tex_z --------------------'
+    print('XXX change attribute in ccs.fabric_layup_list[0].s_tex_z --------------------')
     exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z = 0.02 
-    print '--- SET: ccs.fabric_layup_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---'
-    print '--- GET: unsaved = ', exrv.unsaved, '---'
+    print('--- SET: ccs.fabric_layup_list[0].s_tex_z = ', exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z, '---')
+    print('--- GET: unsaved = ', exrv.unsaved, '---')
     exrv.save_run()

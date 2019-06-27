@@ -29,7 +29,7 @@ from util.traits.ui.item import \
 from numpy import \
     array
 
-from fabric_layout import \
+from .fabric_layout import \
     FabricLayOut
 
 from matresdev.db.simdb.simdb_class import \
@@ -61,7 +61,7 @@ class FabricLayUp(SimDBClass):
     # textile fabric used
     #--------------------------------------------------------------------
     #
-    fabric_layout_key = Enum(FabricLayOut.db.keys(),
+    fabric_layout_key = Enum(list(FabricLayOut.db.keys()),
                              simdb=True, input=True, auto_set=False, enter_set=True)
 
     fabric_layout_ref = Property(
@@ -122,7 +122,7 @@ class FabricLayUp(SimDBClass):
         'unreinforced': get_orientation_all0
     }
 
-    orientation_fn_key = Enum(orientation_fn_dict.keys(),
+    orientation_fn_key = Enum(list(orientation_fn_dict.keys()),
                               input=True, table_field=False,
                               auto_set=False, enter_set=True)
 

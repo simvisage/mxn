@@ -47,8 +47,8 @@ cs = CrossSection(reinf=[bar],
                   eps_up=-0.0033
                   )
 
-print 'normal force', cs.N
-print 'moment', cs.M
+print('normal force', cs.N)
+print('moment', cs.M)
 
 fig = Figure(figsize=(10, 7), dpi=80, facecolor='white')
 canvas = FigureCanvasAgg(fig)

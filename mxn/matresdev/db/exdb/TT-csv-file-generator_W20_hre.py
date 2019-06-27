@@ -34,7 +34,7 @@ simdb = SimDB()
 file_path = join( simdb.exdata_dir, 'tensile_tests', '2012-01-09_TT-12c-6cm-TU-SH1' )
 file_name_ASC = join( file_path, TT_name + '.ASC' )
 
-print 'read input data from file ' + file_name_ASC + '\n'
+print('read input data from file ' + file_name_ASC + '\n')
 
 # open file
 #
@@ -48,11 +48,11 @@ data_arr = loadtxt( file_name_ASC,
 WA_hre = ( data_arr[:, -1] )[:, None]
 
 output_arr = hstack( ( data_arr[:, 0:-1], 2.0 * WA_hre ) )
-print 'output_arr', output_arr
+print('output_arr', output_arr)
 
 file_name_csv = join( file_path, TT_name + '.csv' )
 
-print 'save output data to file ' + file_name_csv + '\n'
+print('save output data to file ' + file_name_csv + '\n')
 
 savetxt( file_name_csv, output_arr, delimiter = ';' )
 

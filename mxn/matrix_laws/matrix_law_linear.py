@@ -11,7 +11,7 @@ import numpy as np
 
 from mxn.mfn import MFnLineArray
 
-from matrix_law_base import \
+from .matrix_law_base import \
     MatrixLawBase
 
 

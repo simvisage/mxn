@@ -36,12 +36,12 @@ from etsproxy.traits.ui.tabular_adapter \
     import TabularAdapter
 
 from etsproxy.pyface.api import ImageResource
-from sim_todo import ToDo
+from .sim_todo import ToDo
 
 from etsproxy.traits.ui.menu import OKButton
-from i_sim_model import ISimModel
-from i_sim_array import ISimArray
-from sim_array_view import SimArrayView
+from .i_sim_model import ISimModel
+from .i_sim_array import ISimArray
+from .sim_array_view import SimArrayView
 
 from etsproxy.traits.ui.file_dialog  \
     import open_file, save_file, FileInfo, TextInfo
@@ -49,10 +49,10 @@ from etsproxy.traits.ui.file_dialog  \
 import pickle
 import os.path as path
     
-from sim_factor import \
+from .sim_factor import \
     SimFactor, SimFloatFactor, SimIntFactor, SimEnumFactor
-from sim_output import SimOut
-from sim_array import SimArray
+from .sim_output import SimOut
+from .sim_array import SimArray
 
 from numpy import array, linspace, frompyfunc, zeros, column_stack, \
                     log as ln, append, logspace, hstack, sign, trapz, mgrid, c_, \
@@ -321,7 +321,7 @@ class SimPStudy( HasTraits ):
     
 def run():
     
-    from sim_model import SimModel
+    from .sim_model import SimModel
     pstudy_app = SimPStudy( sim_model = SimModel() )
     pstudy_app.configure_traits( kind = 'live' )
     

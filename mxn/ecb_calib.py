@@ -28,7 +28,7 @@ from mxn.reinf_laws import \
 from mxn.matrix_cross_section import \
     MatrixCrossSection, MCSGeoRect
 
-from matresdev.db.simdb import SimDB
+from .matresdev.db.simdb import SimDB
 simdb = SimDB()
 
 from mxn.mxn_tree_node import \
@@ -63,8 +63,8 @@ class ECBCalib(MxNTreeNode):
         eps_up = -self.cs.matrix_cs.material_law_.eps_c_u
         eps_lo = self.cs.reinf_components_with_state[0].convert_eps_u_2_lo(eps_up=eps_up)
 
-        print 'eps_up', eps_up
-        print 'eps_lo', eps_lo
+        print('eps_up', eps_up)
+        print('eps_lo', eps_lo)
 
         return np.array([eps_lo, u0[1] ], dtype='float')
 
@@ -77,7 +77,7 @@ class ECBCalib(MxNTreeNode):
         N_t (=total tensile force of the reinforcement layers)
         '''
 
-        print '--------------------iteration', self.n, '------------------------'
+        print('--------------------iteration', self.n, '------------------------')
         self.n += 1
         # set iteration counter
         #
@@ -123,7 +123,7 @@ class ECBCalib(MxNTreeNode):
     '''
     @cached_property
     def _get_calibrated_ecb_law(self):
-        print 'NEW CALIBRATION'
+        print('NEW CALIBRATION')
         self.cs.eps_lo = self.u_sol[0]
         eps_tex_u = self.cs.reinf_components_with_state[0].converted_eps_lo_2_u
         self.cs.reinf_components_with_state[0].material_law_.set_cparams(eps_tex_u, self.u_sol[1])
@@ -182,9 +182,9 @@ if __name__ == '__main__':
     #------------------------------------------------
     #
 
-    print '\n'
-    print 'setup ECBLCalib'
-    print '\n'
+    print('\n')
+    print('setup ECBLCalib')
+    print('\n')
 
     ec = ECBCalib(Mu=3.49)
 

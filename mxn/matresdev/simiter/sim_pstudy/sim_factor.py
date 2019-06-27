@@ -26,7 +26,7 @@ from traitsui.api import \
 from numpy import \
     linspace, arange
    
-from i_sim_model import \
+from .i_sim_model import \
     ISimModel
 
 from etsproxy.traits.ui.tabular_adapter import \

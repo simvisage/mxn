@@ -35,7 +35,7 @@ simdb = SimDB()
 file_path = join( simdb.exdata_dir, 'tensile_tests', 'ZiE_2011-08-18_TT-12-6cm-TU_Laminiert' )
 file_name_xls = join( file_path, TT_name + '.xls' )
 
-print 'read input data from file ' + file_name_xls + '\n'
+print('read input data from file ' + file_name_xls + '\n')
 
 # open file
 #
@@ -79,11 +79,11 @@ time = data_arr[:, 0][:, None]
 force = data_arr[:, 2][:, None]
 
 output_arr = hstack( ( time, force, -WA, -WA, -WA, -WA ) )
-print 'output_arr', output_arr
+print('output_arr', output_arr)
 
 file_name_csv = join( file_path, TT_name + '.csv' )
 
-print 'save output data to file ' + file_name_csv + '\n'
+print('save output data to file ' + file_name_csv + '\n')
 
 savetxt( file_name_csv, output_arr, delimiter = ';' )
 
@@ -91,7 +91,7 @@ savetxt( file_name_csv, output_arr, delimiter = ';' )
 
 file_name_DAT = join( file_path, TT_name + '.DAT' )
 
-print 'generate .DAT-file ' + file_name_DAT + '\n'
+print('generate .DAT-file ' + file_name_DAT + '\n')
 
 DAT_txt = "#BEGINCHANNELHEADER\n\
 200,Bezugskanal\n\

@@ -66,9 +66,9 @@ class FabricHandler(Handler):
     def _ok_fired (self):
         object = self.info.object
         if self.fabric_name == '':
-            print 'Please enter fabric name!'
+            print('Please enter fabric name!')
         elif MTReinfFabric.db.get(self.fabric_name, None):
-            print 'Fabric name already occupied!'
+            print('Fabric name already occupied!')
         else:
             MTReinfFabric.db[self.fabric_name] = MTReinfFabric()
             object.fabric = self.fabric_name
