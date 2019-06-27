@@ -33,8 +33,8 @@ from traitsui.table_filter \
 from traitsui.tabular_adapter \
     import TabularAdapter
 
-from ex_run import ExRun
-from ex_type import ExType
+from .ex_run import ExRun
+from .ex_type import ExType
 from matresdev.db.simdb import \
     SimDBClassExt
 from matresdev.db.simdb.simdb import \
@@ -57,7 +57,7 @@ class ExRunTableAdapter (TabularAdapter):
         obj = self.object
         for field_name in obj.field_names:
             cols.append((field_name, field_name))
-        print cols
+        print(cols)
         return cols
 
     selection_mode = 'rows',
@@ -168,7 +168,7 @@ class ExRunClassExt(SimDBClassExt):
         # walk through the directories and read the
         # values
         #
-        print 'file list', self.dir
+        print('file list', self.dir)
         for root, sub_folders, files in os.walk(self.dir):
             for folder in sub_folders:
                 ex_type_file = os.path.join(root, folder, 'ex_type.cls')
@@ -194,13 +194,13 @@ class ExRunClassExt(SimDBClassExt):
     ex_run_list = List
 
     def _ex_run_list_default(self):
-        print 'file_list', self._get_file_list()
+        print('file_list', self._get_file_list())
         return [ExRun(ex_run_file) for ex_run_file in self._get_file_list()]
 
     inst_list = List
 
     def _inst_list_default(self):
-        print 'ex_run_list', self.ex_run_list
+        print('ex_run_list', self.ex_run_list)
         return [ex_run.ex_type for ex_run in self.ex_run_list]
 
     selected_inst_list = List
@@ -222,10 +222,10 @@ class ExRunClassExt(SimDBClassExt):
         for inst in self.inst_list:
             row = [getattr(inst, tcol) for tcol in self.table_columns]
             ex_table.append(row)
-        print ex_table
+        print(ex_table)
 
     def keys(self):
-        return self.inst_list.keys()
+        return list(self.inst_list.keys())
 
     def get(self, name, Missing):
         it = self.inst_list.get(name, Missing)
@@ -263,7 +263,7 @@ class ExRunClassExt(SimDBClassExt):
         This method is called upon every change of the model. This makes the viewing of
         different experiment types possible.
         '''
-        return self.inst_list[0].plot_templates.keys()
+        return list(self.inst_list[0].plot_templates.keys())
 
     @on_trait_change('selected_inst_list,plot_template')
     def redraw(self, ui_info=None):

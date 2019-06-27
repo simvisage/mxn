@@ -67,7 +67,7 @@ def get_unit( trait ):
     for key 'unit'. If unspecified return 'None'.
     '''
     dict = trait.__dict__
-    if dict.has_key( 'unit' ):
+    if 'unit' in dict:
         return dict['_metadata']['unit'] 
 
 def get_convert_fact( unit_old, unit_new  ):
@@ -124,11 +124,11 @@ class Acl( HasTraits ):
 
     B = Array( unit = 'm' )
     def _B_default(self):
-        print 'default set'
+        print('default set')
         return array([9,9])    
 
     def ppp(self):
-        print self.B[0]
+        print(self.B[0])
         return 1
     
     
@@ -171,12 +171,12 @@ if __name__ == '__main__':
     A.set_attr_type_and_unit()
 #    A.configure_traits()
 
-    print 'WA_1', A.WA_1
+    print('WA_1', A.WA_1)
     dict = A.WA_1.__dict__ 
-    print 'dict', dict   
+    print('dict', dict)   
     
     B = A.B
-    print 'B',B[0]
+    print('B',B[0])
     
     B = A.ppp()
 

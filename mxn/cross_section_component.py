@@ -17,7 +17,7 @@ from mxn.cross_section_state import \
 from mxn.mxn_tree_node import \
     MxNTreeNode
 
-from utils import \
+from .utils import \
     KeyRef
 
 COMPONENT_CHANGE = '+geo_input,geo.changed,material_changed,law_changed,material,material_law'
@@ -33,7 +33,7 @@ class CrossSectionComponent(MxNTreeNode):
         if default_material:
             self.material = default_material
         else:
-            print 'Warning: material not specified for object %s' % self
+            print('Warning: material not specified for object %s' % self)
         '''It is necessary to set default value of material here to ensure
         it has been assigned when its editor is requested by the UI
         '''
@@ -46,7 +46,7 @@ class CrossSectionComponent(MxNTreeNode):
         '''
 
         default_material_law = metadata.get(
-            'material_law', self.material_.named_mtrl_laws.keys()[0])
+            'material_law', list(self.material_.named_mtrl_laws.keys())[0])
         self.material_law = default_material_law
 
         super(CrossSectionComponent, self).__init__(**metadata)
@@ -61,7 +61,7 @@ class CrossSectionComponent(MxNTreeNode):
         try:
             self.material_law = val
         except:
-            self.material_law = self.material_.named_mtrl_laws.keys()[0]
+            self.material_law = list(self.material_.named_mtrl_laws.keys())[0]
 
     state = WeakRef(CrossSectionState, transient=True)
     '''Strain state of a cross section
@@ -73,7 +73,7 @@ class CrossSectionComponent(MxNTreeNode):
         state = super(CrossSectionComponent, self).__getstate__()
 
         for key in ['state', 'state_']:
-            if state.has_key(key):
+            if key in state:
                 del state[key]
 
         return state

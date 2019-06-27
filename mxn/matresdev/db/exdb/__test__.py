@@ -13,7 +13,7 @@ import os
 from shutil import \
     copy
 
-from ex_run_view import \
+from .ex_run_view import \
     ExRunView
 
 from matresdev.db.matdb.trc.composite_cross_section \
@@ -53,10 +53,10 @@ class TestExRunView(unittest.TestCase):
         '''open a file for testing and construct
         ExRunView as a class variable.
         '''
-        print '\n'
-        print '#------------------------------------------'
-        print '# SetUp'
-        print '#------------------------------------------'
+        print('\n')
+        print('#------------------------------------------')
+        print('# SetUp')
+        print('#------------------------------------------')
 
         # define data file (original data file)
         #
@@ -90,14 +90,14 @@ class TestExRunView(unittest.TestCase):
         # before and after reloading from pickle file:
         #
         for attr in [ 'cm_key', 'age', 's_tex_z', 'flu_list' ]:
-            print '\n'
-            print '#------------------------------------------'
-            print '# ', attr
-            print '#------------------------------------------'
+            print('\n')
+            print('#------------------------------------------')
+            print('# ', attr)
+            print('#------------------------------------------')
             old_value = self.get_attr(attr)
-            print 'old_value', old_value
+            print('old_value', old_value)
             new_value = self.change_attr(attr)
-            print 'new_value', new_value
+            print('new_value', new_value)
 #            self.assertNotEqual( old_value, new_value )
             self.assertEqual(self.exrv.unsaved, True)
             self.save_run()
@@ -140,7 +140,7 @@ class TestExRunView(unittest.TestCase):
     # delete the test data files after the test has been run:
     #----------------------------------------------------------
     def delete_test_data_files(self, data_file):
-        print 'XXX Delete the auxilary test data files if they exist --------------------'
+        print('XXX Delete the auxilary test data files if they exist --------------------')
 
         dir_path = os.path.dirname(data_file)
         file_name = os.path.basename(data_file)
@@ -150,43 +150,43 @@ class TestExRunView(unittest.TestCase):
         file_name_orig_asc = os.path.join(dir_path, file_split[0] + '.ASC')
         file_name_test_asc = os.path.join(dir_path, file_split[0] + '_test.ASC')
         if os.path.exists(file_name_test_asc):
-            print '--- test data file asc removed: ', file_name_test_asc, ' ---'
+            print('--- test data file asc removed: ', file_name_test_asc, ' ---')
             os.remove(file_name_test_asc)
         else:
-            print '--- test data file asc does not exist: ', file_name_test_asc, ' ---'
+            print('--- test data file asc does not exist: ', file_name_test_asc, ' ---')
         # delete the "*.DAT"-file
         file_name_orig_dat = os.path.join(dir_path, file_split[0] + '.DAT')
         file_name_test_dat = os.path.join(dir_path, file_split[0] + '_test.DAT')
         if os.path.exists(file_name_test_dat):
-            print '--- test data file dat removed: ', file_name_test_dat, ' ---'
+            print('--- test data file dat removed: ', file_name_test_dat, ' ---')
             os.remove(file_name_test_dat)
         else:
-            print '--- test data file dat does not exist: ', file_name_test_dat, ' ---'
+            print('--- test data file dat does not exist: ', file_name_test_dat, ' ---')
 
     #----------------------------------------------------------
     # delete the pickle file if it exists:
     #----------------------------------------------------------
     def delete_pickle_file(self, data_file):
-        print 'XXX Delete the pickle file if it exists--------------------'
+        print('XXX Delete the pickle file if it exists--------------------')
 
         dir_path = os.path.dirname(data_file)
         file_name = os.path.basename(data_file)
         file_split = file_name.split('.')
         pickle_file_name = os.path.join(dir_path, file_split[0] + '.pickle')
         if os.path.exists(pickle_file_name):
-            print '--- pickle file removed: ', pickle_file_name, ' ---'
+            print('--- pickle file removed: ', pickle_file_name, ' ---')
             os.remove(pickle_file_name)
         else:
-            print '--- pickle file does not exist: ', pickle_file_name, ' ---'
+            print('--- pickle file does not exist: ', pickle_file_name, ' ---')
 
     #----------------------------------------------------------
     # construct ExRunView and show attributes
     #----------------------------------------------------------
     def construct_exrv(self, data_file):
-        print 'XXX Construct ExRunView --------------------'
+        print('XXX Construct ExRunView --------------------')
         self.exrv = ExRunView(data_file=data_file)
-        print '--- GET: data_file = ', self.exrv.data_file, '---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- GET: data_file = ', self.exrv.data_file, '---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
 
     #----------------------------------------------------------
     # get attributes of ExRunView
@@ -203,38 +203,38 @@ class TestExRunView(unittest.TestCase):
             return self.get_s_tex_z()
 
     def get_age(self):
-        print 'XXX Get attributes of ExRunView --------------------'
+        print('XXX Get attributes of ExRunView --------------------')
         age = self.exrv.model.ex_type.age
-        print '--- GET: age (old) = ', age , '---'
+        print('--- GET: age (old) = ', age , '---')
         return age
 
     def get_cm_key(self):
-        print 'XXX Get attributes of ExRunView --------------------'
+        print('XXX Get attributes of ExRunView --------------------')
         cm_key = self.exrv.model.ex_type.ccs.concrete_mixture_key
-        print '--- GET: ccs.cm_key (old) = ', cm_key , '---'
+        print('--- GET: ccs.cm_key (old) = ', cm_key , '---')
         return cm_key
 
     def get_flu_list(self):
-        print 'XXX Get attributes of ExRunView --------------------'
+        print('XXX Get attributes of ExRunView --------------------')
         flu_list = self.exrv.model.ex_type.ccs.fabric_layup_list
-        print '--- GET: ccs.flu_list (old)= ', flu_list , '---'
+        print('--- GET: ccs.flu_list (old)= ', flu_list , '---')
         return flu_list
 
     def get_s_tex_z(self):
-        print 'XXX Get attributes of ExRunView --------------------'
+        print('XXX Get attributes of ExRunView --------------------')
         s_tex_z = self.exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z
-        print '--- GET: ccs.flu_list[0].s_tex_z (old)= ', s_tex_z, '---'
+        print('--- GET: ccs.flu_list[0].s_tex_z (old)= ', s_tex_z, '---')
         return s_tex_z
 
     #----------------------------------------------------------
     # save settings in pickle file
     #----------------------------------------------------------
     def save_run(self):
-        print 'XXX save settings in pickle file --------------------'
+        print('XXX save settings in pickle file --------------------')
         self.exrv.save_run()
-        print '--- SAVE RUN ---'
-        print '--- pickle file saved to:', self.exrv.model.pickle_file_name, ' ---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- SAVE RUN ---')
+        print('--- pickle file saved to:', self.exrv.model.pickle_file_name, ' ---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
 
     #----------------------------------------------------------
     # change attribute of ExRunView
@@ -251,61 +251,61 @@ class TestExRunView(unittest.TestCase):
             return self.change_s_tex_z()
 
     def change_age(self):
-        print 'XXX Change age --------------------'
+        print('XXX Change age --------------------')
         age_old = self.exrv.model.ex_type.age
         self.exrv.model.ex_type.age += 1
-        print '--- SET: age (new)= ', self.exrv.model.ex_type.age , '---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- SET: age (new)= ', self.exrv.model.ex_type.age , '---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
         return self.exrv.model.ex_type.age
 
     def change_cm_key(self):
-        print 'XXX Change concrete matrix in ccs --------------------'
+        print('XXX Change concrete matrix in ccs --------------------')
         cm_key_old = self.exrv.model.ex_type.ccs.concrete_mixture_key
         if cm_key_old == 'FIL-10-09':
             self.exrv.model.ex_type.ccs.concrete_mixture_key = 'PZ-0708-1'
         elif cm_key_old == 'PZ-0708-1':
             self.exrv.model.ex_type.ccs.concrete_mixture_key = 'FIL-10-09'
         cm_key_new = self.exrv.model.ex_type.ccs.concrete_mixture_key
-        print '--- SET: ccs.cm_key (new)= ', cm_key_new , '---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- SET: ccs.cm_key (new)= ', cm_key_new , '---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
         return cm_key_new
 
     def change_flu_list(self):
-        print 'XXX Append ccs.flu_list --------------------'
+        print('XXX Append ccs.flu_list --------------------')
         self.exrv.model.ex_type.ccs.fabric_layup_list.append(plain_concrete(0.01))
         flu_list_new = self.exrv.model.ex_type.ccs.fabric_layup_list
-        print '--- SET: ccs.fabric_layup_list (new)= ', flu_list_new , '---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- SET: ccs.fabric_layup_list (new)= ', flu_list_new , '---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
         return flu_list_new
 
     def change_s_tex_z(self):
-        print 'XXX Change s_tex_z in ccs.flu[0].s_tex_z --------------------'
+        print('XXX Change s_tex_z in ccs.flu[0].s_tex_z --------------------')
         s_tex_z = self.exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z
         self.exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z += 1.0
         s_tex_z_new = self.exrv.model.ex_type.ccs.fabric_layup_list[0].s_tex_z
-        print '--- SET: ccs.flu[0].s_tex_z (new)= ', s_tex_z_new , '---'
-        print '--- GET: unsaved = ', self.exrv.unsaved, '---'
+        print('--- SET: ccs.flu[0].s_tex_z (new)= ', s_tex_z_new , '---')
+        print('--- GET: unsaved = ', self.exrv.unsaved, '---')
         return s_tex_z_new
 
     #----------------------------------------------------------
     # change data file to another file and then change it back
     #----------------------------------------------------------
     def reload_data_file(self, data_file_old, data_file_new):
-        print 'XXX Switch data file to another file and then back again --------------------'
+        print('XXX Switch data file to another file and then back again --------------------')
         self.exrv.data_file = data_file_new
-        print '--- SET: data file (new): ', self.exrv.data_file
+        print('--- SET: data file (new): ', self.exrv.data_file)
         if self.exrv.unsaved == True:
             self.exrv.save_run()
-            print '--- SAVE RUN (new) ---'
+            print('--- SAVE RUN (new) ---')
         self.exrv.data_file = data_file_old
-        print '--- SET: data file (back to old): ', self.exrv.data_file
+        print('--- SET: data file (back to old): ', self.exrv.data_file)
 
 
     def tearDown(self):
-        print '\n'
-        print '#------------------------------------------'
-        print '# tearDown'
-        print '#------------------------------------------'
+        print('\n')
+        print('#------------------------------------------')
+        print('# tearDown')
+        print('#------------------------------------------')
         self.delete_test_data_files(self.data_file_orig_1)
         self.delete_test_data_files(self.data_file_orig_2)
 

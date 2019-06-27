@@ -1,6 +1,6 @@
 
-from sftp_server import \
+from .sftp_server import \
     SFTPServer
-from simdb_class import \
+from .simdb_class import \
     SimDBClass, SimDBClassExt
-from simdb import SimDB
+from .simdb import SimDB

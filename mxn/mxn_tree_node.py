@@ -52,7 +52,7 @@ class ReinfLayoutTreeNode(MxNTreeNode):
         state = super(HasStrictTraits, self).__getstate__()
 
         for key in [ 'cs_state', 'cs_state_' ]:
-            if state.has_key(key):
+            if key in state:
                 del state[ key ]
 
         return state

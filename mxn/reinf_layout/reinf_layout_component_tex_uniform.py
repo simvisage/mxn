@@ -13,15 +13,15 @@ from traitsui.api import \
 from mxn.material_types import \
     MTReinfFabric
 
-from reinf_layout_component import \
+from .reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE
 
-from reinf_layout_component_tex_layer import \
+from .reinf_layout_component_tex_layer import \
     RLCTexLayer
 
-from reinf_fabric_handler import \
+from .reinf_fabric_handler import \
     FabricHandler
 
 from mxn.utils import \

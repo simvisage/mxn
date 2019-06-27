@@ -13,7 +13,7 @@ from mxn.mfn import MFnLineArray
 
 import sympy as sp
 
-from matrix_law_base import \
+from .matrix_law_base import \
     MatrixLawBase
 
 a_, b_, c_, x_ = sp.symbols('a,b,c,x')

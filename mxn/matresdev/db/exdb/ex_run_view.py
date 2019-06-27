@@ -29,7 +29,7 @@ from traitsui.menu import \
     Action, HelpAction, Menu, \
     MenuBar, ToolBar
 
-from ex_run import \
+from .ex_run import \
     ExRun
 from matresdev.db.simdb.simdb import simdb
 from util.traits.editors.mpl_figure_editor import \
@@ -86,7 +86,7 @@ class ExRunView(ModelView):
     #
     @on_trait_change('data_file')
     def _reset_model(self, obj, name, old, new):
-        print 'RESET MODEL'
+        print('RESET MODEL')
         model = self.model
         if model:
             # check if the model was changed and ask if it is to be saved
@@ -149,7 +149,7 @@ class ExRunView(ModelView):
     def redraw(self, ui_info=None):
         ''' Use the currently selected plot template to plot it in the Figure.
         '''
-        print '*** replotting ***'
+        print('*** replotting ***')
 
         # map the array dimensions to the plot axes
         #
@@ -229,7 +229,7 @@ class ExRunView(ModelView):
         This method is called upon every change of the model. This makes the viewing of
         different experiment types possible.
         '''
-        self.plot_template_list = self.model.ex_type.plot_templates.keys()
+        self.plot_template_list = list(self.model.ex_type.plot_templates.keys())
 
     #-------------------------------------------------------------------------
     # UI specification

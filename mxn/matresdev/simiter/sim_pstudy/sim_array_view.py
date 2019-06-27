@@ -30,15 +30,15 @@ from etsproxy.pyface.api import ImageResource
     
 from etsproxy.traits.ui.menu import \
     OKButton
-from i_sim_model import \
+from .i_sim_model import \
     ISimModel
-from sim_factor import \
+from .sim_factor import \
     SimFactor
-from sim_output import \
+from .sim_output import \
     SimOut
-from i_sim_array import \
+from .i_sim_array import \
     ISimArray
-from sim_todo import \
+from .sim_todo import \
     ToDo
 
 from numpy import array, linspace, frompyfunc, zeros, column_stack, \
@@ -372,8 +372,8 @@ class SimArrayView( ModelView ):
                         buttons = [OKButton]) 
             
 def run():
-    from sim_model import SimModel
-    from sim_array import SimArray
+    from .sim_model import SimModel
+    from .sim_array import SimArray
 
     pstudy = SimArray( sim_model = SimModel() )
     pstudy_view = SimArrayView( model = pstudy )

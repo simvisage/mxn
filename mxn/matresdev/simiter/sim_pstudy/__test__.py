@@ -26,21 +26,21 @@ class TestSimArray(unittest.TestCase):
         '''Calculate a study and save it 
         '''
         res = self.sim_pstudy.sim_array[0,:,:,:]
-        print 'fraction cached', self.sim_pstudy.sim_array.fraction_cached
+        print('fraction cached', self.sim_pstudy.sim_array.fraction_cached)
         
         filename = path.join( mkdtemp(), 'foo_file.pst' ) 
         self.sim_pstudy.save( filename )
 
         self.sim_pstudy.new()
-        print 'fraction cached', self.sim_pstudy.sim_array.fraction_cached
+        print('fraction cached', self.sim_pstudy.sim_array.fraction_cached)
         
         self.sim_pstudy.load( filename )
-        print 'fraction cached', self.sim_pstudy.sim_array.fraction_cached
+        print('fraction cached', self.sim_pstudy.sim_array.fraction_cached)
 
-        print 'FIRST BEFORE', self.sim_pstudy.sim_array.output_table[0]
+        print('FIRST BEFORE', self.sim_pstudy.sim_array.output_table[0])
         self.sim_pstudy.sim_array.clear_cache()
-        print 'fraction cached', self.sim_pstudy.sim_array.fraction_cached
-        print 'FIRST AFTER', self.sim_pstudy.sim_array.output_table[0]
+        print('fraction cached', self.sim_pstudy.sim_array.fraction_cached)
+        print('FIRST AFTER', self.sim_pstudy.sim_array.output_table[0])
         
         #print res
 

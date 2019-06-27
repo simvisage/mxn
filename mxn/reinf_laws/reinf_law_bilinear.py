@@ -13,7 +13,7 @@ import numpy as np
 
 from math import exp, log
 
-from reinf_law_base import \
+from .reinf_law_base import \
     ReinfLawBase
 
 

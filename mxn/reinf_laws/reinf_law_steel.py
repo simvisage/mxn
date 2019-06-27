@@ -9,7 +9,7 @@ from traits.api import \
 
 import numpy as np
 
-from reinf_law_base import \
+from .reinf_law_base import \
     ReinfLawBase
 
 class ReinfLawSteel(ReinfLawBase):

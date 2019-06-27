@@ -14,7 +14,7 @@ from traitsui.api import \
 from mxn.mxn_tree_node import \
     MxNTreeNode
 
-from use_case_parametric_study import \
+from .use_case_parametric_study import \
     UCParametricStudy
 
 from mxn.mxn_diagram import \
@@ -23,7 +23,7 @@ from mxn.mxn_diagram import \
 from mxn.ecb_calib import \
     ECBCalib
 
-from use_case_database import \
+from .use_case_database import \
     UCDatabase
 
 class UseCaseContainer(MxNTreeNode):

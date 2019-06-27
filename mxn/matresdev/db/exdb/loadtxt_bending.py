@@ -40,10 +40,10 @@ def loadtxt_bending(file_name):
                               converters={
                                   1: dot2comma, 2: dot2comma, 3: dot2comma},
                               usecols=[1, 2, 3])
-        print 'loadtxt_bending: data_arr contains only loading path'
+        print('loadtxt_bending: data_arr contains only loading path')
 
     except IndexError:
-        print 'loadtxt_bending: data_arr contains loading- and unloading path'
+        print('loadtxt_bending: data_arr contains loading- and unloading path')
         data_arr = loadtxt_2blocks(file_name)
 
     return data_arr
@@ -114,4 +114,4 @@ def loadtxt_2blocks(file_name):
 if __name__ == '__main__':
 
     data_arr = loadtxt_bending(file_name)
-    print 'data_arr', data_arr
+    print('data_arr', data_arr)

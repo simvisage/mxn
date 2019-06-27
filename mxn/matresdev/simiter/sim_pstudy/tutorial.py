@@ -33,12 +33,12 @@ if __name__ == '__main__':
     # 
     # The inputs have the types [ Int, Callable, Float, Float
     # 
-    from sim_model import SimModel
+    from .sim_model import SimModel
     sim_model = SimModel()
     
     # The model response is obtained by issueing
     #    
-    print 'default evaluation', sim_model.peval()
+    print('default evaluation', sim_model.peval())
        
     # returning an array with two values. 
     # In this call, the default values of the factors 
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # In order to study the response of the model in a broader range 
     # of specified levels we now construct the parametric study
     #
-    from sim_pstudy import SimArray
+    from .sim_pstudy import SimArray
     pstudy = SimArray( sim_model = sim_model )
     
     # ACCESSING OUTPUTS
@@ -60,35 +60,35 @@ if __name__ == '__main__':
     # In order to get the model response for the first level
     # of all parameters the index operator can be used as follows:
     #
-    print 'model output for ground levels', pstudy[0,0,0,0]
+    print('model output for ground levels', pstudy[0,0,0,0])
     
     # The combination of last levels is obtained as
     #
-    print 'model output for floor levels', pstudy[-1,-1,-1,-1]
+    print('model output for floor levels', pstudy[-1,-1,-1,-1])
     
     # The computation of outputs is performed on demand and cached. 
     # Thus, if an index appears the second time only the cached value
     # is returned.
     #
-    print 'lookup the output in the cache', pstudy[-1,-1,-1,-1]
+    print('lookup the output in the cache', pstudy[-1,-1,-1,-1])
     
     # Just like for any array, indexes may be sliced
     #
-    print 'get the outputs for all levels of index_1', pstudy[:,0,0,0]
+    print('get the outputs for all levels of index_1', pstudy[:,0,0,0])
     
     # the result of this call is 2-dimensional array with the first index
     # specifying the level of index_1 and second index giving the output
     
     # In analogy, for slice over the last two indexes
     #
-    print 'get the outputs for all combinations of param_1 x param_2', pstudy[0,0,:,:]
+    print('get the outputs for all combinations of param_1 x param_2', pstudy[0,0,:,:])
     
     # a 3-dimensional array is returned with first two indexes correspond
     # to the levels of param_1 and param_2 and third index identifying the output
     
     # Finally, the whole study can be performed using ellipsis
     #
-    print 'get all the values in the n-dimensional space', pstudy[...]
+    print('get all the values in the n-dimensional space', pstudy[...])
     
     # The result is a 5-dimensional array with first four indexes 
     # denoting the factor levels and last index the output.
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     #
     pstudy.factor_dict['param_1'].max_level = 10
     pstudy.factor_dict['param_1'].n_levels = 5
-    print 'get output for first two levels of param_1', pstudy[-1,-1,1,-1]
+    print('get output for first two levels of param_1', pstudy[-1,-1,1,-1])
     
     # Note that values for pstudy[:,:,0,:] were included in the old
     # grid of levels and are reused in the new study as well.
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     # An example of the first application can be demonstrated by using the
     # SimArrayView class
     #
-    from sim_array_view import SimArrayView
+    from .sim_array_view import SimArrayView
     SimArrayView( model = pstudy ).configure_traits()
     
     # SAVING THE STUDY
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     # the object persistence. It associates the study with a file name
     # and monitors whether the study has been changed or not.
     #
-    from sim_pstudy import SimPStudy
+    from .sim_pstudy import SimPStudy
     sim_pstudy = SimPStudy( sim_model = sim_model )
     sim_pstudy.configure_traits()
     

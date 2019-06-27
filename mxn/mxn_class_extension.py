@@ -7,7 +7,7 @@ Created on 14. 4. 2014
 from traits.api import \
     Property, Button, Str, Event, WeakRef
 
-from matresdev.db.simdb import \
+from .matresdev.db.simdb import \
     SimDBClassExt
 
 from mxn.mxn_tree_node import \
@@ -37,7 +37,7 @@ class MxNClassExt(SimDBClassExt, MxNTreeNode):
 
     save_database = Button(label='Save database')
     def _save_database_fired(self):
-        for inst in self.instances.values():
+        for inst in list(self.instances.values()):
             inst.save()
 
     tree_node_list = Property(depends_on='instances')
@@ -48,11 +48,11 @@ class MxNClassExt(SimDBClassExt, MxNTreeNode):
 
     instance_keys = Property()
     def _get_instance_keys(self):
-        return self.instances.keys()
+        return list(self.instances.keys())
 
     chosen_instance = Str()
     def _chosen_instance_default(self):
-        return self.instances.keys()[0]
+        return list(self.instances.keys())[0]
 
     tree_view = View(Item('new_material', show_label=False),
                      Item('save_database', show_label=False),

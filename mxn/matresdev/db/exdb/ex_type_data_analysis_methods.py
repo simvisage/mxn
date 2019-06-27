@@ -42,7 +42,7 @@ class ExTypeSave( object ):
         axes.set_xlabel( 'normalized delta' )
         axes.set_ylabel( 'normalized cummulative frequency' )
 
-        factors = self.continuity_profile_dict.keys()
+        factors = list(self.continuity_profile_dict.keys())
 
         for factor in factors:
             hist = self.continuity_profile_dict[ factor ]
@@ -69,7 +69,7 @@ class ExTypeSave( object ):
         '''remove the jumps in the displacement curves 
         due to resetting the displacement gauges. 
         '''
-        print '*** curve ironing 2 activated ***'
+        print('*** curve ironing 2 activated ***')
         
         # each column from the data array corresponds to a measured parameter 
         # e.g. displacement at a given point as function of time u = f(t))
@@ -87,27 +87,27 @@ class ExTypeSave( object ):
 
             rel_delta_median = interp( 0.5, cum_hg, rel_delta )
 
-            print 'factor', factor
-            print 'rel_delta_median', rel_delta_median
-            print 'cutoff fraction', ( 1.0 / self.cutoff_delta_factor )
+            print('factor', factor)
+            print('rel_delta_median', rel_delta_median)
+            print('cutoff fraction', ( 1.0 / self.cutoff_delta_factor ))
 
 #            if rel_delta_median <= ( 1.0 / self.cutoff_delta_factor ):
 #                
-            print 'ironing'
+            print('ironing')
 
             data_arr = copy( data_array_ironed[:,idx] )
             delta_median = rel_delta_median * max_delta
-            print 'delta_median', delta_median
+            print('delta_median', delta_median)
             delta_threshold = delta_median * self.cutoff_delta_factor
-            print 'delta_threshold', delta_threshold
+            print('delta_threshold', delta_threshold)
 
             # get the difference between each point and its successor
             delta_arr =  fabs( data_arr[1:] - data_arr[:-1] )
-            print 'delta_arr.shape', delta_arr.shape
+            print('delta_arr.shape', delta_arr.shape)
             # get the indexes in 'data_column' after which a 
             # jump exceeds the defined tolerance criteria
             delta_iron_idx = where( delta_arr > delta_threshold )[0]
-            print 'delta_iron_idx.shape', delta_iron_idx 
+            print('delta_iron_idx.shape', delta_iron_idx) 
             # glue the curve at each jump together
             for jidx in delta_iron_idx:
                 # get the offsets at each jump of the curve

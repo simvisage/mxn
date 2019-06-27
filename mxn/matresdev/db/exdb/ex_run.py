@@ -79,11 +79,11 @@ from traitsui.menu import \
     OKButton, CancelButton
 
 import apptools.persistence.state_pickler as spickle
-from ex_type import \
+from .ex_type import \
     ExType
-from i_ex_run import \
+from .i_ex_run import \
     IExRun
-from i_ex_type import \
+from .i_ex_type import \
     IExType
 from matresdev.db.simdb import simdb
 from util.find_class import _find_class
@@ -163,7 +163,7 @@ class ExRun(HasTraits):
         read_ok = False
 
         if os.path.exists(self.pickle_file_name):
-            print 'PICKLE FILE EXISTS %s' % self.pickle_file_name
+            print('PICKLE FILE EXISTS %s' % self.pickle_file_name)
             file_ = open(self.pickle_file_name, 'r')
             try:
                 self.ex_type = self.pickle_['load'](file_)
@@ -187,18 +187,18 @@ class ExRun(HasTraits):
             #
             self.ex_type.process_source_data()
             self.ex_type.derived_data_available = True
-            print '*** derived data available ***'
+            print('*** derived data available ***')
 
         if not read_ok and os.path.exists(self.ex_type_file_name):
 
-            print 'PICKLE FILE DOES NOT EXIST'
+            print('PICKLE FILE DOES NOT EXIST')
 
             f = open(self.ex_type_file_name, 'r')
             ex_type_klass = f.read().split('\n')[0]  # use trim here
             f.close()
             theClass = _find_class(ex_type_klass)
             if theClass is None:
-                raise TypeError, 'class %s not found for file %s' % (ex_type_klass, self.ex_type_file_name)
+                raise TypeError('class %s not found for file %s' % (ex_type_klass, self.ex_type_file_name))
             self.ex_type = theClass(data_file=self.data_file)
             self.unsaved = True
             read_ok = True
@@ -206,7 +206,7 @@ class ExRun(HasTraits):
             self.ex_type.process_source_data()
 
         if not read_ok:
-            raise ValueError, 'Cannot instantiate ExType using %s' % data_file
+            raise ValueError('Cannot instantiate ExType using %s' % data_file)
 
     def save_pickle(self):
         '''Store the current state of the ex_run.
@@ -231,7 +231,7 @@ class ExRun(HasTraits):
 
     @on_trait_change('ex_type.input_change')
     def _set_changed_state(self):
-        print '*** received input change event ***'''
+        print('*** received input change event ***''')
         self.change_event = True
         self.unsaved = True
 
@@ -272,10 +272,10 @@ if __name__ == '__main__':
 #                               'PT10-10a.DAT')
     exrun = ExRun(test_file)
     exrun.configure_traits(view='view_traits')
-    print 'processed data', exrun.ex_type.data_array.shape
-    print 'ex_type file name', exrun.ex_type_file_name
-    print 'ex_type', exrun.ex_type
-    print 'pickle_file_name', exrun.pickle_file_name
+    print('processed data', exrun.ex_type.data_array.shape)
+    print('ex_type file name', exrun.ex_type_file_name)
+    print('ex_type', exrun.ex_type)
+    print('pickle_file_name', exrun.pickle_file_name)
 
     # exrun.save_pickle()
     # exrun = ExRun( '/home/rch/sim_data/sim_exdb/ex_composite_tensile_test/TT08-7a-V2.DAT' )

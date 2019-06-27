@@ -21,17 +21,17 @@ def replace_string_in_files(path,
             selected_files.append(os.path.join(path, f))
 
     for file_name in selected_files:
-        print 'replacement applied to', file_name
+        print('replacement applied to', file_name)
         fid = open(file_name, "r")
         text = fid.read()
         fid.close()
         # write the replacements back into the file.
         fid = open(file_name, "w")
-        for old, new in replace_dict.items():
+        for old, new in list(replace_dict.items()):
             text = text.replace(old, new)
         fid.write(text)
         fid.close()
-        print 'finished'
+        print('finished')
 
 def migrate_classes(migration_table):
     '''Walk through all files within the simdb storage'

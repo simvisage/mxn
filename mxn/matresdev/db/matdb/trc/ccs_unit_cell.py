@@ -48,13 +48,13 @@ from numpy import \
 
 import numpy as np
 
-from concrete_mixture \
+from .concrete_mixture \
     import ConcreteMixture
 
-from fabric_layout \
+from .fabric_layout \
     import FabricLayOut
 
-from fabric_layup \
+from .fabric_layup \
     import FabricLayUp
 
 from matresdev.db.simdb.simdb_class import \
@@ -146,7 +146,7 @@ class CCSUnitCell(SimDBClass):
     fabric_layout_key = Str(simdb=True, input=True, table_field=True,
                              auto_set=False, enter_set=True)
     def _fabric_layout_key_default(self):
-        return FabricLayOut.db.keys()[0]
+        return list(FabricLayOut.db.keys())[0]
 
     fabric_layout_ref = Property(Instance(SimDBClass),
                                   depends_on='fabric_layout_key')
@@ -173,7 +173,7 @@ class CCSUnitCell(SimDBClass):
         fabric layups. Returns a function depending of the concrete age.
         '''
         E_m = self.concrete_mixture_ref.get_E_m_time(age)
-        print 'E_m_time', E_m
+        print('E_m_time', E_m)
         return E_m
 
     def get_E_c_time(self, age):
@@ -224,28 +224,28 @@ class CCSUnitCell(SimDBClass):
     damage_function_list = List(DamageFunctionEntry, input=True)
 
     def set_param(self, material_model, calibration_test, df):
-        print 'adding damage function'
+        print('adding damage function')
         for mp_entry in self.damage_function_list:
             if (mp_entry.material_model == material_model and
                  mp_entry.calibration_test == calibration_test):
                 mp_entry.damage_function = df
-                print 'only the function updated'
+                print('only the function updated')
                 return
         mp_entry = DamageFunctionEntry(material_model=material_model,
                                         calibration_test=calibration_test,
                                         damage_function=df)
         self.damage_function_list.append(mp_entry)
-        print 'new function added'
+        print('new function added')
 
     def get_param(self, material_model, calibration_test):
-        print 'material_model', material_model
-        print 'calibration_test', calibration_test
+        print('material_model', material_model)
+        print('calibration_test', calibration_test)
         for mp_entry in self.damage_function_list:
             if (mp_entry.material_model == material_model and
                  mp_entry.calibration_test == calibration_test):
                 return mp_entry.damage_function
 
-        raise ValueError, 'no entry in unit cell with key ( %s ) for model ( %s ) and test( %s )' % (self.key, material_model, calibration_test)
+        raise ValueError('no entry in unit cell with key ( %s ) for model ( %s ) and test( %s )' % (self.key, material_model, calibration_test))
 
     #-------------------------------------------------------------
     # derive the average phi-function based on all entries
@@ -313,18 +313,18 @@ class CCSUnitCell(SimDBClass):
     print_values = Button()
     def _print_values_fired(self):
         for mp_entry in self.selected_dfs:
-            print 'x', mp_entry.damage_function.xdata
-            print 'y', mp_entry.damage_function.ydata
+            print('x', mp_entry.damage_function.xdata)
+            print('y', mp_entry.damage_function.ydata)
 
     save_phi_fn_values = Button()
     def _save_phi_fn_values_fired(self):
         'save phi_fn xy-data to file'
-        print 'save phi_arr data to file'
+        print('save phi_arr data to file')
         for mp_entry in self.selected_dfs:
             xdata = mp_entry.damage_function.xdata
             ydata = mp_entry.damage_function.ydata
             phi_arr = np.hstack([xdata[:, None], ydata[:, None]])
-            print 'phi_arr ', phi_arr.shape, ' save to file "phi_arr.csv"'
+            print('phi_arr ', phi_arr.shape, ' save to file "phi_arr.csv"')
             np.savetxt('phi_arr.csv', phi_arr, delimiter=';')
 
     # event to trigger the replotting - used by the figure editor

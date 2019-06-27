@@ -31,16 +31,16 @@ from numpy import \
 
 import numpy as np
 
-from concrete_mixture \
+from .concrete_mixture \
     import ConcreteMixture
 
-from fabric_layup \
+from .fabric_layup \
     import FabricLayUp
 
 from matresdev.db.simdb.simdb_class import \
     SimDBClass
 
-from ccs_unit_cell import \
+from .ccs_unit_cell import \
     CCSUnitCell
 
 ccs_table_editor = TableEditor(
@@ -97,7 +97,7 @@ class CompositeCrossSection(SimDBClass):
     # select the concrete mixture from the concrete database:
     # -------------------------------------------------------------------------
 
-    concrete_mixture_key = Enum(ConcreteMixture.db.keys(),
+    concrete_mixture_key = Enum(list(ConcreteMixture.db.keys()),
                                 simdb=True, input=True,
                                 auto_set=False, enter_set=True)
 
@@ -267,9 +267,9 @@ class CompositeCrossSection(SimDBClass):
     def set_param(self, material_model, calibration_test, df):
 
         if not self.is_regular:
-            raise ValueError, 'Too complex cross section for calibration\n' \
+            raise ValueError('Too complex cross section for calibration\n' \
                 'There must be one dominating layup with a 90% contribution' \
-                'to the reinforcement ration of the composite cross section'
+                'to the reinforcement ration of the composite cross section')
 
         # Extract the characteristics of the dominating layout
         cm_key = self.concrete_mixture_key
@@ -295,7 +295,7 @@ class CompositeCrossSection(SimDBClass):
                                 rho=self.rho_c)
             CCSUnitCell.db[key] = ccsuc
 
-        print 'CCSUnitCell: stored parameters for', key
+        print('CCSUnitCell: stored parameters for', key)
         ccsuc.set_param(material_model, calibration_test, df)
         CCSUnitCell.db[key].save()
 

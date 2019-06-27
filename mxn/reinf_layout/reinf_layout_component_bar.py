@@ -10,7 +10,7 @@ from traits.api import \
 from traitsui.api import \
     View, Item, VGroup, Group
 
-from reinf_layout_component import \
+from .reinf_layout_component import \
     ReinfLayoutComponent, \
     STATE_LAW_AND_GEOMETRY_CHANGE, \
     STATE_AND_GEOMETRY_CHANGE

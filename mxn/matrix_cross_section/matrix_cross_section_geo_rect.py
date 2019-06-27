@@ -10,7 +10,7 @@ from traits.api import \
 from traitsui.api import \
     View, Item, Group, HGroup
 
-from matrix_cross_section_geo import MCSGeo
+from .matrix_cross_section_geo import MCSGeo
 
 import numpy as np
 
